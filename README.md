@@ -90,7 +90,7 @@ Our app allows users to create events and to-do items that can be organized on a
     * Change settings
 
 ## Wireframes
-<img src="Wireframe" width=600>
+<img src="wireframe.jpg" width=600>
 
 ### [BONUS] Digital Wireframes & Mockups
 
