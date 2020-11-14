@@ -1,14 +1,6 @@
 # Calendify
 # Group 27 Mobile App Development Document    
 
-
-
-
-Original App Design Project - README Template
-===
-
-# Calendify
-
 ## Table of Contents
 1. [Overview](#Overview)
 1. [Product Spec](#Product-Spec)
