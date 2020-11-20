@@ -89,7 +89,10 @@ Our app allows users to create events and to-do items that can be organized on a
 ### [BONUS] Interactive Prototype
 
 ## Schema 
-[This section will be completed in Unit 9]
+| Syntax      | Description |
+| ----------- | ----------- |
+| Header      | Title       |
+| Paragraph   | Text        |
 ### Models
 [Add table of models]
 ### Networking
