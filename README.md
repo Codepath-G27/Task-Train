@@ -122,13 +122,13 @@ Alarm
 
 ### Networking
 * Calendar Screen
-  - (Read/GET) All events within the given month
-  - (Create/POST) Creating a new event/to-do item
+  * (Read/GET) All events within the given month
+  * (Create/POST) Creating a new event/to-do item
  * To-do/Event View 
-  - (Read/GET) All upcoming events/to-do items
-  - (Create/POST) Creating an event/to-do item
-  - (Delete) Delete an event/to-do item
+  * (Read/GET) All upcoming events/to-do items
+  * (Create/POST) Creating an event/to-do item
+  * (Delete) Delete an event/to-do item
  * Alarm Screen
-  - (Read/GET) All upcoming alarms
-  - (Create/POST) Creating an alarm with its recurrence
-  - (Delete) Delete an alarm
+  * (Read/GET) All upcoming alarms
+  * (Create/POST) Creating an alarm with its recurrence
+  * (Delete) Delete an alarm
