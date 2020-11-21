@@ -89,6 +89,7 @@ Our app allows users to create events and to-do items that can be organized on a
 ### [BONUS] Interactive Prototype
 
 ## Schema 
+### Models
 To-Do Object
 | Property      | Type | Description |
 | ----------- | ----------- | ------------ |
@@ -118,9 +119,13 @@ Alarm
 |Name | String | The name of the alarm. |
 |Time | Java.time | When the alarm should go off. |
 |Recurrence | String | Which days of the week the alarm should ring. |
-### Models
-[Add table of models]
+
 ### Networking
-- [Add list of network requests by screen ]
-- [Create basic snippets for each Parse network request]
-- [OPTIONAL: List endpoints if using existing API such as Yelp]
+Calendar Screen
+  (Read/GET) All events within the given month
+  (Create/POST) Creating a new event/to-do item
+ To-do/Event View 
+  (Read/GET) All upcoming events/to-do items
+  (Create/POST) Creating an event/to-do item
+  (Delete) Delete an event/to-do item
+ 
