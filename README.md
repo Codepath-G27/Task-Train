@@ -3,11 +3,31 @@
 
 ## Table of Contents
 1. [Overview](#Overview)
-1. [Product Spec](#Product-Spec)
-1. [Wireframes](#Wireframes)
-2. [Schema](#Schema)
+2. [Product Spec](#Product-Spec)
+3. [Wireframes](#Wireframes)
+4. [Schema](#Schema)
 
 ## Overview
+
+
+## Sprint Week 1 (Unit 10) Update
+
+User Stories (None Completed...)
+
+- [ ]  User must be able to see a calendar that has all events and to-do items
+- [ ]  User must be able to create a to-do and event items and set item name, time, alarm
+- [ ]  User must be able to see relevant to-do items in a list
+- [ ]  User must be able to edit and remove items from the calendar
+- [ ]  User receives a daily notification stating what events/to-do items they have for the day
+- [ ]  User is able to adjust alarms, reminders through a settings page
+
+Here's an update on our Unit 10 progress: 
+
+<img src='sprint1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
+
+
+
 ### Description
 Our app allows users to create events and to-do items that can be organized on a calendar and to-do list. Each event and to-do allows users to set the details, such as date, time, and other details. Users can evenset alarms to notify them of things that are coming up.
 
