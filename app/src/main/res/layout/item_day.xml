@@ -6,7 +6,7 @@
     android:layout_margin="2dp">
 
     <TextView
-        android:id="@+id/dayText"
+        android:id="@+id/calendarDayText"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
