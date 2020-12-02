@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/action_calendar"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="Calendar"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_todo"
+        android:icon="@android:drawable/ic_menu_edit"
+        android:title="ToDo"
+        app:showAsAction="always" />
+</menu>
