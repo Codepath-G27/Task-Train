@@ -10,6 +10,6 @@
     <item
         android:id="@+id/action_todo"
         android:icon="@android:drawable/ic_menu_edit"
-        android:title="Todo"
+        android:title="ToDo"
         app:showAsAction="always" />
 </menu>

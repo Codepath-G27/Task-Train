@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kizitonwose.calendarview.CalendarView;
 
 /**
@@ -21,13 +21,13 @@ public class CalendarFragment extends Fragment {
 
     private CalendarView cvCalendar;
     private TextView tvDate;
-    private Button btnAdd;
+    private FloatingActionButton btnAdd;
 
     public CalendarFragment() {
         // Required empty public constructor
     }
 
-    // The onCreateView method is called when Fragment should create its View object heirarchy
+    // The onCreateView method is called when Fragment should create its View object hierarchy
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -44,11 +44,11 @@ public class CalendarFragment extends Fragment {
         tvDate = view.findViewById(R.id.tvDate);
         btnAdd = view.findViewById(R.id.btnAdd);
 
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO: Add click action
-            }
-        });
+//        btnAdd.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // TODO: Add click action
+//            }
+//        });
     }
 }
