@@ -33,6 +33,8 @@ import java.util.*
 
 data class Event(val id: String, val text: String, val date: LocalDate)
 
+//todo create TaskViewModel in this way: https://developer.android.com/codelabs/android-training-livedata-viewmodel#12
+
 class Example3EventsAdapter(val onClick: (Event) -> Unit) :
         RecyclerView.Adapter<Example3EventsAdapter.Example3EventsViewHolder>() {
 
