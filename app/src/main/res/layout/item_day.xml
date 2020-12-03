@@ -6,7 +6,7 @@
     android:layout_margin="2dp">
 
     <TextView
-        android:id="@+id/dayText"
+        android:id="@+id/tvDay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
@@ -17,7 +17,7 @@
         tools:text="22" />
 
     <View
-        android:id="@+id/dotView"
+        android:id="@+id/vDot"
         android:layout_width="4.5dp"
         android:layout_height="4.5dp"
         android:layout_marginBottom="10dp"
