@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.kizitonwose.calendarview.CalendarView;
 
+import java.time.LocalDate;
+
 /**
  * A simple {@link Fragment subclass}
  */
@@ -22,6 +24,8 @@ public class CalendarFragment extends Fragment {
     private CalendarView cvCalendar;
     private TextView tvDate;
     private FloatingActionButton btnAdd;
+
+    private LocalDate today = LocalDate.now();
 
     public CalendarFragment() {
         // Required empty public constructor
@@ -44,11 +48,11 @@ public class CalendarFragment extends Fragment {
         tvDate = view.findViewById(R.id.tvDate);
         btnAdd = view.findViewById(R.id.btnAdd);
 
-//        btnAdd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO: Add click action
-//            }
-//        });
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: Add click action
+            }
+        });
     }
 }
