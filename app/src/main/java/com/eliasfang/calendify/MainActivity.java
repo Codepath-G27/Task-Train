@@ -31,10 +31,15 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.action_todo:
                         fragment = new ToDoFragment();
                         break;
+                    case R.id.action_reminder:
+                        fragment = new ReminderFragment();
+                        break;
+
                     case R.id.action_calendar:
                     default:
                         fragment = new CalendarFragment();
                         break;
+
                 }
                 fragmentManager.beginTransaction().replace(R.id.flContainer, fragment).commit();
                 return true;
@@ -43,4 +48,7 @@ public class MainActivity extends AppCompatActivity {
         // default view
         bottomNavigationView.setSelectedItemId((R.id.action_calendar));
     }
+
+
+
 }

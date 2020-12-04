@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
@@ -8,8 +9,13 @@
         android:title="Calendar"
         app:showAsAction="always" />
     <item
+        android:id="@+id/action_reminder"
+        android:icon="@drawable/ic_baseline_alarm_on_24"
+        android:title="Reminders"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/action_todo"
         android:icon="@android:drawable/ic_menu_edit"
-        android:title="ToDo"
+        android:title="TODO"
         app:showAsAction="always" />
 </menu>
