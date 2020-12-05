@@ -22,7 +22,7 @@ User Stories
 - [X]  User is able to set alarms/reminders
 - [X]  Reminders activate at the given time notificng the user
 
-Here's an update on our Unit 10 progress: 
+Here's an update on our Unit 11 progress: 
 
 <img src='https://i.imgur.com/nus9QOQ.gif' width='' alt='Video Walkthrough' />
 GIF created with [LiceCap](https://www.cockos.com/licecap/).
