@@ -6,52 +6,45 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ToDoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import com.eliasfang.calendify.Adapter.TaskListAdapter;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import java.util.List;
+
 public class ToDoFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    public static final String TAG = "PostsFragment";
+    private RecyclerView rvPosts;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private FloatingActionButton fabCreateEvent;
+
+    protected TaskListAdapter adapter;
+    protected List<Task> allTasks;
+
 
     public ToDoFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ToDoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ToDoFragment newInstance(String param1, String param2) {
-        ToDoFragment fragment = new ToDoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        fabCreateEvent = view.findViewById(R.id.fabCreateEvent);
+        RecyclerView recyclerView = view.findViewById(R.id.rvItems);
+        final TaskListAdapter adapter = new TaskListAdapter(getContext());
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        fabCreateEvent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //todo send it to another activity to add an event
+            }
+        });
+
     }
 
     @Override
@@ -60,4 +53,5 @@ public class ToDoFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_to_do, container, false);
     }
+
 }
