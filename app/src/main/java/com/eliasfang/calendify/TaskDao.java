@@ -25,4 +25,10 @@ public interface TaskDao {
 
     //TODO create edit task function, which would query for a given task id, delete it
     //then reinsert with same id, updated values
+
+    @Query("SELECT * from task_table where status = 'false'")
+    LiveData<List<Task>> getTasksInProgress();
+
+    @Query("SELECT * from task_table where hasAlarm = 'true'")
+    LiveData<List<Task>> getTasksWithAlarm();
 }
