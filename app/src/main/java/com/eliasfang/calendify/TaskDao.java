@@ -22,4 +22,7 @@ public interface TaskDao {
     //TODO be able to organize tasks by earliest due date first
     @Query("SELECT * from task_table")
     LiveData<List<Task>> getAllTasks();
+
+    //TODO create edit task function, which would query for a given task id, delete it
+    //then reinsert with same id, updated values
 }
