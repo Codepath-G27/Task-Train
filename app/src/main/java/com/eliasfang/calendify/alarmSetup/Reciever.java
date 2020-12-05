@@ -1,8 +1,10 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.alarmSetup;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+
+import com.eliasfang.calendify.MainActivity;
 
 public class Reciever extends BroadcastReceiver {
     @Override

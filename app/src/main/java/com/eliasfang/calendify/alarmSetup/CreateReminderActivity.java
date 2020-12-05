@@ -1,4 +1,4 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.alarmSetup;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.eliasfang.calendify.Database.DatabaseClass;
 import com.eliasfang.calendify.Database.EntityClass;
+import com.eliasfang.calendify.R;
 
 import java.text.DateFormat;
 import java.text.ParseException;

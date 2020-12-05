@@ -9,8 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NotificationMessage"></activity>
-        <activity android:name=".CreateReminderActivity" />
+        <activity android:name=".alarmSetup.NotificationMessage"></activity>
+        <activity android:name=".alarmSetup.CreateReminderActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,14 +20,14 @@
         </activity>
 
         <receiver
-            android:name=".Reciever"
+            android:name=".alarmSetup.Reciever"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".Alarm" />
+        <receiver android:name=".alarmSetup.Alarm" />
     </application>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
