@@ -1,7 +1,6 @@
 package com.eliasfang.calendify;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -151,7 +150,7 @@ public class CalendarFragment extends Fragment {
                 TextView tvDay = dayViewContainer.getTextView();
                 View vDot = dayViewContainer.getDotView();
 
-                tvDay.setText(calendarDay.getDate().getDayOfMonth());
+                tvDay.setText(calendarDay.getDate().getDayOfMonth() + "");
 
                 if (calendarDay.getOwner() == DayOwner.THIS_MONTH) {
                     tvDay.setVisibility(TextView.VISIBLE);
