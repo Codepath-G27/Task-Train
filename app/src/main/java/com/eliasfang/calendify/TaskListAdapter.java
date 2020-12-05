@@ -14,7 +14,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     private final LayoutInflater mInflater;
     private List<Task> myTasks; // Cached copy of Tasks
 
-    TaskListAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+    TaskListAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
+    }
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -33,7 +35,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         }
     }
 
-    void setTasks(List<Task> words){
+    void setTasks(List<Task> words) {
         myTasks = words;
         notifyDataSetChanged();
     }
@@ -55,3 +57,5 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             taskItemView = itemView.findViewById(R.id.textView);
         }
     }
+
+}

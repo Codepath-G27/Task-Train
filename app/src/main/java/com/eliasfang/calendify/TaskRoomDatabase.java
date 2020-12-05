@@ -62,5 +62,4 @@ public abstract class TaskRoomDatabase extends RoomDatabase {
         }
     }
 
-    }
 }
