@@ -25,7 +25,7 @@ User Stories
 Here's an update on our Unit 10 progress: 
 
 <img src='https://i.imgur.com/nus9QOQ.gif' width='' alt='Video Walkthrough' />
-GIF created with [LiceCap]("http://www.cockos.com/licecap/").
+GIF created with [LiceCap](https://www.cockos.com/licecap/).
 
 
 
