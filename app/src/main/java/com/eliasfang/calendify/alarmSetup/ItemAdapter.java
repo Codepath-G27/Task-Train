@@ -1,4 +1,4 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.alarmSetup;
 
 import android.view.LayoutInflater;
 import android.view.View;

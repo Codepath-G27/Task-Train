@@ -3,14 +3,18 @@
     android:background="@color/white"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+
     <item
         android:id="@+id/action_todo"
-        android:icon="@android:drawable/ic_menu_edit"
-        android:title="ToDo"
+        android:icon="@drawable/ic_baseline_edit_24"
+        android:title="TODO"
         app:showAsAction="always" />
+
+
     <item
         android:id="@+id/action_reminder"
         android:icon="@drawable/ic_baseline_alarm_on_24"
         android:title="Reminders"
         app:showAsAction="always" />
+
 </menu>

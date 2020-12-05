@@ -1,9 +1,11 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.alarmSetup;
 
 import android.os.Bundle;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.eliasfang.calendify.R;
 
 public class NotificationMessage extends AppCompatActivity {
     TextView textView;
