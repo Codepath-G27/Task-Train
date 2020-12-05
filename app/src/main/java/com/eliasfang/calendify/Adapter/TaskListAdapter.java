@@ -1,4 +1,4 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,13 +8,16 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.eliasfang.calendify.R;
+import com.eliasfang.calendify.Task;
+
 import java.util.List;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskViewHolder> {
     private final LayoutInflater mInflater;
     private List<Task> myTasks; // Cached copy of Tasks
 
-    TaskListAdapter(Context context) {
+    public TaskListAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
     }
 
@@ -57,5 +60,4 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             taskItemView = itemView.findViewById(R.id.textView);
         }
     }
-
 }

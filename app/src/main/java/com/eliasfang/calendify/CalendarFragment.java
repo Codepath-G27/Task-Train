@@ -87,7 +87,7 @@ public class CalendarFragment extends Fragment {
                     flDialog.addView(etDialog, new FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT));
 
                     dialog = new AlertDialog.Builder(getContext())
-                            .setTitle("Calendify")
+                            .setTitle("Enter event title")
                             .setView(flDialog)
                             .setPositiveButton("Save", new DialogInterface.OnClickListener() {
                                 @Override
@@ -117,6 +117,7 @@ public class CalendarFragment extends Fragment {
                         }
                     });
                 }
+                dialog.show();
             }
         });
     }
