@@ -25,8 +25,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_gravity="end|bottom"
-        android:layout_marginEnd="30dp"
-        android:layout_marginBottom="26dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
         app:backgroundTint="@color/colorAccent"
         app:srcCompat="@drawable/ic_add"
         app:tint="@color/white" />
