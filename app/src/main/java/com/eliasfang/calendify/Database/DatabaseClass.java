@@ -6,11 +6,11 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {EntityClass.class}, version = 1)
+@Database(entities = {ReminderEntity.class}, version = 1)
 public abstract class DatabaseClass extends RoomDatabase {
     private static DatabaseClass INSTANCE;
 
-    public abstract EventDao EventDao();
+    public abstract ReminderDao EventDao();
 
     public static DatabaseClass getDatabase(final Context context) {
         if (INSTANCE == null) {
