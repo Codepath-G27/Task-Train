@@ -1,5 +1,6 @@
 package com.eliasfang.calendify;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,11 +44,12 @@ public class CalendarFragment extends Fragment {
         tvDate = view.findViewById(R.id.tvDate);
         btnAdd = view.findViewById(R.id.btnAdd);
 
-//        btnAdd.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // TODO: Add click action
-//            }
-//        });
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent myintent  = new Intent(getActivity(), activity_create_task.class
+                );
+            }
+        });
     }
 }

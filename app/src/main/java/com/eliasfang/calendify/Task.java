@@ -18,12 +18,10 @@ public class Task {
     private String name;
     @ColumnInfo(name = "description")
     private String description;
-    @ColumnInfo(name = "date")
-    private String date; //TODO need to change this to some appropriate Java library
-    @ColumnInfo(name = "time")
-    private String time; //TODO same with this one
-    @ColumnInfo(name = "status")
-    private boolean status;
+    @ColumnInfo(name = "epochTime")
+    private long epochTime; //TODO same with this one
+    @ColumnInfo(name = "isCompleted")
+    private boolean isCompleted;
     @ColumnInfo(name = "hasAlarm")
     private boolean hasAlarm;
     @ColumnInfo(name = "minutesBefore")
@@ -34,23 +32,21 @@ public class Task {
     @ColumnInfo(name = "recurrence")
     private String recurrence; //TODO also change this to some appropriate Java time library
 
-    public Task(String name, String description, String date, String time, boolean status, boolean hasAlarm, int minutesBefore) {
+    public Task(String name, String description, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore) {
         this.name = name;
         this.description = description;
-        this.date = date;
-        this.time = time;
-        this.status = status;
+        this.epochTime = epochTime;
+        this.isCompleted = isCompleted;
         this.hasAlarm = hasAlarm;
         this.minutesBefore = minutesBefore;
     }
 
     @Ignore
-    public Task(String name, String description, String date, String time, boolean status, boolean hasAlarm, int minutesBefore, String location, String recurrence) {
+    public Task(String name, String description, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore, String location, String recurrence) {
         this.name = name;
         this.description = description;
-        this.date = date;
-        this.time = time;
-        this.status = status;
+        this.epochTime = epochTime;
+        this.isCompleted = isCompleted;
         this.hasAlarm = hasAlarm;
         this.minutesBefore = minutesBefore;
         this.location = location;
@@ -81,28 +77,20 @@ public class Task {
         this.description = description;
     }
 
-    public String getDate() {
-        return date;
+    public long getEpochTime() {
+        return epochTime;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setEpochTime(long epochTime) {
+        this.epochTime = epochTime;
     }
 
-    public String getTime() {
-        return time;
+    public boolean isCompleted() {
+        return isCompleted;
     }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public boolean isStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
     }
 
     public boolean isHasAlarm() {

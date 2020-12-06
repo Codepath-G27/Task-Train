@@ -11,4 +11,6 @@ public class activity_create_task extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_task);
     }
+    //todo set onclicklistener and create a new task
+
 }
