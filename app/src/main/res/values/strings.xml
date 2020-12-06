@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Calendify</string>
     <string name="button">Button</string>
-    <string name="item_removed">Button</string>
+    <string name="create_an_event">Create an event</string>
 </resources>
