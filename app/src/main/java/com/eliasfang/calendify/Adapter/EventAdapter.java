@@ -10,18 +10,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.eliasfang.calendify.Database.EntityClass;
+import com.eliasfang.calendify.Database.ReminderEntity;
 import com.eliasfang.calendify.R;
 
 import java.util.List;
 
 public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> {
     Context context;
-    public List<EntityClass> entityClasses;
+    public List<ReminderEntity> reminderEntities;
 
-    public EventAdapter(Context context, List<EntityClass> entityClasses) {
+    public EventAdapter(Context context, List<ReminderEntity> reminderEntities) {
         this.context = context;
-        this.entityClasses = entityClasses;
+        this.reminderEntities = reminderEntities;
     }
 
     @NonNull
@@ -32,13 +32,13 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.eventText.setText(entityClasses.get(position).getEventname());
-        holder.timeAndDateText.setText(entityClasses.get(position).getEventdate() + " " + entityClasses.get(position).getEventtime());
+        holder.eventText.setText(reminderEntities.get(position).getEventname());
+        holder.timeAndDateText.setText(reminderEntities.get(position).getEventdate() + " " + reminderEntities.get(position).getEventtime());
     }
 
     @Override
     public int getItemCount() {
-        return entityClasses.size();
+        return reminderEntities.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -47,9 +47,11 @@ public class EventAdapter extends RecyclerView.Adapter<EventAdapter.ViewHolder> 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            eventText = (TextView) itemView.findViewById(R.id.event);
+            eventText = (TextView) itemView.findViewById(R.id.reminder);
             timeAndDateText = (TextView) itemView.findViewById(R.id.time_and_date);
             toplayout = (LinearLayout) itemView.findViewById(R.id.toplayout);
         }
     }
+
+
 }

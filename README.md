@@ -10,9 +10,9 @@
 ## Overview
 
 
-## Sprint Week 1 (Unit 10) Update
+## Sprint Week 2 (Unit 11) Update
 
-User Stories (None Completed...)
+User Stories
 
 - [ ]  User must be able to see a calendar that has all events and to-do items
 - [ ]  User must be able to create a to-do and event items and set item name, time, alarm
@@ -22,11 +22,10 @@ User Stories (None Completed...)
 - [X]  User is able to set alarms/reminders
 - [X]  Reminders activate at the given time notificng the user
 
-Here's an update on our Unit 10 progress: 
+Here's an update on our Unit 11 progress: 
 
-<img src='sprint1.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 <img src='https://i.imgur.com/nus9QOQ.gif' width='' alt='Video Walkthrough' />
-GIF created with [LiceCap](http://www.cockos.com/licecap/).
+GIF created with [LiceCap](https://www.cockos.com/licecap/).
 
 
 

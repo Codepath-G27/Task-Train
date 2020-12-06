@@ -1,4 +1,4 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.alarmSetup;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -20,7 +19,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.eliasfang.calendify.Database.DatabaseClass;
-import com.eliasfang.calendify.Database.EntityClass;
+import com.eliasfang.calendify.Database.ReminderEntity;
+import com.eliasfang.calendify.R;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -30,40 +30,53 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class CreateReminderActivity extends AppCompatActivity implements View.OnClickListener {
-    Button btn_time, btn_date, btn_done;
-    ImageView btn_record;
+    Button btn_set_time;
+    Button btn_set_date;
+    Button btn_submit;
     EditText editext_message;
-    String timeTonotify;
-    DatabaseClass databaseClass;
+    String notificationTime;
+    DatabaseClass dataBase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_reminder);
+        btn_submit = findViewById(R.id.btn_set_reminder);
+        btn_set_date = findViewById(R.id.btn_set_date);
         editext_message = findViewById(R.id.et_note);
-        btn_record = findViewById(R.id.record_btn);
-        btn_date = findViewById(R.id.btn_set_date);
-        btn_done = findViewById(R.id.btn_set_reminder);
-        btn_time = findViewById(R.id.btn_set_time);
-        btn_record.setOnClickListener(this);
-        btn_time.setOnClickListener(this);
-        btn_date.setOnClickListener(this);
-        btn_done.setOnClickListener(this);
-        databaseClass = DatabaseClass.getDatabase(getApplicationContext());
+        btn_set_time = findViewById(R.id.btn_set_time);
+        btn_set_date.setOnClickListener(this);
+        btn_submit.setOnClickListener(this);
+        btn_set_time.setOnClickListener(this);
+        dataBase = DatabaseClass.getDatabase(getApplicationContext());
 
     }
 
     @Override
     public void onClick(View view) {
-        if (view == btn_record) {
-            recordSpeech();
-        } else if (view == btn_time) {
-            selectTime();
-        } else if (view == btn_date) {
-            selectDate();
+        if (view == btn_set_date) {
+            setDate();
+        } else if (view == btn_set_time) {
+            setTime();
         } else {
             submit();
         }
+    }
+
+
+    private void setTime() {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                notificationTime = i + ":" + i1;
+                btn_set_time.setText(FormatTime(i, i1));
+            }
+        }, hour, minute, false);
+        timePickerDialog.show();
+
     }
 
     private void submit() {
@@ -71,38 +84,23 @@ public class CreateReminderActivity extends AppCompatActivity implements View.On
         if (text.isEmpty()) {
             Toast.makeText(this, "Please Enter or record the text", Toast.LENGTH_SHORT).show();
         } else {
-            if (btn_time.getText().toString().equals("Select Time") || btn_date.getText().toString().equals("Select date")) {
+            if (btn_set_time.getText().toString().equals("Select Time") || btn_set_date.getText().toString().equals("Select date")) {
                 Toast.makeText(this, "Please select date and time", Toast.LENGTH_SHORT).show();
             } else {
-                EntityClass entityClass = new EntityClass();
+                ReminderEntity reminderEntity = new ReminderEntity();
                 String value = (editext_message.getText().toString().trim());
-                String date = (btn_date.getText().toString().trim());
-                String time = (btn_time.getText().toString().trim());
-                entityClass.setEventdate(date);
-                entityClass.setEventname(value);
-                entityClass.setEventtime(time);
-                databaseClass.EventDao().insertAll(entityClass);
+                String date = (btn_set_date.getText().toString().trim());
+                String time = (btn_set_time.getText().toString().trim());
+                reminderEntity.setEventdate(date);
+                reminderEntity.setEventname(value);
+                reminderEntity.setEventtime(time);
+                dataBase.EventDao().insertAll(reminderEntity);
                 setAlarm(value, date, time);
             }
         }
     }
 
-    private void selectTime() {
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int minute = calendar.get(Calendar.MINUTE);
-        TimePickerDialog timePickerDialog = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                timeTonotify = i + ":" + i1;
-                btn_time.setText(FormatTime(i, i1));
-            }
-        }, hour, minute, false);
-        timePickerDialog.show();
-
-    }
-
-    private void selectDate() {
+    private void setDate() {
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -110,7 +108,7 @@ public class CreateReminderActivity extends AppCompatActivity implements View.On
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                btn_date.setText(day + "-" + (month + 1) + "-" + year);
+                btn_set_date.setText(day + "-" + (month + 1) + "-" + year);
             }
         }, year, month, day);
         datePickerDialog.show();
@@ -127,8 +125,6 @@ public class CreateReminderActivity extends AppCompatActivity implements View.On
         } else {
             formattedMinute = "" + minute;
         }
-
-
         if (hour == 0) {
             time = "12" + ":" + formattedMinute + " AM";
         } else if (hour < 12) {
@@ -139,24 +135,10 @@ public class CreateReminderActivity extends AppCompatActivity implements View.On
             int temp = hour - 12;
             time = temp + ":" + formattedMinute + " PM";
         }
-
-
         return time;
     }
 
 
-    private void recordSpeech() {
-
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, "en-US");
-        try {
-
-            startActivityForResult(intent, 1);
-        } catch (Exception e) {
-            Toast.makeText(this, "Your device does not support Speech recognizer", Toast.LENGTH_SHORT).show();
-        }
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -179,16 +161,15 @@ public class CreateReminderActivity extends AppCompatActivity implements View.On
         intent.putExtra("date", time);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        String dateandtime = date + " " + timeTonotify;
+        String TimeandDate = date + " " + notificationTime;
         DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
         try {
-            Date date1 = formatter.parse(dateandtime);
+            Date date1 = formatter.parse(TimeandDate);
             am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
 
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
         finish();
 
     }

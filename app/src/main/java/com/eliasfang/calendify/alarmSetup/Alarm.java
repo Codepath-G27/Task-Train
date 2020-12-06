@@ -1,4 +1,4 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.alarmSetup;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
+
+import com.eliasfang.calendify.R;
 
 public class Alarm extends BroadcastReceiver {
     @Override

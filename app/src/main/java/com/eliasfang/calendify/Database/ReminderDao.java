@@ -7,12 +7,12 @@ import androidx.room.Query;
 import java.util.List;
 
 @Dao
-public interface EventDao {
+public interface ReminderDao {
 
     @Insert
-    void insertAll(EntityClass entityClass);
+    void insertAll(ReminderEntity reminderEntity);
 
     @Query("SELECT * FROM myTable")
-    List<EntityClass> getAllData();
+    List<ReminderEntity> getAllData();
 
 }

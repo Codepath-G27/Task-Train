@@ -1,6 +1,7 @@
 package com.eliasfang.calendify;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +11,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eliasfang.calendify.Adapter.EventAdapter;
+import com.eliasfang.calendify.Database.ReminderEntity;
+import com.eliasfang.calendify.alarmSetup.CreateReminderActivity;
 import com.eliasfang.calendify.Database.DatabaseClass;
-import com.eliasfang.calendify.Database.EntityClass;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -49,6 +54,8 @@ public class ReminderFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         btn_createEvent = view.findViewById(R.id.btn_createEvent);
         recyclerView = view.findViewById(R.id.reminder_recyclerview);
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+
 
 
         btn_createEvent.setOnClickListener(new View.OnClickListener() {
@@ -57,8 +64,13 @@ public class ReminderFragment extends Fragment {
 
                 Toast.makeText(getContext(), "Currently in create Reminder", Toast.LENGTH_SHORT).show();
                 goToCreateEventActivity();
+
+
             }
         });
+
+
+
         databaseClass = DatabaseClass.getDatabase(getContext());
 
 
@@ -71,17 +83,35 @@ public class ReminderFragment extends Fragment {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder target, int direction) {
-                int position = target.getAdapterPosition();
-                eventAdapter.entityClasses.remove(position);
+                final int position = target.getAdapterPosition();
+                final ReminderEntity item = eventAdapter.reminderEntities.get(position);
+                eventAdapter.reminderEntities.remove(position);
+                Snackbar snackbar = Snackbar
+                        .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                    snackbar.setAction("UNDO", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            eventAdapter.reminderEntities.add(position, item);
+                            recyclerView.scrollToPosition(position);
+                        }
+                    });
+                snackbar.setActionTextColor(Color.WHITE);
+                snackbar.show();
+
+
                 eventAdapter.notifyDataSetChanged();
+
             }
         });
         helper.attachToRecyclerView(recyclerView);
 
+
+
     }
 
     private void setAdapter() {
-        List<EntityClass> classList = databaseClass.EventDao().getAllData();
+        List<ReminderEntity> classList = databaseClass.EventDao().getAllData();
         eventAdapter = new EventAdapter(getContext(), classList);
         recyclerView.setAdapter(eventAdapter);
     }
@@ -96,4 +126,8 @@ public class ReminderFragment extends Fragment {
         Intent intent = new Intent(getContext(), CreateReminderActivity.class);
         startActivity(intent);
     }
+
+
+
+
 }
