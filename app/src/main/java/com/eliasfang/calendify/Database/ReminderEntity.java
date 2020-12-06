@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "myTable")
-public class EntityClass {
+public class ReminderEntity {
     @PrimaryKey(autoGenerate = true)
     int id;
     @ColumnInfo(name = "eventname")
