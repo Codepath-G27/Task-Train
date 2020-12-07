@@ -93,6 +93,7 @@ public class ReminderFragment extends Fragment {
                         public void onClick(View view) {
 
                             eventAdapter.reminderEntities.add(position, item);
+                            eventAdapter.notifyDataSetChanged();
                             recyclerView.scrollToPosition(position);
                         }
                     });
