@@ -1,11 +1,16 @@
 package com.eliasfang.calendify;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +24,7 @@ public class ToDoFragment extends Fragment {
     public static final String TAG = "PostsFragment";
     private RecyclerView rvPosts;
 
-    private FloatingActionButton fabCreateEvent;
+    private FloatingActionButton fabCreate;
 
     protected TaskListAdapter adapter;
     protected List<Task> allTasks;
@@ -32,16 +37,18 @@ public class ToDoFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fabCreateEvent = view.findViewById(R.id.fabCreateEvent);
+        fabCreate = view.findViewById(R.id.fabCreate);
         RecyclerView recyclerView = view.findViewById(R.id.rvItems);
         final TaskListAdapter adapter = new TaskListAdapter(getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        fabCreateEvent.setOnClickListener(new View.OnClickListener() {
+        fabCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //todo send it to another activity to add an event
+                DialogFragment dialog = TaskCreateDialogFragment.newInstance();
+                dialog.show(getFragmentManager(), "tag");
+                Toast.makeText(getContext(), "Create a task", Toast.LENGTH_SHORT).show();
             }
         });
 
