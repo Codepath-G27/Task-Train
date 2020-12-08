@@ -38,7 +38,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         }
     }
 
-    void setTasks(List<Task> words) {
+    public void setTasks(List<Task> words) {
         myTasks = words;
         notifyDataSetChanged();
     }

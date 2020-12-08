@@ -25,14 +25,14 @@ public abstract class TaskRoomDatabase extends RoomDatabase {
                             // if no Migration object.
                             // Migration is not part of this practical.
                             .fallbackToDestructiveMigration()
-                            .addCallback(sRoomDatabaseCallback)
+                            //.addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
-    private static RoomDatabase.Callback sRoomDatabaseCallback =
+/*    private static RoomDatabase.Callback sRoomDatabaseCallback =
             new RoomDatabase.Callback(){
 
                 @Override
@@ -57,9 +57,8 @@ public abstract class TaskRoomDatabase extends RoomDatabase {
             // Not needed if you only populate the database
             // when it is first created
             myDao.deleteAll();
-            //todo maybe add default tasks?
             return null;
         }
-    }
+    }*/
 
 }

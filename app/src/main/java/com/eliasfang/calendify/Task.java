@@ -1,5 +1,8 @@
 package com.eliasfang.calendify;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -7,7 +10,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "task_table")
-public class Task {
+public class Task implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -124,4 +127,48 @@ public class Task {
     public void setRecurrence(String recurrence) {
         this.recurrence = recurrence;
     }
+
+
+    protected Task(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        description = in.readString();
+        epochTime = in.readLong();
+        isCompleted = in.readByte() != 0x00;
+        hasAlarm = in.readByte() != 0x00;
+        minutesBefore = in.readInt();
+        location = in.readString();
+        recurrence = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeLong(epochTime);
+        dest.writeByte((byte) (isCompleted ? 0x01 : 0x00));
+        dest.writeByte((byte) (hasAlarm ? 0x01 : 0x00));
+        dest.writeInt(minutesBefore);
+        dest.writeString(location);
+        dest.writeString(recurrence);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+        @Override
+        public Task createFromParcel(Parcel in) {
+            return new Task(in);
+        }
+
+        @Override
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
 }
