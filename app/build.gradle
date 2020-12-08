@@ -33,6 +33,14 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    def lifecycle_version = "2.2.0"
+    def arch_version = "2.1.0"
+
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
+    // LiveData
+    implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
+
     def room_version = "2.2.5"
 
     implementation "androidx.room:room-runtime:$room_version"
@@ -46,6 +54,16 @@ dependencies {
 
     // optional - Test helpers
     testImplementation "androidx.room:room-testing:$room_version"
+
+
+
+
+    implementation 'androidx.fragment:fragment:1.2.2'
+    implementation 'androidx.lifecycle:lifecycle-process:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-service:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-savedstate:2.2.0'
+    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.2.0'
+
 }
 repositories {
     mavenCentral()

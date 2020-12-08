@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +17,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static android.app.Activity.RESULT_OK;
+
 public class TaskCreateDialogFragment extends DialogFragment implements View.OnClickListener {
+    public static final String EXTRA_REPLY =
+            "com.eliasfang.calendify.TASK";
+
+    public static final int TASK_CREATION_FRAGMENT = 1;
     private EditText etTitle;
     private EditText etLocation;
     private TextView tvDate;
@@ -68,22 +76,27 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         int id = v.getId();
 
         // Manage which button was clicked on event creation dialog
-        switch(id) {
+        switch (id) {
             case R.id.imgBtnClose:
                 dismiss();
                 Toast.makeText(getContext(), "Cancelled task creation", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tvSave:
                 Task task = saveFields();
-                // TODO: save task to database
+                Intent replyIntent = new Intent();
+                replyIntent.putExtra(EXTRA_REPLY, task);
+
+                //getActivity().getSupportFragmentManager().findFragmentById(R.id.action_todo).onActivityResult(TASK_CREATION_FRAGMENT, RESULT_OK, replyIntent);
                 dismiss();
+
                 Toast.makeText(getContext(), "Task saved", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
 
-    // Helper functoins to save the fields that are filled in
+    // Helper functions to save the fields that are filled in
     private Task saveFields() {
+        //todo add some error handling to make sure that we have a valid task
         String title = etTitle.getText().toString();
         String location = etLocation.getText().toString();
         String date = tvDate.getText().toString();
@@ -91,9 +104,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         boolean recur = cbRecur.isChecked();
         String description = etDescription.getText().toString();
 
-        // TODO: Fix task constructors to create new task
-        // return new Task();
-        return null;
+        Task toReturn = new Task(title, description, (long) 0.0, false, false, 0);
+        return toReturn;
     }
 
 }
