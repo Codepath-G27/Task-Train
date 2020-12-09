@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashActivity extends AppCompatActivity {
-    private static final int SPLASH_SCREEN_TIMEOUT = 1000;
+    private static final int SPLASH_SCREEN_TIMEOUT = 2000;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
