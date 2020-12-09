@@ -3,6 +3,7 @@ package com.eliasfang.calendify;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -85,8 +86,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                 Task task = saveFields();
                 Intent replyIntent = new Intent();
                 replyIntent.putExtra(EXTRA_REPLY, task);
-
-                //getActivity().getSupportFragmentManager().findFragmentById(R.id.action_todo).onActivityResult(TASK_CREATION_FRAGMENT, RESULT_OK, replyIntent);
+                TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+                myTaskViewModel.insert(task);
                 dismiss();
 
                 Toast.makeText(getContext(), "Task saved", Toast.LENGTH_SHORT).show();
