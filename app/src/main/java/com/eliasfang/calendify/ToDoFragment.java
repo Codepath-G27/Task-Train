@@ -67,6 +67,7 @@ public class ToDoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogFragment dialog = TaskCreateDialogFragment.newInstance();
+                //todo just write it into the database directly
                 dialog.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.action_todo), TASK_CREATION_FRAGMENT);
                 dialog.show(getActivity().getSupportFragmentManager(), "tag");
                 Toast.makeText(getContext(), "Create a task", Toast.LENGTH_SHORT).show();

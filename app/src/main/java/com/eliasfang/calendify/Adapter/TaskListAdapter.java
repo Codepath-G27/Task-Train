@@ -23,7 +23,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = mInflater.inflate(R.layout.recyclerview_item, parent, false);
+        View itemView = mInflater.inflate(R.layout.item_todo, parent, false);
         return new TaskViewHolder(itemView);
     }
 
@@ -31,10 +31,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     public void onBindViewHolder(TaskViewHolder holder, int position) {
         if (myTasks != null) {
             Task current = myTasks.get(position);
-            holder.taskItemView.setText(current.getName());
+            holder.tvTitle.setText(current.getName());
+
         } else {
             // Covers the case of data not being ready yet.
-            holder.taskItemView.setText("Task not specified yet");
+            holder.tvTitle.setText("Task not specified yet");
         }
     }
 
@@ -53,11 +54,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     }
 
     class TaskViewHolder extends RecyclerView.ViewHolder {
-        private final TextView taskItemView;
+        private final TextView tvTitle;
+        private final TextView tvDate;
 
         private TaskViewHolder(View itemView) {
             super(itemView);
-            taskItemView = itemView.findViewById(R.id.textView);
+            tvTitle = itemView.findViewById(R.id.tvTitle);
+            tvDate = itemView.findViewById(R.id.tvDate);
         }
     }
 }
