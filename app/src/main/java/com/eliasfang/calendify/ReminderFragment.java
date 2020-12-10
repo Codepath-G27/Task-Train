@@ -115,6 +115,8 @@ public class ReminderFragment extends Fragment {
         List<ReminderEntity> classList = databaseClass.EventDao().getAllData();
         eventAdapter = new EventAdapter(getContext(), classList);
         recyclerView.setAdapter(eventAdapter);
+        final int position = eventAdapter.reminderEntities.size()-1;
+        recyclerView.scrollToPosition(position);
     }
 
     @Override
@@ -126,6 +128,7 @@ public class ReminderFragment extends Fragment {
     private void goToCreateEventActivity() {
         Intent intent = new Intent(getContext(), CreateReminderActivity.class);
         startActivity(intent);
+
     }
 
 
