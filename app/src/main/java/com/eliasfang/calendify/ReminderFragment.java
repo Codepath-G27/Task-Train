@@ -86,12 +86,13 @@ public class ReminderFragment extends Fragment {
                 final int position = target.getAdapterPosition();
                 final ReminderEntity item = eventAdapter.reminderEntities.get(position);
                 eventAdapter.reminderEntities.remove(position);
+                databaseClass.EventDao().deleteTask(item.getId());
                 Snackbar snackbar = Snackbar
                         .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_LONG);
                     snackbar.setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-
+                            databaseClass.EventDao().insertAll(item);
                             eventAdapter.reminderEntities.add(position, item);
                             eventAdapter.notifyDataSetChanged();
                             recyclerView.scrollToPosition(position);

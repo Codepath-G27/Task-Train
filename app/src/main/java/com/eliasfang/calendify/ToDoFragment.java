@@ -91,12 +91,13 @@ public class ToDoFragment extends Fragment {
                 final int position = target.getAdapterPosition();
                 final Task item = adapter.getMyTasks().get(position);
                 adapter.getMyTasks().remove(position);
+                myTaskViewModel.deleteTask(item);
                 Snackbar snackbar = Snackbar
                         .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_LONG);
                 snackbar.setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        myTaskViewModel.insert(item);
                         adapter.getMyTasks().add(position, item);
                         adapter.notifyDataSetChanged();
                         recyclerView.scrollToPosition(position);

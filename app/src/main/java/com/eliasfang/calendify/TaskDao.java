@@ -17,6 +17,9 @@ public interface TaskDao {
     @Query("DELETE FROM task_table")
     void deleteAll();
 
+    @Query("DELETE FROM task_table WHERE id = :taskId")
+    void deleteTask(int taskId);
+
     //TODO be able to organize tasks by earliest due date first
     @Query("SELECT * from task_table")
     LiveData<List<Task>> getAllTasks();
