@@ -91,7 +91,7 @@ public class ToDoFragment extends Fragment {
                 adapter.getMyTasks().remove(position);
                 myTaskViewModel.deleteTask(item);
                 Snackbar snackbar = Snackbar
-                        .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                        .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_SHORT);
                 snackbar.setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
