@@ -1,5 +1,6 @@
 package com.eliasfang.calendify;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -61,10 +62,10 @@ public class ReminderFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                DialogFragment dialog = TaskCreateDialogFragment.newInstance();
-                dialog.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.action_reminder), REMINDER_CREATION_FRAGMENT);
-                dialog.show(getActivity().getSupportFragmentManager(), "tag");
-                Toast.makeText(getContext(), "Create a reminder", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Create a Reminder", Toast.LENGTH_SHORT).show();
+                goToCreateEventActivity();
+
+
             }
         });
 
@@ -87,7 +88,7 @@ public class ReminderFragment extends Fragment {
                 eventAdapter.reminderEntities.remove(position);
                 databaseClass.EventDao().deleteTask(item.getId());
                 Snackbar snackbar = Snackbar
-                        .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                        .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_SHORT);
                     snackbar.setAction("UNDO", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -123,6 +124,12 @@ public class ReminderFragment extends Fragment {
     public void onResume() {
         super.onResume();
         setAdapter();
+    }
+
+    private void goToCreateEventActivity() {
+        Intent intent = new Intent(getContext(), ReminderCreateDialogFragment.class);
+        startActivity(intent);
+
     }
 
 }
