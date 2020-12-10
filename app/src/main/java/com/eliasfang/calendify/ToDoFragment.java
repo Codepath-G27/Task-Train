@@ -2,23 +2,28 @@ package com.eliasfang.calendify;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eliasfang.calendify.Adapter.TaskListAdapter;
+import com.eliasfang.calendify.Database.ReminderEntity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
 
@@ -32,7 +37,7 @@ public class ToDoFragment extends Fragment {
             "com.eliasfang.calendify.TASK";
 
     public static final String TAG = "PostsFragment";
-    private RecyclerView rvPosts;
+    private RecyclerView recyclerView;
 
     private FloatingActionButton fabCreate;
 
@@ -49,7 +54,7 @@ public class ToDoFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fabCreate = view.findViewById(R.id.fabCreate);
-        RecyclerView recyclerView = view.findViewById(R.id.rvItems);
+         recyclerView = view.findViewById(R.id.rvItems);
         myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         final TaskListAdapter adapter = new TaskListAdapter(getContext());
         recyclerView.setAdapter(adapter);
@@ -74,6 +79,38 @@ public class ToDoFragment extends Fragment {
             }
         });
 
+        ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder target, int direction) {
+                final int position = target.getAdapterPosition();
+                final Task item = adapter.getMyTasks().get(position);
+                adapter.getMyTasks().remove(position);
+                Snackbar snackbar = Snackbar
+                        .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_LONG);
+                snackbar.setAction("UNDO", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        adapter.getMyTasks().add(position, item);
+                        adapter.notifyDataSetChanged();
+                        recyclerView.scrollToPosition(position);
+                    }
+                });
+                snackbar.setActionTextColor(Color.WHITE);
+                snackbar.show();
+
+
+                adapter.notifyDataSetChanged();
+
+            }
+        });
+        helper.attachToRecyclerView(recyclerView);
     }
 
     @Override
@@ -95,5 +132,6 @@ public class ToDoFragment extends Fragment {
         }
 
     }
+
 
 }
