@@ -12,11 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TaskCreateDialogFragment"></activity>
-        <activity android:name=".NotificationMessage" />
-        <activity android:name=".CreateReminderActivity" />
-        <activity android:name=".alarmSetup.NotificationMessage"></activity>
-        <activity android:name=".alarmSetup.CreateReminderActivity" />
         <activity android:name=".MainActivity" />
 
         <activity android:name=".SplashActivity" android:theme="@style/SplashTheme">

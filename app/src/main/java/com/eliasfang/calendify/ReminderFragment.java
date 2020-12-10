@@ -1,6 +1,5 @@
 package com.eliasfang.calendify;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,15 +9,14 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eliasfang.calendify.Adapter.EventAdapter;
 import com.eliasfang.calendify.Database.ReminderEntity;
-import com.eliasfang.calendify.alarmSetup.CreateReminderActivity;
 import com.eliasfang.calendify.Database.DatabaseClass;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -29,6 +27,7 @@ import java.util.List;
  * A simple {@link Fragment subclass}
  */
 public class ReminderFragment extends Fragment {
+    public static final int REMINDER_CREATION_FRAGMENT = 1;
 
     private RecyclerView recyclerView;
     private FloatingActionButton btn_createEvent;
@@ -62,10 +61,10 @@ public class ReminderFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Toast.makeText(getContext(), "Currently in create Reminder", Toast.LENGTH_SHORT).show();
-                goToCreateEventActivity();
-
-
+                DialogFragment dialog = TaskCreateDialogFragment.newInstance();
+                dialog.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.action_reminder), REMINDER_CREATION_FRAGMENT);
+                dialog.show(getActivity().getSupportFragmentManager(), "tag");
+                Toast.makeText(getContext(), "Create a reminder", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -125,13 +124,5 @@ public class ReminderFragment extends Fragment {
         super.onResume();
         setAdapter();
     }
-
-    private void goToCreateEventActivity() {
-        Intent intent = new Intent(getContext(), CreateReminderActivity.class);
-        startActivity(intent);
-
-    }
-
-
 
 }

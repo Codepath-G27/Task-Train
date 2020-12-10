@@ -32,11 +32,10 @@ import static android.app.Activity.RESULT_OK;
 public class ToDoFragment extends Fragment {
 
     public static final int TASK_CREATION_FRAGMENT = 1;
-
     public static final String EXTRA_REPLY =
             "com.eliasfang.calendify.TASK";
 
-    public static final String TAG = "PostsFragment";
+    public static final String TAG = "ToDoFragment";
     private RecyclerView recyclerView;
 
     private FloatingActionButton fabCreate;
@@ -72,7 +71,6 @@ public class ToDoFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogFragment dialog = TaskCreateDialogFragment.newInstance();
-                //todo just write it into the database directly
                 dialog.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.action_todo), TASK_CREATION_FRAGMENT);
                 dialog.show(getActivity().getSupportFragmentManager(), "tag");
                 Toast.makeText(getContext(), "Create a task", Toast.LENGTH_SHORT).show();
