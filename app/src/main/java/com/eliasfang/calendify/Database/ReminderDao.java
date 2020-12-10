@@ -15,4 +15,7 @@ public interface ReminderDao {
     @Query("SELECT * FROM myTable")
     List<ReminderEntity> getAllData();
 
+    @Query("DELETE FROM myTable WHERE id = :alarmId")
+    void deleteTask(int alarmId);
+
 }

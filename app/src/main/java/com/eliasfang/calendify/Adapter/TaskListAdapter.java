@@ -60,11 +60,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     class TaskViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvTitle;
         private final TextView tvDate;
+        //private final TextView tvDesc;
 
         private TaskViewHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDate = itemView.findViewById(R.id.tvDate);
+            //tvDesc = itemView.findViewById(R.id.tvDescription);
         }
     }
 }

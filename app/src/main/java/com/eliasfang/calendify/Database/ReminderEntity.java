@@ -40,4 +40,8 @@ public class ReminderEntity {
     public void setEventtime(String eventtime) {
         this.eventtime = eventtime;
     }
+
+    public int getId() {
+        return id;
+    }
 }
