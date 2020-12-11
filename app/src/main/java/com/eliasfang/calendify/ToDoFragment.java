@@ -54,8 +54,9 @@ public class ToDoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         fabCreate = view.findViewById(R.id.fabCreate);
          recyclerView = view.findViewById(R.id.rvItems);
-        myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+
         final TaskListAdapter adapter = new TaskListAdapter(getContext());
+        myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
