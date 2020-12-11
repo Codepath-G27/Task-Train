@@ -23,6 +23,9 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.eliasfang.calendify.Database.DatabaseClass;
+import com.eliasfang.calendify.Database.ReminderEntity;
+
 import java.util.Calendar;
 
 import static android.app.Activity.RESULT_OK;
@@ -37,6 +40,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     private Button btnTime;
     private CheckBox cbRecur;
     private EditText etDescription;
+    DatabaseClass dataBase;
+
 
     public TaskCreateDialogFragment() {
         // Required empty constructor
@@ -52,6 +57,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         super.onCreate(savedInstanceState);
         // Set to style defined in styles.xml
         setStyle(DialogFragment.STYLE_NORMAL, R.style.FullscreenDialogTheme);
+        dataBase = DatabaseClass.getDatabase(getContext());
     }
 
     @Nullable
@@ -66,6 +72,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         btnTime = view.findViewById(R.id.btnTime);
         cbRecur = view.findViewById(R.id.cbRecur);
         etDescription = view.findViewById(R.id.etDescription);
+
+
 
         // Show soft keyboard automatically and set focus on event name
         etTitle.requestFocus();
@@ -102,6 +110,16 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                 replyIntent.putExtra(EXTRA_REPLY, task);
                 TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
                 myTaskViewModel.insert(task);
+
+                //add alarm in a very brute force way
+                ReminderEntity reminderEntity = new ReminderEntity();
+                String value = etTitle.getText().toString();
+                String date = (btnDate.getText().toString().trim());
+                String time = (btnTime.getText().toString().trim());
+                reminderEntity.setEventdate(date);
+                reminderEntity.setEventname(value);
+                reminderEntity.setEventtime(time);
+                dataBase.EventDao().insertAll(reminderEntity);
                 dismiss();
 
                 Toast.makeText(getContext(), "Task saved", Toast.LENGTH_SHORT).show();
