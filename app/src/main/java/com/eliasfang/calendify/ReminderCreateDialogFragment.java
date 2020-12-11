@@ -53,7 +53,6 @@ public class ReminderCreateDialogFragment extends AppCompatActivity implements V
         dataBase = DatabaseClass.getDatabase(getApplicationContext());
 
     }
-
     @Override
     public void onClick(View view) {
         if (view == btn_set_date) {
