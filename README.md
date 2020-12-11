@@ -26,7 +26,7 @@ User Stories
 
 Here's an update on our Unit 11 progress: 
 
-<img src='https://files.slack.com/files-pri/T0J064FCJ-F01H46576AD/alarm_delete.gif' width='' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/YWPobLY.gif' width='' alt='Video Walkthrough' />
 GIF created with [LiceCap](https://www.cockos.com/licecap/).
 
 
