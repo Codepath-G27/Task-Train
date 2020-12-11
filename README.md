@@ -15,13 +15,14 @@
 
 User Stories
 
-- [ ]  User must be able to see a calendar that has all events and to-do items
-- [ ]  User must be able to create a to-do and event items and set item name, time, alarm
-- [ ]  User must be able to see relevant to-do items in a list
-- [ ]  User must be able to edit and remove items from the calendar
-- [X]  User receives a daily notification stating what events/to-do items they have for the day
+- [X]  Unique UI design with icon and splashScreen
+- [X]  User must be able to create a to-do and event items and set item name, time, alarm
+- [X]  User must be able to see relevant to-do items in a list
+- [X]  User must be able to edit and remove items from the list of task
+- [X]  User receives a notification at a designated time
 - [X]  User is able to set alarms/reminders
-- [X]  Reminders activate at the given time notificng the user
+- [X]  Reminders activate at the given time notifying the user
+- [X]  Synch between task and reminder creation
 
 Here's an update on our Unit 11 progress: 
 
@@ -47,30 +48,27 @@ Our app allows users to create events and to-do items that can be organized on a
 
 **Required Must-have Stories**
 
-* User must be able to see a calendar that has all events and to-do items
 * User must be able to create a to-do and event items and set item name, time, alarm
 * User must be able to see relevant to-do items in a list
-* User must be able to edit and remove items from the calendar
-* User receives a daily notification stating what events/to-do items they have for the day
+* User must be able to edit and remove items from the list
+* Reminders activate at the given time notifying the user
 * User is able to adjust alarms, reminders through a settings page
 
 
 **Optional Nice-to-have Stories**
 
 * User can import other calendars via .ics files (for Canvas, Outlook, Google Calendar support)
-* User is able to customize the calendar with color options
+* User is able to customize the app with color options
 * User is able to add labels to to-do/event items
 * User is able to add descriptions to alarms and to-do items. 
 * User can see upcoming schedule via a widget for the lockscreen
 
 ### 2. Screen Archetypes
 
-* Calendar Screen
-   * Displays all events and to-do items
-   * User can edit/delete an event/to-do item by tapping on it
 * To-Do List Screen
    * User can view all upcoming events and to-doo items
    * User can tap a "plus/add" button in order to add a to-do item
+   * Display the additional information on the task creation screen
 * To-Do/Event Creation Screen
     * User can set/edit event/to-do item, classify item, and set an alarm 
 * Settings Screen
@@ -80,16 +78,16 @@ Our app allows users to create events and to-do items that can be organized on a
 
 **Tab Navigation** (Tab to Screen)
 
-* Calendar
+* Reminders
 * To-do List
 
 **Flow Navigation** (Screen to Screen)
 
-* Calendar
-   * Create event
-   * Click day
-   * Swipe between months
-   * Edit events
+* Reminder
+   * Create reminder
+   * Set date
+   * Set time
+   * Add description
 * To-do List
    * Create tasks
    * Check off tasks
