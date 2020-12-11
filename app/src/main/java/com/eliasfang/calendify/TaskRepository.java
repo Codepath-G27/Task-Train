@@ -30,6 +30,10 @@ public class TaskRepository {
         new deleteAsyncTask(myTaskDao).execute(task);
     }
 
+    public void updateCompleted(Task task) {
+        new updateAsyncTask(myTaskDao).execute(task);
+    }
+
 
     private class insertAsyncTask extends AsyncTask<Task, Void, Void> {
         private TaskDao myAsyncTaskDao;
@@ -52,6 +56,18 @@ public class TaskRepository {
         @Override
         protected Void doInBackground(final Task... params) {
             myAsyncTaskDao.deleteTask(params[0].getId());
+            return null;
+        }
+    }
+    private class updateAsyncTask extends AsyncTask<Task, Void, Void> {
+        private TaskDao myAsyncTaskDao;
+        public updateAsyncTask(TaskDao myTaskDao) {
+            myAsyncTaskDao = myTaskDao;
+        }
+
+        @Override
+        protected Void doInBackground(final Task... params) {
+            myAsyncTaskDao.updateIsComplete(params[0].getId());
             return null;
         }
     }

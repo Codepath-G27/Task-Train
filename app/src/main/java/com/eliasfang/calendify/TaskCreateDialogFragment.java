@@ -6,8 +6,11 @@ import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,8 +28,13 @@ import android.widget.Toast;
 
 import com.eliasfang.calendify.Database.DatabaseClass;
 import com.eliasfang.calendify.Database.ReminderEntity;
+import com.eliasfang.calendify.alarmSetup.Alarm;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -40,6 +48,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     private Button btnTime;
     private CheckBox cbRecur;
     private EditText etDescription;
+
     DatabaseClass dataBase;
 
 
@@ -120,6 +129,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                 reminderEntity.setEventname(value);
                 reminderEntity.setEventtime(time);
                 dataBase.EventDao().insertAll(reminderEntity);
+                setAlarm(value, date, time);
+
                 dismiss();
 
                 Toast.makeText(getContext(), "Task saved", Toast.LENGTH_SHORT).show();
@@ -189,6 +200,27 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
         Task toReturn = new Task(title, description, (long) 0.0, false, false, 0);
         return toReturn;
+    }
+    private void setAlarm(String text, String date, String time) {
+        AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(getContext(), Alarm.class);
+        intent.putExtra("event", text);
+        intent.putExtra("time", date);
+        intent.putExtra("date", time);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        String TimeandDate = date + " " + time;
+        DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
+        try {
+            Date date1 = formatter.parse(TimeandDate);
+            am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 }

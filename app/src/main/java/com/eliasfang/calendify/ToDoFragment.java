@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,10 @@ public class ToDoFragment extends Fragment {
 
     private TaskViewModel myTaskViewModel;
 
+    private CheckBox cbItemComplete;
+
+
+
     public ToDoFragment() {
         // Required empty public constructor
     }
@@ -54,6 +59,9 @@ public class ToDoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         fabCreate = view.findViewById(R.id.fabCreate);
          recyclerView = view.findViewById(R.id.rvItems);
+
+        cbItemComplete = view.findViewById(R.id.cbItemComplete);
+
         myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         final TaskListAdapter adapter = new TaskListAdapter(getContext());
         recyclerView.setAdapter(adapter);
@@ -74,8 +82,11 @@ public class ToDoFragment extends Fragment {
                 dialog.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.action_todo), TASK_CREATION_FRAGMENT);
                 dialog.show(getActivity().getSupportFragmentManager(), "tag");
                 Toast.makeText(getContext(), "Create a task", Toast.LENGTH_SHORT).show();
+
             }
         });
+
+
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
@@ -88,29 +99,45 @@ public class ToDoFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder target, int direction) {
                 final int position = target.getAdapterPosition();
                 final Task item = adapter.getMyTasks().get(position);
-                adapter.getMyTasks().remove(position);
-                myTaskViewModel.deleteTask(item);
-                Snackbar snackbar = Snackbar
-                        .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_SHORT);
-                snackbar.setAction("UNDO", new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        myTaskViewModel.insert(item);
-                        adapter.getMyTasks().add(position, item);
-                        adapter.notifyDataSetChanged();
-                        recyclerView.scrollToPosition(position);
-                    }
-                });
-                snackbar.setActionTextColor(Color.WHITE);
-                snackbar.show();
+
+                if (direction == ItemTouchHelper.LEFT) {
+                    myTaskViewModel.updateCompleted(item);
+                    myTaskViewModel.refreshTasks();
+                    Snackbar snackbar = Snackbar
+                            .make(target.itemView, "Task Complete!", Snackbar.LENGTH_SHORT);
+                    snackbar.setActionTextColor(Color.WHITE);
+                    snackbar.show();
+                } else {
+                    adapter.getMyTasks().remove(position);
+                    myTaskViewModel.deleteTask(item);
+                    Snackbar snackbar = Snackbar
+                            .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_SHORT);
+                    snackbar.setAction("UNDO", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            myTaskViewModel.insert(item);
+                            adapter.getMyTasks().add(position, item);
+                            adapter.notifyDataSetChanged();
+                            recyclerView.scrollToPosition(position);
+                        }
+                    });
+                    snackbar.setActionTextColor(Color.WHITE);
+                    snackbar.show();
 
 
-                adapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
+
+                }
+
 
             }
         });
         helper.attachToRecyclerView(recyclerView);
+
+
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -131,6 +158,9 @@ public class ToDoFragment extends Fragment {
         }
 
     }
+
+
+
 
 
 }
