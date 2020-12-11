@@ -29,7 +29,7 @@ Here's an update on our Unit 11 progress:
 <img src='https://i.imgur.com/HPIcBVO.gif' width='' alt='Video Walkthrough' />
 <img src='https://i.imgur.com/jnukcrF.gif' width='' alt='Video Walkthrough' />
 <img src='https://i.imgur.com/YWPobLY.gif' width='' alt='Video Walkthrough' />
-<img src='https://i.imgur.com/KLoVv5z.png' width='400' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/KLoVv5z.png' width='400' height='20' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](https://www.cockos.com/licecap/).
 
