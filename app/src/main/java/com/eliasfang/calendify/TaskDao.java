@@ -21,13 +21,16 @@ public interface TaskDao {
     void deleteTask(int taskId);
 
     //TODO be able to organize tasks by earliest due date first
-    @Query("SELECT * from task_table")
+    @Query("SELECT * from task_table where isCompleted = 0")
     LiveData<List<Task>> getAllTasks();
 
     //TODO create edit task function, which would query for a given task id, delete it
     //then reinsert with same id, updated values, update query
 
-    @Query("SELECT * from task_table where isCompleted = 'false'")
+    @Query("UPDATE task_table SET isCompleted = 1 WHERE id = :taskId")
+    void updateIsComplete(int taskId);
+
+    @Query("SELECT * from task_table where isCompleted = 0")
     LiveData<List<Task>> getTasksInProgress();
 
     @Query("SELECT * from task_table where hasAlarm = 'true'")

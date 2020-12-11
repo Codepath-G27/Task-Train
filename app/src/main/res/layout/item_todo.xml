@@ -17,7 +17,7 @@
         android:background="@color/white">
 
         <CheckBox
-            android:id="@+id/ibItemComplete"
+            android:id="@+id/cbItemComplete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -25,7 +25,8 @@
             android:layout_marginTop="5dp"
             android:button="@drawable/custom_checkbox"
             android:scaleX=".75"
-            android:scaleY=".75" />
+            android:scaleY=".75"
+       />
 
         <TextView
             android:id="@+id/tvTitle"
@@ -34,7 +35,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="5dp"
             android:layout_marginTop="0dp"
-            android:layout_toEndOf="@+id/ibItemComplete"
+            android:layout_toEndOf="@+id/cbItemComplete"
             tools:text="Name of Task Here" />
 
         <TextView
@@ -44,7 +45,7 @@
             android:layout_below="@+id/tvTitle"
             android:layout_marginStart="5dp"
             android:layout_marginTop="2dp"
-            android:layout_toEndOf="@+id/ibItemComplete"
+            android:layout_toEndOf="@+id/cbItemComplete"
             tools:text="MM/DD/YYYY (Due date)" />
 
         <ImageView

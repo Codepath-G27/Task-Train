@@ -2,6 +2,7 @@ package com.eliasfang.calendify;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         });
         // default view
         bottomNavigationView.setSelectedItemId((R.id.action_todo));
+
     }
 
 
