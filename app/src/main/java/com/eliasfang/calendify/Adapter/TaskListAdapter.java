@@ -37,7 +37,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         if (myTasks != null) {
             Task current = myTasks.get(position);
             holder.tvTitle.setText(current.getName());
-            holder.prep();
 
         } else {
             // Covers the case of data not being ready yet.
@@ -74,26 +73,14 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     class TaskViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvTitle;
         private final TextView tvDate;
-        private final CheckBox isComplete;
         //private final TextView tvDesc;
 
         private TaskViewHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvDate = itemView.findViewById(R.id.tvDate);
-            isComplete = itemView.findViewById(R.id.cbItemComplete);
 
             //tvDesc = itemView.findViewById(R.id.tvDescription);
-        }
-
-        public void prep() {
-            isComplete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-
         }
 
     }

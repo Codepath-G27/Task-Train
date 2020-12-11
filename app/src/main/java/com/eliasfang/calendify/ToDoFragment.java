@@ -46,7 +46,6 @@ public class ToDoFragment extends Fragment {
 
     private TaskViewModel myTaskViewModel;
 
-    private CheckBox cbItemComplete;
 
 
 
@@ -58,9 +57,7 @@ public class ToDoFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fabCreate = view.findViewById(R.id.fabCreate);
-         recyclerView = view.findViewById(R.id.rvItems);
-
-        cbItemComplete = view.findViewById(R.id.cbItemComplete);
+        recyclerView = view.findViewById(R.id.rvItems);
 
         myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
         final TaskListAdapter adapter = new TaskListAdapter(getContext());
