@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -38,11 +39,13 @@ public class ReminderCreateDialogFragment extends AppCompatActivity implements V
     EditText editext_message;
     String notificationTime;
     DatabaseClass dataBase;
+    ImageButton imgBtnClose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_fragment_create_reminder);
+        imgBtnClose = findViewById(R.id.imgBtnClose);
         btn_submit = findViewById(R.id.tvSave);
         btn_set_date = findViewById(R.id.btn_set_date);
         editext_message = findViewById(R.id.et_note);
@@ -50,15 +53,19 @@ public class ReminderCreateDialogFragment extends AppCompatActivity implements V
         btn_set_date.setOnClickListener(this);
         btn_submit.setOnClickListener(this);
         btn_set_time.setOnClickListener(this);
+        imgBtnClose.setOnClickListener(this);
         dataBase = DatabaseClass.getDatabase(getApplicationContext());
 
     }
+
     @Override
     public void onClick(View view) {
         if (view == btn_set_date) {
             setDate();
         } else if (view == btn_set_time) {
             setTime();
+        } else if (view == imgBtnClose) {
+            finish();
         } else {
             submit();
         }

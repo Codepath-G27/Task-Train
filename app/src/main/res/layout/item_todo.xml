@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginVertical="1dp"
     android:layout_marginHorizontal="5dp"
-    app:cardBackgroundColor="@color/black"
-    android:clickable="true"
-    android:foreground="?android:attr/selectableItemBackground">
+    android:layout_marginVertical="1dp"
+    android:clickable="false"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/black">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,11 +21,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:scaleX=".75"
-            android:scaleY=".75"
-            android:layout_marginTop="5dp"
             android:layout_marginLeft="1dp"
-            android:button="@drawable/custom_checkbox" />
+            android:layout_marginTop="5dp"
+            android:button="@drawable/custom_checkbox"
+            android:scaleX=".75"
+            android:scaleY=".75" />
 
         <TextView
             android:id="@+id/tvTitle"
@@ -47,14 +47,22 @@
             android:layout_toEndOf="@+id/ibItemComplete"
             tools:text="MM/DD/YYYY (Due date)" />
 
-        <ImageButton
-            android:id="@+id/ibAlarm"
+        <ImageView
+            android:id="@+id/ivAlarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="25dp"
-            app:srcCompat="@android:drawable/ic_lock_idle_alarm" />
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="55dp"
+            app:srcCompat="@drawable/ic_baseline_access_alarm_24" />
+
+        <Switch
+            android:id="@+id/swAlarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="5dp" />
 
     </RelativeLayout>
 

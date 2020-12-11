@@ -18,28 +18,6 @@
                         android:height="30dp" />
                 </shape>
             </item>
-            <item
-                android:width="8dp"
-                android:height="2dp"
-                android:top="20dp"
-                android:left="6dp">
-                <rotate android:fromDegrees="45">
-                    <shape android:shape="rectangle">
-                        <solid android:color="@color/white" />
-                    </shape>
-                </rotate>
-            </item>
-            <item
-                android:width="19dp"
-                android:height="2dp"
-                android:top="16dp"
-                android:left="9dp">
-                <rotate android:fromDegrees="-45">
-                    <shape android:shape="rectangle">
-                        <solid android:color="@color/white" />
-                    </shape>
-                </rotate>
-            </item>
         </layer-list>
     </item>
 </selector>
