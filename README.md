@@ -10,9 +10,6 @@
 
 ## Overview
 
-
-## Sprint Week 2 (Unit 11) Update
-
 User Stories
 
 - [X]  Unique UI design with icon and splashScreen
