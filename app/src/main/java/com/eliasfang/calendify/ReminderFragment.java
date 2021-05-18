@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eliasfang.calendify.Adapter.EventAdapter;
+import com.eliasfang.calendify.Adapter.TaskListAdapter;
 import com.eliasfang.calendify.Database.ReminderEntity;
 import com.eliasfang.calendify.Database.DatabaseClass;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -55,8 +56,6 @@ public class ReminderFragment extends Fragment {
         btn_createEvent = view.findViewById(R.id.btn_createEvent);
         recyclerView = view.findViewById(R.id.reminder_recyclerview);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
-
 
         btn_createEvent.setOnClickListener(new View.OnClickListener() {
             @Override

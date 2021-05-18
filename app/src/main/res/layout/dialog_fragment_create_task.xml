@@ -140,12 +140,12 @@
             </LinearLayout>
 
             <CheckBox
-                android:id="@+id/cbRecur"
+                android:id="@+id/cbAlarm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="Recurring"
+                android:text="Alarm"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
@@ -160,7 +160,7 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cbRecur" />
+                app:layout_constraintTop_toBottomOf="@+id/cbAlarm" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

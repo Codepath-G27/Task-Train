@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
@@ -36,8 +35,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static android.app.Activity.RESULT_OK;
-
 public class TaskCreateDialogFragment extends DialogFragment implements View.OnClickListener {
     public static final String EXTRA_REPLY =
             "com.eliasfang.calendify.TASK";
@@ -48,6 +45,9 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     private Button btnTime;
     private CheckBox cbRecur;
     private EditText etDescription;
+    private CheckBox cbAlarm;
+
+    private Boolean checked = false;
 
     DatabaseClass dataBase;
 
@@ -79,8 +79,9 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         etLocation = view.findViewById(R.id.etLocation);
         btnDate = view.findViewById(R.id.btnDate);
         btnTime = view.findViewById(R.id.btnTime);
-        cbRecur = view.findViewById(R.id.cbRecur);
+        cbRecur = view.findViewById(R.id.cbAlarm);
         etDescription = view.findViewById(R.id.etDescription);
+        cbAlarm = view.findViewById(R.id.cbAlarm);
 
 
 
@@ -119,17 +120,20 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                 replyIntent.putExtra(EXTRA_REPLY, task);
                 TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
                 myTaskViewModel.insert(task);
-
-                //add alarm in a very brute force way
-                ReminderEntity reminderEntity = new ReminderEntity();
-                String value = etTitle.getText().toString();
-                String date = (btnDate.getText().toString().trim());
-                String time = (btnTime.getText().toString().trim());
-                reminderEntity.setEventdate(date);
-                reminderEntity.setEventname(value);
-                reminderEntity.setEventtime(time);
-                dataBase.EventDao().insertAll(reminderEntity);
-                setAlarm(value, date, time);
+                if(cbAlarm.isChecked()) {
+                    task.setHasAlarm(true);
+                    cbAlarm.setChecked(true);
+                    //add alarm in a very brute force way
+                    ReminderEntity reminderEntity = new ReminderEntity();
+                    String value = etTitle.getText().toString();
+                    String date = (btnDate.getText().toString().trim());
+                    String time = (btnTime.getText().toString().trim());
+                    reminderEntity.setEventdate(date);
+                    reminderEntity.setEventname(value);
+                    reminderEntity.setEventtime(time);
+                    dataBase.EventDao().insertAll(reminderEntity);
+                    setAlarm(value, date, time);
+                }
 
                 dismiss();
 
@@ -137,6 +141,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                 break;
         }
     }
+
+
 
     private void saveDate() {
         Calendar calendar = Calendar.getInstance();
@@ -195,10 +201,11 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         String location = etLocation.getText().toString();
         String date = btnDate.getText().toString();
         String time = btnTime.getText().toString();
+
         boolean recur = cbRecur.isChecked();
         String description = etDescription.getText().toString();
 
-        Task toReturn = new Task(title, description, (long) 0.0, false, false, 0);
+        Task toReturn = new Task(title, description, date, (long) 0.0, false, recur, 0);
         return toReturn;
     }
     private void setAlarm(String text, String date, String time) {

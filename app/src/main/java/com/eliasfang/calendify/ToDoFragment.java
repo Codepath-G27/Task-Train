@@ -4,14 +4,21 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -46,7 +53,7 @@ public class ToDoFragment extends Fragment {
 
     private TaskViewModel myTaskViewModel;
 
-
+    private SearchView searchView;
 
 
     public ToDoFragment() {
@@ -59,8 +66,31 @@ public class ToDoFragment extends Fragment {
         fabCreate = view.findViewById(R.id.fabCreate);
         recyclerView = view.findViewById(R.id.rvItems);
 
+        //Set search view to allow for seach
+        searchView = view.findViewById(R.id.search);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                if (adapter == null) {
+
+                }
+                Log.i(TAG, "And2 22  2" + newText);
+                adapter.getFilter().filter(newText);
+                Log.i(TAG, "And2 22  2" + newText);
+
+                return false;
+            }
+        });
+
+
         myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        final TaskListAdapter adapter = new TaskListAdapter(getContext());
+        adapter = new TaskListAdapter(getContext());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -72,6 +102,8 @@ public class ToDoFragment extends Fragment {
             }
         });
 
+        setHasOptionsMenu(true);
+
         fabCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,7 +114,6 @@ public class ToDoFragment extends Fragment {
 
             }
         });
-
 
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -135,14 +166,12 @@ public class ToDoFragment extends Fragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_to_do, container, false);
     }
-
 
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -153,11 +182,9 @@ public class ToDoFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "Error occurred", Toast.LENGTH_SHORT).show();
         }
+        adapter.notifyDataSetChanged();
 
     }
-
-
-
 
 
 }
