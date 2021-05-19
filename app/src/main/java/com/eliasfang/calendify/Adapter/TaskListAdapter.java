@@ -1,8 +1,10 @@
 package com.eliasfang.calendify.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -100,16 +102,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             tvDate = itemView.findViewById(R.id.tvDate);
             toggle = itemView.findViewById(R.id.swAlarm);
 
-            toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                    if(isChecked == false){
-                        Log.i(TAG, "Not Checked");
-                        myTasks.get(position).setHasAlarm(false);
 
-                    }
-                }
-            });
+
+
+
 
             //tvDesc = itemView.findViewById(R.id.tvDescription);
         }

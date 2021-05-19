@@ -38,10 +38,8 @@ public class Task implements Parcelable {
     @ColumnInfo(name = "recurrence")
     private String recurrence; //TODO also change this to some appropriate Java time library
 
-
-
     @ColumnInfo(name = "eventTime")
-    String eventTime;
+    private String eventTime;
 
 
 

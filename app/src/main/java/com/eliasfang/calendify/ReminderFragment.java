@@ -60,8 +60,6 @@ public class ReminderFragment extends Fragment {
         btn_createEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Toast.makeText(getContext(), "Create a Reminder", Toast.LENGTH_SHORT).show();
                 goToCreateEventActivity();
 
 

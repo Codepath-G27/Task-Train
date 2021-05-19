@@ -66,7 +66,7 @@ public class ToDoFragment extends Fragment {
         fabCreate = view.findViewById(R.id.fabCreate);
         recyclerView = view.findViewById(R.id.rvItems);
 
-        //Set search view to allow for seach
+        //Set search view to allow for search
         searchView = view.findViewById(R.id.search);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -77,13 +77,7 @@ public class ToDoFragment extends Fragment {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                if (adapter == null) {
-
-                }
-                Log.i(TAG, "And2 22  2" + newText);
                 adapter.getFilter().filter(newText);
-                Log.i(TAG, "And2 22  2" + newText);
-
                 return false;
             }
         });
@@ -110,7 +104,7 @@ public class ToDoFragment extends Fragment {
                 DialogFragment dialog = TaskCreateDialogFragment.newInstance();
                 dialog.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.action_todo), TASK_CREATION_FRAGMENT);
                 dialog.show(getActivity().getSupportFragmentManager(), "tag");
-                Toast.makeText(getContext(), "Create a task", Toast.LENGTH_SHORT).show();
+
 
             }
         });
