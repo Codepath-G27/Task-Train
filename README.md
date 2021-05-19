@@ -65,7 +65,7 @@ Alarm
 
 ### Technology Used
 
-Room Persistence Library, AlarmManager, Jinatonic Confetti, Alerter
+Room Persistence Library, AlarmManager, Jinatonic Confetti Library, Alerter Library, Styleable Toast Library
 
 Graphic Assets Produced by: [Marcela Mayor](https://www.instagram.com/marcy_mayor/)
 
