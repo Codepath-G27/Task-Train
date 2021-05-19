@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/dark_gray"
+    android:background="@color/white"
     android:layout_height="wrap_content">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:id="@+id/layout"
         android:layout_width="fill_parent"
         android:layout_height="64dp"
@@ -13,19 +13,19 @@
 
         <ImageView
             android:id="@+id/alarmIcon"
-            android:layout_width="60dp"
-            android:layout_height="45dp"
+            android:layout_width="56dp"
+            android:layout_height="33dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="-10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:alpha=".7"
             android:layout_gravity="center|left"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="10dp"
+            android:alpha=".7"
 
-            android:src="@drawable/ic_alarm_white_24dp" />
+            android:src="@drawable/icon_tasktrain" />
 
         <RelativeLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/alarmIcon">
@@ -34,10 +34,48 @@
                 android:id="@+id/message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/message4"
                 android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginLeft="222dp"
+                android:layout_marginTop="-4dp"
+
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="3dp"
+                android:layout_toEndOf="@+id/message5"
                 android:text="Message Here"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/message5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/message4"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="-1dp"
+                android:layout_marginTop="-2dp"
+                android:layout_marginBottom="1dp"
+                android:text="The Train Has Arrived:"
+                android:textColor="@color/black"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/message4"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="0dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="0dp"
+                android:text="Task Train"
+                android:textColor="@color/dark_gray"
+                android:textSize="13sp" />
+
         </RelativeLayout>
+
     </RelativeLayout>
 </LinearLayout>
