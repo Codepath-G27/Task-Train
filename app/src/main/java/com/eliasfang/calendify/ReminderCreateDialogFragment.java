@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -33,6 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class ReminderCreateDialogFragment extends AppCompatActivity implements View.OnClickListener {
+    private final static String TAG = "ReminderCreateDialog";
     Button btn_set_time;
     Button btn_set_date;
     TextView btn_submit;
@@ -55,7 +57,6 @@ public class ReminderCreateDialogFragment extends AppCompatActivity implements V
         btn_set_time.setOnClickListener(this);
         imgBtnClose.setOnClickListener(this);
         dataBase = DatabaseClass.getDatabase(getApplicationContext());
-
     }
 
     @Override
@@ -65,6 +66,7 @@ public class ReminderCreateDialogFragment extends AppCompatActivity implements V
         } else if (view == btn_set_time) {
             setTime();
         } else if (view == imgBtnClose) {
+            Toast.makeText(this, "Cancelled Reminder Creation", Toast.LENGTH_SHORT).show();
             finish();
         } else {
             submit();
@@ -90,11 +92,13 @@ public class ReminderCreateDialogFragment extends AppCompatActivity implements V
     private void submit() {
         String text = editext_message.getText().toString().trim();
         if (text.isEmpty()) {
-            Toast.makeText(this, "Please Enter or record the text", Toast.LENGTH_SHORT).show();
-        } else {
-            if (btn_set_time.getText().toString().equals("Select Time") || btn_set_date.getText().toString().equals("Select date")) {
-                Toast.makeText(this, "Please select date and time", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please Enter a Title", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            if (btn_set_time.getText().toString().trim().equals("Add time") || btn_set_date.getText().toString().trim().equals("Add date")) {
+                Toast.makeText(this, "Please select a date and time", Toast.LENGTH_SHORT).show();
             } else {
+                Log.i(TAG, "The time is " + btn_set_time.getText().toString().trim() + " The date is " + btn_set_date.getText().toString().trim());
                 ReminderEntity reminderEntity = new ReminderEntity();
                 String value = (editext_message.getText().toString().trim());
                 String date = (btn_set_date.getText().toString().trim());

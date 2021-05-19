@@ -30,27 +30,38 @@ public class Task implements Parcelable {
     @ColumnInfo(name = "minutesBefore")
     private int minutesBefore;
 
+    @ColumnInfo(name = "eventDate")
+    private String eventDate;
+
     @ColumnInfo(name = "location")
     private String location;
     @ColumnInfo(name = "recurrence")
     private String recurrence; //TODO also change this to some appropriate Java time library
 
-    public Task(String name, String description, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore) {
+    @ColumnInfo(name = "eventTime")
+    private String eventTime;
+
+
+
+
+    public Task(String name, String description, String eventDate, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore) {
         this.name = name;
         this.description = description;
         this.epochTime = epochTime;
+        this.eventDate = eventDate;
         this.isCompleted = isCompleted;
         this.hasAlarm = hasAlarm;
         this.minutesBefore = minutesBefore;
     }
 
     @Ignore
-    public Task(String name, String description, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore, String location, String recurrence) {
+    public Task(String name, String description, String eventDate, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore, String location, String recurrence) {
         this.name = name;
         this.description = description;
         this.epochTime = epochTime;
         this.isCompleted = isCompleted;
         this.hasAlarm = hasAlarm;
+        this.eventDate = eventDate;
         this.minutesBefore = minutesBefore;
         this.location = location;
         this.recurrence = recurrence;
@@ -62,6 +73,14 @@ public class Task implements Parcelable {
 
     public int getId() {
         return id;
+    }
+
+    public String getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(String eventDate) {
+        this.eventDate = eventDate;
     }
 
     public void setId(int id) {
@@ -126,6 +145,17 @@ public class Task implements Parcelable {
 
     public void setRecurrence(String recurrence) {
         this.recurrence = recurrence;
+    }
+
+
+
+
+    public String getEventTime() {
+        return eventTime;
+    }
+
+    public void setEventTime(String eventtime) {
+        this.eventTime = eventtime;
     }
 
 

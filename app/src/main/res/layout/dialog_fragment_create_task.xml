@@ -68,31 +68,44 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/etTitle"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
-                android:layout_marginEnd="16dp"
-                android:hint="Add title"
-                android:textSize="40sp"
+                android:layout_marginTop="5dp"
+                app:counterEnabled="true"
+                app:hintTextAppearance="@style/MyHintStyle"
+                app:counterMaxLength="38"
+
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent">
+
+                <EditText
+                    android:id="@+id/etTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:theme="@style/TextLabel"
+                    android:hint="Add title"
+                    android:maxLength="38"
+                    android:textSize="30sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <EditText
                 android:id="@+id/etLocation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Add location"
                 android:textSize="16sp"
+                android:theme="@style/TextLabel"
+                android:hint="Add location"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/inputText" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -140,12 +153,12 @@
             </LinearLayout>
 
             <CheckBox
-                android:id="@+id/cbRecur"
+                android:id="@+id/cbAlarm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="Recurring"
+                android:text="Alarm"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
@@ -157,10 +170,11 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Add description"
+                android:theme="@style/TextLabel"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cbRecur" />
+                app:layout_constraintTop_toBottomOf="@+id/cbAlarm" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

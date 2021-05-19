@@ -5,7 +5,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
@@ -13,6 +12,8 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,11 +37,9 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import static android.app.Activity.RESULT_OK;
-
 public class TaskCreateDialogFragment extends DialogFragment implements View.OnClickListener {
-    public static final String EXTRA_REPLY =
-            "com.eliasfang.calendify.TASK";
+    public static final String EXTRA_REPLY = "com.eliasfang.calendify.TASK";
+    public static final String TAG = "TaskCreateDialog";
 
     private EditText etTitle;
     private EditText etLocation;
@@ -48,6 +47,9 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     private Button btnTime;
     private CheckBox cbRecur;
     private EditText etDescription;
+    private CheckBox cbAlarm;
+
+    private Boolean checked = false;
 
     DatabaseClass dataBase;
 
@@ -79,8 +81,9 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         etLocation = view.findViewById(R.id.etLocation);
         btnDate = view.findViewById(R.id.btnDate);
         btnTime = view.findViewById(R.id.btnTime);
-        cbRecur = view.findViewById(R.id.cbRecur);
+        cbRecur = view.findViewById(R.id.cbAlarm);
         etDescription = view.findViewById(R.id.etDescription);
+        cbAlarm = view.findViewById(R.id.cbAlarm);
 
 
 
@@ -110,33 +113,57 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                 saveTime();
                 break;
             case R.id.imgBtnClose:
+                Toast toast = Toast.makeText(getContext(), "Cancelled Task Creation", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.START, 90, 0);
+                toast.show();
                 dismiss();
-                Toast.makeText(getContext(), "Cancelled task creation", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tvSave:
-                Task task = saveData();
-                Intent replyIntent = new Intent();
-                replyIntent.putExtra(EXTRA_REPLY, task);
-                TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-                myTaskViewModel.insert(task);
+                if(!etTitle.getText().toString().isEmpty()) {
+                    if (cbAlarm.isChecked() && (btnDate.getText().toString().equals("Add date") || btnTime.getText().toString().equals("Add time"))) {
+                        Toast.makeText(getContext(), "Please select date and time", Toast.LENGTH_SHORT).show();
+                    }
+                    else if(!cbAlarm.isChecked()){
+                        Task task = saveData();
+                        Intent replyIntent = new Intent();
+                        replyIntent.putExtra(EXTRA_REPLY, task);
+                        TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+                        myTaskViewModel.insert(task);
+                        dismiss();
+                        Toast.makeText(getContext(), "Task saved", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Task task = saveData();
+                        Intent replyIntent = new Intent();
+                        replyIntent.putExtra(EXTRA_REPLY, task);
+                        TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+                        myTaskViewModel.insert(task);
+                        task.setHasAlarm(true);
+                        cbAlarm.setChecked(true);
+                        //add alarm in a very brute force way
+                        ReminderEntity reminderEntity = new ReminderEntity();
+                        String value = etTitle.getText().toString();
+                        String date = (btnDate.getText().toString().trim());
+                        String time = (btnTime.getText().toString().trim());
+                        reminderEntity.setEventdate(date);
+                        reminderEntity.setEventname(value);
+                        reminderEntity.setEventtime(time);
+                        dataBase.EventDao().insertAll(reminderEntity);
+                        setAlarm(value, date, time);
+                        dismiss();
+                        Log.i(TAG, "The date is " + btnDate.getText().toString().trim() + " The time is " + btnTime.getText().toString().trim());
+                        Toast.makeText(getContext(), "Task saved with alarm", Toast.LENGTH_SHORT).show();
+                    }
 
-                //add alarm in a very brute force way
-                ReminderEntity reminderEntity = new ReminderEntity();
-                String value = etTitle.getText().toString();
-                String date = (btnDate.getText().toString().trim());
-                String time = (btnTime.getText().toString().trim());
-                reminderEntity.setEventdate(date);
-                reminderEntity.setEventname(value);
-                reminderEntity.setEventtime(time);
-                dataBase.EventDao().insertAll(reminderEntity);
-                setAlarm(value, date, time);
 
-                dismiss();
-
-                Toast.makeText(getContext(), "Task saved", Toast.LENGTH_SHORT).show();
-                break;
+                }
+                else{
+                    Toast.makeText(getContext(), "Please enter a title", Toast.LENGTH_SHORT).show();
+                }
         }
     }
+
+
 
     private void saveDate() {
         Calendar calendar = Calendar.getInstance();
@@ -195,10 +222,11 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         String location = etLocation.getText().toString();
         String date = btnDate.getText().toString();
         String time = btnTime.getText().toString();
+
         boolean recur = cbRecur.isChecked();
         String description = etDescription.getText().toString();
 
-        Task toReturn = new Task(title, description, (long) 0.0, false, false, 0);
+        Task toReturn = new Task(title, description, date, (long) 0.0, false, recur, 0);
         return toReturn;
     }
     private void setAlarm(String text, String date, String time) {

@@ -29,6 +29,21 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:title="Stay on track"
                 app:titleTextColor="@color/white" />
+
+            <androidx.appcompat.widget.SearchView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="150dp"
+                app:theme="@style/AppSearchView"
+                android:layoutDirection="rtl"
+                android:id="@+id/search"
+                android:icon="@drawable/ic_baseline_search_24"
+                app:layout_constraintBottom_toBottomOf="@+id/my_toolbar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/my_toolbar"
+                app:layout_constraintTop_toTopOf="@+id/my_toolbar" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

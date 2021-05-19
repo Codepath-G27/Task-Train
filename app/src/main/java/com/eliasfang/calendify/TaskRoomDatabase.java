@@ -9,7 +9,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-@Database(entities = {Task.class}, version = 1, exportSchema = false)
+@Database(entities = {Task.class}, version = 2, exportSchema = false)
 public abstract class TaskRoomDatabase extends RoomDatabase {
     public abstract TaskDao taskDao();
 
