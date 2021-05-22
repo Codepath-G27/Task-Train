@@ -1,19 +1,14 @@
 package com.eliasfang.calendify.Adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +44,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             Task current = myTasks.get(position);
             holder.tvTitle.setText(current.getName());
             holder.toggle.setChecked(current.isHasAlarm());
+            holder.tvCategory.setText(current.getCategory());
             holder.position = position;
         } else {
             // Covers the case of data not being ready yet.
@@ -88,7 +84,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
 
     class TaskViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvTitle;
-        private final TextView tvDate;
+        private final TextView tvCategory;
         private Switch toggle;
         int position;
 
@@ -99,13 +95,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDate = itemView.findViewById(R.id.tvDate);
+            tvCategory = itemView.findViewById(R.id.tvCategory);
             toggle = itemView.findViewById(R.id.swAlarm);
-
-
-
-
-
 
             //tvDesc = itemView.findViewById(R.id.tvDescription);
         }

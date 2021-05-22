@@ -30,6 +30,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     testImplementation 'junit:junit:4.12'
+    implementation 'com.github.jinatonic.confetti:confetti:1.1.2'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
@@ -42,6 +44,12 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycle_version"
 
     def room_version = "2.2.5"
+
+    //Alerter Library
+    implementation 'com.tapadoo.android:alerter:2.0.4'
+
+    //Toast Style Library
+    implementation 'com.muddzdev:styleabletoast:2.3.0'
 
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"

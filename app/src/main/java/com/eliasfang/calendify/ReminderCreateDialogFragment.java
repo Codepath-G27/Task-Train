@@ -25,6 +25,7 @@ import com.eliasfang.calendify.Database.DatabaseClass;
 import com.eliasfang.calendify.Database.ReminderEntity;
 import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.alarmSetup.Alarm;
+import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -66,7 +67,7 @@ public class ReminderCreateDialogFragment extends AppCompatActivity implements V
         } else if (view == btn_set_time) {
             setTime();
         } else if (view == imgBtnClose) {
-            Toast.makeText(this, "Cancelled Reminder Creation", Toast.LENGTH_SHORT).show();
+            StyleableToast.makeText(this, "Task Creation Cancelled", R.style.toastDeleted).show();
             finish();
         } else {
             submit();
@@ -169,8 +170,8 @@ public class ReminderCreateDialogFragment extends AppCompatActivity implements V
 
         Intent intent = new Intent(getApplicationContext(), Alarm.class);
         intent.putExtra("event", text);
-        intent.putExtra("time", date);
-        intent.putExtra("date", time);
+        intent.putExtra("date", date);
+        intent.putExtra("time", time);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
         String TimeandDate = date + " " + notificationTime;

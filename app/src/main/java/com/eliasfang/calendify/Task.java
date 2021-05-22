@@ -41,10 +41,13 @@ public class Task implements Parcelable {
     @ColumnInfo(name = "eventTime")
     private String eventTime;
 
+    @ColumnInfo(name = "category")
+    private String category;
 
 
 
-    public Task(String name, String description, String eventDate, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore) {
+
+    public Task(String name, String description, String eventDate, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore, String category) {
         this.name = name;
         this.description = description;
         this.epochTime = epochTime;
@@ -52,10 +55,11 @@ public class Task implements Parcelable {
         this.isCompleted = isCompleted;
         this.hasAlarm = hasAlarm;
         this.minutesBefore = minutesBefore;
+        this.category = category;
     }
 
     @Ignore
-    public Task(String name, String description, String eventDate, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore, String location, String recurrence) {
+    public Task(String name, String description, String eventDate, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore, String category, String location, String recurrence) {
         this.name = name;
         this.description = description;
         this.epochTime = epochTime;
@@ -63,6 +67,7 @@ public class Task implements Parcelable {
         this.hasAlarm = hasAlarm;
         this.eventDate = eventDate;
         this.minutesBefore = minutesBefore;
+        this.category = category;
         this.location = location;
         this.recurrence = recurrence;
     }
@@ -147,9 +152,6 @@ public class Task implements Parcelable {
         this.recurrence = recurrence;
     }
 
-
-
-
     public String getEventTime() {
         return eventTime;
     }
@@ -158,6 +160,13 @@ public class Task implements Parcelable {
         this.eventTime = eventtime;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
     protected Task(Parcel in) {
         id = in.readInt();
@@ -169,6 +178,9 @@ public class Task implements Parcelable {
         minutesBefore = in.readInt();
         location = in.readString();
         recurrence = in.readString();
+        eventDate = in.readString();
+        eventTime = in.readString();
+        category = in.readString();
     }
 
     @Override
@@ -186,6 +198,9 @@ public class Task implements Parcelable {
         dest.writeByte((byte) (hasAlarm ? 0x01 : 0x00));
         dest.writeInt(minutesBefore);
         dest.writeString(location);
+        dest.writeString(category);
+        dest.writeString(eventDate);
+        dest.writeString(eventTime);
         dest.writeString(recurrence);
     }
 

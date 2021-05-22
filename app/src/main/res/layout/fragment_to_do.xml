@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ToDoFragment"
+    android:id="@+id/clroot"
     android:background="@color/white">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -19,9 +20,11 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/my_toolbar"
+                app:collapseIcon="@drawable/ic_baseline_arrow_back_24"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/gradient"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -30,18 +33,19 @@
                 app:title="Stay on track"
                 app:titleTextColor="@color/white" />
 
-            <androidx.appcompat.widget.SearchView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="150dp"
-                app:theme="@style/AppSearchView"
-                android:layoutDirection="rtl"
-                android:id="@+id/search"
-                android:icon="@drawable/ic_baseline_search_24"
-                app:layout_constraintBottom_toBottomOf="@+id/my_toolbar"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/my_toolbar"
-                app:layout_constraintTop_toTopOf="@+id/my_toolbar" />
+<!--            <androidx.appcompat.widget.SearchView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_marginEnd="150dp"-->
+<!--                app:theme="@style/AppSearchView"-->
+<!--                app:actionViewClass="androidx.appcompat.widget.SearchView"-->
+<!--                android:layoutDirection="rtl"-->
+<!--                android:id="@+id/search"-->
+<!--                android:icon="@drawable/ic_baseline_search_24"-->
+<!--                app:layout_constraintBottom_toBottomOf="@+id/my_toolbar"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="@+id/my_toolbar"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/my_toolbar" />-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

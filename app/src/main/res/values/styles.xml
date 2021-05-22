@@ -5,29 +5,36 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="background">@drawable/gradient</item>
+
     </style>
 
     <style name="FullscreenDialogTheme" parent="Theme.AppCompat.Light.DialogWhenLarge">
         <item name="android:statusBarColor">@color/black</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowAnimationStyle">@style/Animation.AppCompat.Dialog</item>
+
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="background">@drawable/gradient</item>
     </style>
 
     <style name="AppSearchView" parent="Widget.AppCompat.SearchView" >
         <!-- Text Size -->
 
         <!-- Query Text Color -->
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorPrimary">@color/black</item>
         <!-- Hint Color -->
         <item name="android:textColorHint">@color/white</item>
         <!-- Icon Color -->
         <item name="android:tint">@color/white</item>
+        <item name="closeIcon">@drawable/ic_baseline_close_24</item>
+        <item name="android:editTextColor">@android:color/white</item>
+
     </style>
 
     <style name="TextLabel" parent="TextAppearance.AppCompat">
@@ -39,6 +46,20 @@
 
     <style name="MyHintStyle" parent="@android:style/TextAppearance">
         <item name="android:textColor">@color/dark_gray</item>
+    </style>
+
+    <style name="toastSaved">
+        <item name="stColorBackground">@color/purple</item>
+        <item name="stTextColor">#FFFFFF</item>
+        <item name="stIconStart">@drawable/ic_baseline_check_circle_24</item>
+        <item name="stLength">SHORT</item>
+    </style>
+
+    <style name="toastDeleted">
+        <item name="stColorBackground">@color/purple</item>
+        <item name="stTextColor">#FFFFFF</item>
+        <item name="stIconStart">@drawable/ic_baseline_cancel_24</item>
+        <item name="stLength">SHORT</item>
     </style>
 
 </resources>
