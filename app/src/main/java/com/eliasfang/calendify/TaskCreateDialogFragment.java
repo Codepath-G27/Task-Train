@@ -91,9 +91,9 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         cbRecur = view.findViewById(R.id.cbAlarm);
         etDescription = view.findViewById(R.id.etDescription);
         cbAlarm = view.findViewById(R.id.cbAlarm);
-        spCategory= view.findViewById(R.id.etCategory);
+        spCategory = view.findViewById(R.id.etCategory);
 
-        ArrayAdapter<String>  myAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.category_items));
+        ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.category_items));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spCategory.setAdapter(myAdapter);
 
@@ -128,50 +128,46 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                 dismiss();
                 break;
             case R.id.tvSave:
-                if(!etTitle.getText().toString().isEmpty()) {
-                    if (cbAlarm.isChecked() && (btnDate.getText().toString().equals("Add date") || btnTime.getText().toString().equals("Add time"))) {
-                        Toast.makeText(getContext(), "Please select date and time", Toast.LENGTH_SHORT).show();
-                    }
-                    else if(!cbAlarm.isChecked()){
-                        Task task = saveData();
-                        Intent replyIntent = new Intent();
-                        replyIntent.putExtra(EXTRA_REPLY, task);
-                        TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-                        myTaskViewModel.insert(task);
-                        dismiss();
-                        StyleableToast.makeText(getContext(), "Task Saved", R.style.toastSaved).show();
-                    }
-                    else {
-                        Task task = saveData();
-                        Intent replyIntent = new Intent();
-                        replyIntent.putExtra(EXTRA_REPLY, task);
-                        TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-                        myTaskViewModel.insert(task);
-                        task.setHasAlarm(true);
-                        cbAlarm.setChecked(true);
-                        //add alarm in a very brute force way
-                        ReminderEntity reminderEntity = new ReminderEntity();
-                        String value = etTitle.getText().toString();
-                        String date = (btnDate.getText().toString().trim());
-                        String time = (btnTime.getText().toString().trim());
-                        reminderEntity.setEventdate(date);
-                        reminderEntity.setEventname(value);
-                        reminderEntity.setEventtime(time);
-                        dataBase.EventDao().insertAll(reminderEntity);
-                        setAlarm(value, date, time);
-                        dismiss();
-                        Log.i(TAG, "The date is " + btnDate.getText().toString().trim() + " The time is " + btnTime.getText().toString().trim());
-                        StyleableToast.makeText(getContext(), "Task Saved with Alarm", R.style.toastSaved).show();
-                    }
+                if (!etTitle.getText().toString().isEmpty()) {
+                        if (cbAlarm.isChecked() && (btnDate.getText().toString().equals("Add date") || btnTime.getText().toString().equals("Add time"))) {
+                            Toast.makeText(getContext(), "Please select date and time", Toast.LENGTH_SHORT).show();
+                        } else if (!cbAlarm.isChecked()) {
+                            Task task = saveData();
+                            Intent replyIntent = new Intent();
+                            replyIntent.putExtra(EXTRA_REPLY, task);
+                            TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+                            myTaskViewModel.insert(task);
+                            dismiss();
+                            StyleableToast.makeText(getContext(), "Task Saved", R.style.toastSaved).show();
+                        } else {
+                            Task task = saveData();
+                            Intent replyIntent = new Intent();
+                            replyIntent.putExtra(EXTRA_REPLY, task);
+                            TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+                            myTaskViewModel.insert(task);
+                            task.setHasAlarm(true);
+                            cbAlarm.setChecked(true);
+                            //add alarm in a very brute force way
+                            ReminderEntity reminderEntity = new ReminderEntity();
+                            String value = etTitle.getText().toString();
+                            String date = (btnDate.getText().toString().trim());
+                            String time = (btnTime.getText().toString().trim());
+                            reminderEntity.setEventdate(date);
+                            reminderEntity.setEventname(value);
+                            reminderEntity.setEventtime(time);
+                            dataBase.EventDao().insertAll(reminderEntity);
+                            setAlarm(value, date, time);
+                            dismiss();
+                            Log.i(TAG, "The date is " + btnDate.getText().toString().trim() + " The time is " + btnTime.getText().toString().trim());
+                            StyleableToast.makeText(getContext(), "Task Saved with Alarm", R.style.toastSaved).show();
+                        }
 
 
-                }
-                else{
+                } else {
                     Toast.makeText(getContext(), "Please enter a title", Toast.LENGTH_SHORT).show();
                 }
         }
     }
-
 
 
     private void saveDate() {
@@ -242,6 +238,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         Task toReturn = new Task(title, description, date, (long) 0.0, false, recur, 0, category);
         return toReturn;
     }
+
     private void setAlarm(String text, String date, String time) {
         AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 

@@ -6,6 +6,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="background">@drawable/gradient</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="windowActionModeOverlay">true</item>
 
     </style>
 
@@ -51,7 +53,7 @@
     <style name="toastSaved">
         <item name="stColorBackground">@color/purple</item>
         <item name="stTextColor">#FFFFFF</item>
-        <item name="stIconStart">@drawable/ic_baseline_check_circle_24</item>
+        <item name="stIconStart">@drawable/ic_baseline_check_circle_white_24</item>
         <item name="stLength">SHORT</item>
     </style>
 

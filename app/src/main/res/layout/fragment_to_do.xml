@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/layout"
+        android:background="@color/white"
         >
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,19 +34,6 @@
                 app:title="Stay on track"
                 app:titleTextColor="@color/white" />
 
-<!--            <androidx.appcompat.widget.SearchView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_marginEnd="150dp"-->
-<!--                app:theme="@style/AppSearchView"-->
-<!--                app:actionViewClass="androidx.appcompat.widget.SearchView"-->
-<!--                android:layoutDirection="rtl"-->
-<!--                android:id="@+id/search"-->
-<!--                android:icon="@drawable/ic_baseline_search_24"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/my_toolbar"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="@+id/my_toolbar"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/my_toolbar" />-->
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -61,6 +49,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
+        android:background="@color/white"
         android:layout_marginBottom="0dp"
         tools:listitem="recyclerview_item">
 

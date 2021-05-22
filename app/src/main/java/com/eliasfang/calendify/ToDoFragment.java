@@ -70,6 +70,7 @@ public class ToDoFragment extends Fragment {
     private SearchView searchView;
     private RelativeLayout clRoot;
 
+    //Colors array for app styling
     private int colors[] = {Color.parseColor("#94C1FF"), Color.parseColor("#8080FF"), Color.parseColor("#785CF7")};
 
 
@@ -93,24 +94,9 @@ public class ToDoFragment extends Fragment {
 
 
 
-        //Set search view to allow for search
-//        searchView = view.findViewById(R.id.search);
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                adapter.getFilter().filter(newText);
-//                return false;
-//            }
-//        });
-
 
         myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        adapter = new TaskListAdapter(getContext());
+        adapter = new TaskListAdapter(getContext(), getActivity());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -235,7 +221,6 @@ public class ToDoFragment extends Fragment {
         final MenuItem searchItem = menu.findItem(R.id.action_search);
 
         SearchView searchView = (SearchView) searchItem.getActionView();
-
 
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
