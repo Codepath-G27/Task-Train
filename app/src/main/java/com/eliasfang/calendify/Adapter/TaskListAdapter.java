@@ -134,17 +134,19 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
                                         myTasks.remove(task);
                                         mainViewModel.deleteTask(task);
                                     }
-                                    Alerter.create(activity)
-                                            .setTitle("Selected Tasks Completed")
-                                            .setText("Keep on Chugging Ahead!")
-                                            .setBackgroundColorRes(R.color.colorAccent)
-                                            .setIcon(R.drawable.icon_tasktrain)
-                                            .setIconColorFilter(0) // Optional - Removes white tint
-                                            .enableSwipeToDismiss()
-                                            .enableProgress(true)
-                                            .setDuration(1500)
-                                            .setProgressColorRes(R.color.colorPrimary)
-                                            .show();
+                                    if(!selectedList.isEmpty()) {
+                                        Alerter.create(activity)
+                                                .setTitle("Selected Tasks Completed")
+                                                .setText("Keep on Chugging Ahead!")
+                                                .setBackgroundColorRes(R.color.colorAccent)
+                                                .setIcon(R.drawable.icon_tasktrain)
+                                                .setIconColorFilter(0) // Optional - Removes white tint
+                                                .enableSwipeToDismiss()
+                                                .enableProgress(true)
+                                                .setDuration(1500)
+                                                .setProgressColorRes(R.color.colorPrimary)
+                                                .show();
+                                    }
                                     mode.finish();
                                     break;
                             }

@@ -18,7 +18,7 @@ public class NotificationMessage extends AppCompatActivity {
         textView = findViewById(R.id.tv_message);
         timeMessage = findViewById(R.id.time_message);
         Bundle bundle = getIntent().getExtras();
-        timeMessage.setText(bundle.getString("time"));
+        timeMessage.setText(bundle.getString("date"));
         textView.setText(bundle.getString("message"));
 
 

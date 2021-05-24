@@ -23,7 +23,6 @@
                 android:title="Alphabetically"/>
             <item android:id="@+id/sort_category"
                 android:title="Category"/>
-
         </menu>
     </item>
 
