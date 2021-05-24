@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import androidx.core.app.NotificationCompat;
@@ -16,16 +17,20 @@ import androidx.core.app.NotificationCompat;
 import com.eliasfang.calendify.R;
 
 public class Alarm extends BroadcastReceiver {
+    private static final String TAG = "Alarm";
     @Override
     public void onReceive(Context context, Intent intent) {
         Bundle bundle = intent.getExtras();
         String text = bundle.getString("event");
-        String date = bundle.getString("date") + " " + bundle.getString("time");
+        String date = bundle.getString("date");
+        String time = bundle.getString("time");
+        Log.i(TAG, time);
 
         //Click on Notification
 
         Intent intent1 = new Intent(context, NotificationMessage.class);
         intent1.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent1.putExtra("time", time);
         intent1.putExtra("message", text);
         //Notification Builder
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, intent1, PendingIntent.FLAG_ONE_SHOT);
@@ -36,6 +41,7 @@ public class Alarm extends BroadcastReceiver {
         contentView.setImageViewResource(R.id.image, R.mipmap.ic_launcher);
         PendingIntent pendingSwitchIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         contentView.setTextViewText(R.id.message, text);
+        contentView.setTextViewText(R.id.time_message, time);
         mBuilder.setSmallIcon(R.drawable.ic_alarm_white_24dp);
         mBuilder.setAutoCancel(true);
         mBuilder.setOngoing(true);

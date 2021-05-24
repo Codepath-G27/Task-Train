@@ -35,6 +35,7 @@ public class ReminderFragment extends Fragment {
     private FloatingActionButton btn_createEvent;
     EventAdapter eventAdapter;
     DatabaseClass databaseClass;
+    private List<ReminderEntity> myReminders;
 
     public ReminderFragment() {
         // Required empty public constructor
@@ -57,18 +58,19 @@ public class ReminderFragment extends Fragment {
         recyclerView = view.findViewById(R.id.reminder_recyclerview);
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
+        databaseClass = DatabaseClass.getDatabase(getContext());
+        myReminders = databaseClass.EventDao().getAllData();
+
+
         btn_createEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 goToCreateEventActivity();
-
-
             }
         });
 
 
 
-        databaseClass = DatabaseClass.getDatabase(getContext());
 
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {

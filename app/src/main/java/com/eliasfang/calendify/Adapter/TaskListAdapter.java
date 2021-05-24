@@ -1,61 +1,224 @@
 package com.eliasfang.calendify.Adapter;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.Task;
+import com.eliasfang.calendify.TaskViewModel;
+import com.github.jinatonic.confetti.CommonConfetti;
+import com.tapadoo.alerter.Alerter;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskViewHolder> implements Filterable {
+    private static final String TAG = "TaskListAdapter";
+
+
     private final LayoutInflater mInflater;
     private List<Task> myTasks; // Cached copy of Tasks
     private List<Task> myTasksFull;
-    private static final String TAG = "TaskListAdapter";
+    private boolean isEnabled = false;
+    private boolean isSelectAll = false;
+    private Activity activity;
+    ArrayList<Task> selectedList = new ArrayList<Task>();
+    private TaskViewModel mainViewModel;
 
-    public TaskListAdapter(Context context) {
+    public TaskListAdapter(Context context, Activity actinput) {
         mInflater = LayoutInflater.from(context);
+        activity = actinput;
     }
 
     @Override
     public TaskViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = mInflater.inflate(R.layout.item_todo, parent, false);
-
+        mainViewModel = ViewModelProviders.of((FragmentActivity) activity).get(TaskViewModel.class);
         return new TaskViewHolder(itemView);
     }
 
 
 
     @Override
-    public void onBindViewHolder(TaskViewHolder holder, int position) {
+    public void onBindViewHolder(final TaskViewHolder holder, int position) {
         if (myTasks != null) {
             Task current = myTasks.get(position);
             holder.tvTitle.setText(current.getName());
             holder.toggle.setChecked(current.isHasAlarm());
+            holder.tvCategory.setText(current.getCategory());
             holder.position = position;
         } else {
             // Covers the case of data not being ready yet.
             holder.tvTitle.setText("Task not specified yet");
         }
+
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                //Click Condiditon
+                if(!isEnabled){
+                    //When action mode not enabled
+                    ActionMode.Callback callback = new ActionMode.Callback() {
+                        @Override
+                        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                            mode.getMenuInflater().inflate(R.menu.menu_select,menu);
+                            return true;
+                        }
+
+                        @Override
+                        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                            //When action mode is preper
+                            //set isEnabled true
+                            isEnabled = true;
+                            //Create method for item click
+                            ClickItem(holder);
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                            //When Clicked on action mode item
+                            //get item id
+                            int id = item.getItemId();
+                            switch(id){
+                                case R.id.menu_delete:
+                                    //When cliked delte items
+                                    for(Task task : selectedList){
+                                        myTasks.remove(task);
+                                        mainViewModel.deleteTask(task);
+                                    }
+                                    if(myTasks.size() == 0){
+                                        //When empty
+                                    }
+                                    mode.finish();
+                                    break;
+                                case R.id.select_all:
+                                    if(selectedList.size() == myTasks.size()){
+                                        //If all seledted then unselect
+                                        isSelectAll = false;
+                                        selectedList.clear();
+                                    }
+                                    else{
+                                        //When all item unselected
+                                        isSelectAll = true;
+                                        selectedList.clear();
+                                        selectedList.addAll(myTasks);
+                                    }
+                                    notifyDataSetChanged();
+                                    break;
+                                case R.id.complete:
+                                    for(Task task : selectedList) {
+                                        myTasks.remove(task);
+                                        mainViewModel.deleteTask(task);
+                                    }
+                                    if(!selectedList.isEmpty()) {
+                                        Alerter.create(activity)
+                                                .setTitle("Selected Tasks Completed")
+                                                .setText("Keep on Chugging Ahead!")
+                                                .setBackgroundColorRes(R.color.colorAccent)
+                                                .setIcon(R.drawable.icon_tasktrain)
+                                                .setIconColorFilter(0) // Optional - Removes white tint
+                                                .enableSwipeToDismiss()
+                                                .enableProgress(true)
+                                                .setDuration(1500)
+                                                .setProgressColorRes(R.color.colorPrimary)
+                                                .show();
+                                    }
+                                    mode.finish();
+                                    break;
+                            }
+                            return true;
+                        }
+
+                        @Override
+                        public void onDestroyActionMode(ActionMode mode) {
+                            //When action mode is detroy
+                            //Set is Enabled as false
+                            isEnabled = false;
+                            isSelectAll = false;
+                            selectedList.clear();
+                            notifyDataSetChanged();
+                        }
+                    };
+                    //Start aciton mode
+                    ((AppCompatActivity) v.getContext()).startActionMode(callback);
+                }
+                else {
+                    //when already enabled
+                    ClickItem(holder);
+                }
+                return true;
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(isEnabled) {
+                    ClickItem(holder);
+                }
+                else{
+                    Log.i(TAG, "You clicked");
+                }
+            }
+        });
+        //Check condition
+        if (isSelectAll) {
+            holder.ivCheckBox.setVisibility(View.VISIBLE);
+            holder.itemView.setBackgroundColor(Color.LTGRAY);
+        }
+        else{
+            holder.ivCheckBox.setVisibility(View.GONE);
+            holder.itemView.setBackgroundColor(Color.BLACK);
+        }
     }
 
+    private void ClickItem(TaskViewHolder holder) {
+        //get selected item value
+        Task selected = myTasks.get(holder.getAdapterPosition());
+        //Check condidtion
+        if(holder.ivCheckBox.getVisibility() == View.GONE){
+            //When not selected
+            //Check image
+            holder.ivCheckBox.setVisibility(View.VISIBLE);
+            //Set background
+            holder.itemView.setBackgroundColor(Color.LTGRAY);
+            //Add value to list of selected items
+            selectedList.add(selected);
+        }
+        else{
+            //when item selected
+            //Hide the check box
+            holder.ivCheckBox.setVisibility(View.GONE);
+            //Set background
+            holder.itemView.setBackgroundColor(Color.BLACK);
+            //remove value
+            selectedList.remove(selected);
+        }
+    }
 
 
     public List<Task> getMyTasks() {
@@ -83,14 +246,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     }
 
 
-
-
-
     class TaskViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvTitle;
-        private final TextView tvDate;
+        private final TextView tvCategory;
         private Switch toggle;
-        int position;
+        private  int position;
+        private ImageView ivCheckBox;
 
 
         //private final TextView tvDesc;
@@ -99,13 +260,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvDate = itemView.findViewById(R.id.tvDate);
+            tvCategory = itemView.findViewById(R.id.tvCategory);
             toggle = itemView.findViewById(R.id.swAlarm);
-
-
-
-
-
+            ivCheckBox = itemView.findViewById(R.id.ivCheckBox);
 
             //tvDesc = itemView.findViewById(R.id.tvDescription);
         }

@@ -3,4 +3,12 @@
     <string name="button">Button</string>
     <string name="create_an_event">Create an event</string>
     <string name="stay_on_track">Stay On Track</string>
+
+    <string-array name="category_items">
+        <item>Other</item>
+        <item>Work</item>
+        <item>School</item>
+        <item>Sports</item>
+        <item>Recreation</item>
+    </string-array>
 </resources>

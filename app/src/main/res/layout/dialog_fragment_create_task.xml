@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -30,7 +31,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:padding="8dp"
                 android:src="@android:drawable/ic_menu_close_clear_cancel"
-                android:tint="@color/white"/>
+                android:tint="@color/white" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -74,8 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 app:counterEnabled="true"
-                app:hintTextAppearance="@style/MyHintStyle"
                 app:counterMaxLength="38"
+                app:hintTextAppearance="@style/MyHintStyle"
 
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -88,10 +89,11 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
-                    android:theme="@style/TextLabel"
+
                     android:hint="Add title"
                     android:maxLength="38"
-                    android:textSize="30sp" />
+                    android:textSize="30sp"
+                    android:theme="@style/TextLabel" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <EditText
@@ -100,10 +102,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginBottom="5dp"
+
+                android:hint="Add location"
                 android:textSize="16sp"
                 android:theme="@style/TextLabel"
-                android:hint="Add location"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.94"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/inputText" />
 
@@ -112,6 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="3"
                 android:orientation="horizontal"
@@ -125,30 +132,30 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="16dp"
                     android:layout_weight="2"
-                    android:text="Add date"
+                    android:background="@drawable/gradient"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:background="@drawable/gradient"
+                    android:text="Add date"
                     android:textAllCaps="false"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground" />
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
                 <Button
                     android:id="@+id/btnTime"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
-                    android:text="Add time"
+                    android:background="@drawable/gradient"
+                    android:clickable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
-                    android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:background="@drawable/gradient"
+                    android:text="Add time"
                     android:textAllCaps="false"
-                    android:clickable="true"
-                    android:foreground="?android:attr/selectableItemBackground" />
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -156,7 +163,7 @@
                 android:id="@+id/cbAlarm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="16dp"
                 android:text="Alarm"
                 app:layout_constraintStart_toStartOf="parent"
@@ -170,11 +177,26 @@
                 android:layout_marginTop="24dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Add description"
-                android:theme="@style/TextLabel"
+
                 android:textSize="16sp"
+                android:theme="@style/TextLabel"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/cbAlarm" />
+                app:layout_constraintTop_toBottomOf="@+id/cbAlarm"
+                />
+
+            <Spinner
+                android:id="@+id/etCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="16dp"
+                android:paddingTop="5dp"
+                app:layout_constraintBottom_toBottomOf="@+id/cbAlarm"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cbAlarm"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
