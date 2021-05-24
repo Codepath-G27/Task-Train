@@ -54,6 +54,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     private EditText etDescription;
     private Spinner spCategory;
     private CheckBox cbAlarm;
+    String notificationTime;
 
 
     private Boolean checked = false;
@@ -191,11 +192,14 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                notificationTime = i + ":" + i1;
                 btnTime.setText(FormatTime(i, i1));
             }
         }, hour, minute, false);
         timePickerDialog.show();
     }
+
+
 
     public String FormatTime(int hour, int minute) {
 
@@ -248,7 +252,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         intent.putExtra("time", time);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        String TimeandDate = date + " " + time;
+        String TimeandDate = date + " " + notificationTime;
         DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
         try {
             Date date1 = formatter.parse(TimeandDate);
