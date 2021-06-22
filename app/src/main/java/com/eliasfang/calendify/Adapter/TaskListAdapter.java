@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     private boolean isEnabled = false;
     private boolean isSelectAll = false;
     private Activity activity;
+
     ArrayList<Task> selectedList = new ArrayList<Task>();
     private TaskViewModel mainViewModel;
 
@@ -63,13 +65,14 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
 
 
     @Override
-    public void onBindViewHolder(final TaskViewHolder holder, int position) {
+    public void onBindViewHolder(final TaskViewHolder holder, final int position) {
         if (myTasks != null) {
             Task current = myTasks.get(position);
             holder.tvTitle.setText(current.getName());
             holder.toggle.setChecked(current.isHasAlarm());
             holder.tvCategory.setText(current.getCategory());
             holder.position = position;
+
         } else {
             // Covers the case of data not being ready yet.
             holder.tvTitle.setText("Task not specified yet");
@@ -177,11 +180,31 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Task current = myTasks.get(position);
                 if(isEnabled) {
                     ClickItem(holder);
                 }
                 else{
+                    if(!current.getExpanded()) {
+                        holder.rLayout.setVisibility(View.VISIBLE);
+                        holder.tvDate.setVisibility(View.VISIBLE);
+                        Log.i(TAG, "The current is " + String.valueOf(current.getExpanded()));
+                        if(!current.getEventTime().equals("Add time"))
+                            holder.tvTime.setText(current.getEventTime());
+
+                        if(!current.getEventDate().equals("Add date"))
+                            holder.tvDate.setText(current.getEventDate());
+
+                        holder.tvDescription.setText(current.getDescription());
+                        holder.tvLocation.setText(current.getLocation());
+                        current.setExpanded(true);
+                    }
+                    else{
+                        holder.rLayout.setVisibility(View.GONE);
+                        current.setExpanded(false);
+                    }
                     Log.i(TAG, "You clicked");
+
                 }
             }
         });
@@ -249,9 +272,14 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     class TaskViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvTitle;
         private final TextView tvCategory;
+        private final TextView tvTime;
+        private final TextView tvDate;
         private Switch toggle;
+        private final TextView tvLocation;
+        private final TextView tvDescription;
         private  int position;
         private ImageView ivCheckBox;
+        private RelativeLayout rLayout;
 
 
         //private final TextView tvDesc;
@@ -263,6 +291,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             tvCategory = itemView.findViewById(R.id.tvCategory);
             toggle = itemView.findViewById(R.id.swAlarm);
             ivCheckBox = itemView.findViewById(R.id.ivCheckBox);
+            rLayout = itemView.findViewById(R.id.rLayout);
+            tvDate = itemView.findViewById(R.id.tvDate);
+            tvTime = itemView.findViewById(R.id.tvTime);
+            tvDescription = itemView.findViewById(R.id.tvDescription);
+            tvLocation = itemView.findViewById(R.id.tvLocation);
 
             //tvDesc = itemView.findViewById(R.id.tvDescription);
         }
@@ -304,4 +337,6 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             notifyDataSetChanged();
         }
     };
+
+
 }

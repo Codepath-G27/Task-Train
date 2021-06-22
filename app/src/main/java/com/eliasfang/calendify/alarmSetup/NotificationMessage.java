@@ -20,7 +20,5 @@ public class NotificationMessage extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         timeMessage.setText(bundle.getString("date"));
         textView.setText(bundle.getString("message"));
-
-
     }
 }
