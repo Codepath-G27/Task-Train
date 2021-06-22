@@ -239,7 +239,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
         //TODO set the category picker from the spinner
 
-        Task toReturn = new Task(title, description, date, (long) 0.0, false, recur, 0, category);
+        Task toReturn = new Task(title, description, date, time, (long) 0.0, false, recur, 0, category, location, false);
         return toReturn;
     }
 

@@ -8,70 +8,132 @@
     android:layout_marginVertical="1dp"
     android:clickable="false"
     android:foreground="?android:attr/selectableItemBackground"
-    app:cardBackgroundColor="@color/black">
+    >
 
 
-    <RelativeLayout
-        android:id="@+id/rel_layout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="1dp"
-        android:background="@color/white">
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="0dp"
-            tools:text="Name of Task Here" />
+        <RelativeLayout
+            android:id="@+id/rel_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="1dp"
+            android:background="@color/white">
 
-        <TextView
-            android:id="@+id/tvCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tvTitle"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="2dp"
-            tools:text="Category" />
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="0dp"
+                tools:text="Name of Task Here" />
 
-        <ImageView
-            android:id="@+id/ivAlarm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="55dp"
-            app:srcCompat="@drawable/ic_baseline_access_alarm_24" />
+            <TextView
+                android:id="@+id/tvCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvTitle"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                tools:text="Category" />
 
-        <Switch
-            android:id="@+id/swAlarm"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="5dp"
-            android:clickable="false" />
+            <ImageView
+                android:id="@+id/ivAlarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="55dp"
+                app:srcCompat="@drawable/ic_baseline_access_alarm_24" />
 
-        <ImageView
-            android:id="@+id/ivCheckBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/ivAlarm"
-            android:layout_marginTop="0dp"
-            android:layout_marginEnd="10dp"
-            android:layout_toStartOf="@+id/ivAlarm"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_baseline_check_circle_24" />
+            <Switch
+                android:id="@+id/swAlarm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="8dp"
+                android:layout_marginRight="5dp"
+                android:clickable="false" />
 
-    </RelativeLayout>
+            <ImageView
+                android:id="@+id/ivCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/ivAlarm"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="10dp"
+                android:layout_toStartOf="@+id/ivAlarm"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_baseline_check_circle_24" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        >
+            <RelativeLayout
+                android:id="@+id/rLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tvCategory"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="1dp"
+                android:layout_marginBottom="1dp"
+                android:background="@color/white"
+                android:visibility="gone"
+                tools:visibility="visible">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:id="@+id/tvLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="2dp"
+                    android:hint="No Location"
+                    android:text="No Location"
+                    android:textStyle="bold"
+                    tools:text="Location" />
+
+                <TextView
+                    android:id="@+id/tvTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="10dp"
+                    android:hint="No Time "
+                    android:textStyle="bold"
+                    tools:text="Time" />
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_toStartOf="@+id/tvTime"
+                    android:hint="No Date"
+                    android:textStyle="bold"
+                    tools:text="Date" />
+
+                <TextView
+                    android:id="@+id/tvDescription"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tvLocation"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="5dp"
+                    android:hint="No Description"
+                    android:text="No Description"
+                    android:textStyle="bold"
+                    tools:text="Description" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
 
 </androidx.cardview.widget.CardView>

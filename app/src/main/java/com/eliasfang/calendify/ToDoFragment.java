@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -64,6 +65,7 @@ public class ToDoFragment extends Fragment {
 
     protected TaskListAdapter adapter;
     protected List<Task> allTasks;
+    private boolean oneExpanded = false;
 
     private TaskViewModel myTaskViewModel;
 
@@ -135,15 +137,30 @@ public class ToDoFragment extends Fragment {
                 final int position = target.getAdapterPosition();
                 final Task item = adapter.getMyTasks().get(position);
 
-                if (direction == ItemTouchHelper.LEFT) {
-                    myTaskViewModel.updateCompleted(item);
-                    myTaskViewModel.refreshTasks();
-                    showAlerter(view);
-                    CommonConfetti.rainingConfetti(clRoot, colors).oneShot();
-                } else {
-                    adapter.getMyTasks().remove(position);
-                    myTaskViewModel.deleteTask(item);
-                    //Code to include alerter instead of snackbar for deletion
+
+                oneExpanded = false;
+                for(Task a : adapter.getMyTasks()){
+                    oneExpanded = oneExpanded || a.getExpanded();
+                    Log.i(TAG, "Expanded:" + oneExpanded);
+                }
+
+
+
+                if(!oneExpanded) {
+                    if (direction == ItemTouchHelper.LEFT) {
+                        myTaskViewModel.updateCompleted(item);
+                        myTaskViewModel.refreshTasks();
+                        showAlerter(view);
+                        CommonConfetti.rainingConfetti(clRoot, colors).oneShot();
+                    } else {
+                        adapter.getMyTasks().remove(position);
+
+
+                        Log.i(TAG, String.valueOf(item.getExpanded()));
+                        myTaskViewModel.deleteTask(item);
+
+                        adapter.notifyDataSetChanged();
+                        //Code to include alerter instead of snackbar for deletion
 //                    Alerter.create(getActivity())
 //                            .setTitle("Task Deleted")
 //                            .setText("Click to Undo")
@@ -154,24 +171,36 @@ public class ToDoFragment extends Fragment {
 //                            .enableProgress(true)
 //                            .setProgressColorRes(R.color.colorPrimary)
 //                            .show();
-                    Snackbar snackbar = Snackbar
-                            .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_SHORT);
-                    snackbar.setAction("UNDO", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            myTaskViewModel.insert(item);
-                            adapter.getMyTasks().add(position, item);
-                            adapter.notifyDataSetChanged();
-                            recyclerView.scrollToPosition(position);
-                        }
-                    });
-                    snackbar.setActionTextColor(Color.WHITE);
-                    snackbar.show();
+                        Snackbar snackbar = Snackbar
+                                .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_SHORT);
+                        snackbar.setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                myTaskViewModel.insert(item);
+                                adapter.getMyTasks().add(position, item);
+                                adapter.notifyDataSetChanged();
+                                recyclerView.scrollToPosition(position);
+                            }
+                        });
+                        snackbar.setActionTextColor(Color.WHITE);
+                        snackbar.show();
 
-                    adapter.notifyDataSetChanged();
+                        adapter.notifyDataSetChanged();
+
+                    }
+                }
+                else {
+                    Toast.makeText(getContext(), "Deletion is disabled while items are expanded", Toast.LENGTH_SHORT).show();
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    }, 300);
+                    Log.i(TAG, "item:" + item.getExpanded());
 
                 }
-
 
             }
         });

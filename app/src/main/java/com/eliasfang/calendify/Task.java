@@ -44,33 +44,26 @@ public class Task implements Parcelable {
     @ColumnInfo(name = "category")
     private String category;
 
+    @ColumnInfo(name ="isExpanded")
+    private boolean isExpanded;
 
 
 
-    public Task(String name, String description, String eventDate, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore, String category) {
+
+    public Task(String name, String description, String eventDate, String eventTime, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore, String category, String location, boolean isExpanded) {
         this.name = name;
         this.description = description;
         this.epochTime = epochTime;
         this.eventDate = eventDate;
-        this.isCompleted = isCompleted;
-        this.hasAlarm = hasAlarm;
-        this.minutesBefore = minutesBefore;
-        this.category = category;
-    }
-
-    @Ignore
-    public Task(String name, String description, String eventDate, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore, String category, String location, String recurrence) {
-        this.name = name;
-        this.description = description;
-        this.epochTime = epochTime;
-        this.isCompleted = isCompleted;
-        this.hasAlarm = hasAlarm;
-        this.eventDate = eventDate;
-        this.minutesBefore = minutesBefore;
-        this.category = category;
         this.location = location;
-        this.recurrence = recurrence;
+        this.eventTime = eventTime;
+        this.isCompleted = isCompleted;
+        this.hasAlarm = hasAlarm;
+        this.minutesBefore = minutesBefore;
+        this.category = category;
     }
+
+
 
     public String getName() {
         return name;
@@ -166,6 +159,14 @@ public class Task implements Parcelable {
 
     public void setCategory(String category) {
         this.category = category;
+    }
+
+    public boolean getExpanded() {
+        return isExpanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.isExpanded = expanded;
     }
 
     protected Task(Parcel in) {
