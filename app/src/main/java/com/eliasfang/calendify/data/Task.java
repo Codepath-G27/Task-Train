@@ -1,13 +1,27 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.data;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+
+import com.eliasfang.calendify.alarmSetup.Alarm;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 @Entity(tableName = "task_table")
 public class Task implements Parcelable {
@@ -16,6 +30,7 @@ public class Task implements Parcelable {
     @NonNull
     @ColumnInfo(name = "id")
     private int id;
+
 
     @ColumnInfo(name = "name")
     private String name;
@@ -46,6 +61,26 @@ public class Task implements Parcelable {
 
     @ColumnInfo(name ="isExpanded")
     private boolean isExpanded;
+
+
+    @ColumnInfo(name ="month")
+    private Integer month;
+
+    @ColumnInfo(name ="year")
+    private Integer year;
+
+    @ColumnInfo(name ="day")
+    private Integer day;
+
+    @ColumnInfo(name ="hour")
+    private Integer hour;
+
+    @ColumnInfo(name ="minute")
+    private Integer minute;
+
+
+    @ColumnInfo(name = "alarmId")
+    private Integer alarmId;
 
 
 
@@ -169,6 +204,60 @@ public class Task implements Parcelable {
         this.isExpanded = expanded;
     }
 
+
+
+
+
+
+    public Integer getMonth() {
+        return month;
+    }
+
+    public void setMonth(Integer month) {
+        this.month = month;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
+    }
+
+    public Integer getDay() {
+        return day;
+    }
+
+    public void setDay(Integer day) {
+        this.day = day;
+    }
+
+    public Integer getHour() {
+        return hour;
+    }
+
+    public void setHour(Integer hour) {
+        this.hour = hour;
+    }
+
+    public Integer getMinute() {
+        return minute;
+    }
+
+    public void setMinute(Integer minute) {
+        this.minute = minute;
+    }
+
+
+    public Integer getAlarmId() {
+        return alarmId;
+    }
+
+    public void setAlarmId(Integer alarmId) {
+        this.alarmId = alarmId;
+    }
+
     protected Task(Parcel in) {
         id = in.readInt();
         name = in.readString();
@@ -217,4 +306,20 @@ public class Task implements Parcelable {
             return new Task[size];
         }
     };
+
+
+    public void cancelAlarm(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, Alarm.class);
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
+        alarmManager.cancel(alarmPendingIntent);
+        this.hasAlarm = false;
+
+        String toastText = String.format("Alarm cancelled for %02d:%02d with id %d", hour, minute, alarmId);
+        //Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
+
+        Log.i("cancel", toastText);
+    }
+
+
 }

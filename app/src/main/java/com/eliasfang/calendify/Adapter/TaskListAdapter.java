@@ -3,11 +3,11 @@ package com.eliasfang.calendify.Adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Handler;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,17 +22,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eliasfang.calendify.R;
-import com.eliasfang.calendify.Task;
-import com.eliasfang.calendify.TaskViewModel;
-import com.github.jinatonic.confetti.CommonConfetti;
+import com.eliasfang.calendify.data.Task;
+import com.eliasfang.calendify.data.TaskViewModel;
 import com.tapadoo.alerter.Alerter;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,13 +42,17 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     private List<Task> myTasksFull;
     private boolean isEnabled = false;
     private boolean isSelectAll = false;
+
+    private boolean oneExpanded = false;
     private Activity activity;
+    private Context context2;
 
     ArrayList<Task> selectedList = new ArrayList<Task>();
     private TaskViewModel mainViewModel;
 
     public TaskListAdapter(Context context, Activity actinput) {
         mInflater = LayoutInflater.from(context);
+        context2 = context;
         activity = actinput;
     }
 
@@ -109,12 +110,23 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
                             switch(id){
                                 case R.id.menu_delete:
                                     //When cliked delte items
-                                    for(Task task : selectedList){
-                                        myTasks.remove(task);
-                                        mainViewModel.deleteTask(task);
+                                    oneExpanded = false;
+                                    for(Task a : myTasks){
+                                        oneExpanded = oneExpanded || a.getExpanded();
+                                        Log.i(TAG, "Expanded:" + oneExpanded);
                                     }
-                                    if(myTasks.size() == 0){
-                                        //When empty
+                                    if(!oneExpanded) {
+                                        for (Task task : selectedList) {
+                                            myTasks.remove(task);
+                                            mainViewModel.deleteTask(task);
+                                        }
+                                        if (myTasks.size() == 0) {
+                                            //When empty
+                                        }
+
+                                    }
+                                    else {
+                                        Toast.makeText(context2, "Deletion is disabled while items are expanded", Toast.LENGTH_SHORT).show();
                                     }
                                     mode.finish();
                                     break;
@@ -133,22 +145,34 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
                                     notifyDataSetChanged();
                                     break;
                                 case R.id.complete:
-                                    for(Task task : selectedList) {
-                                        myTasks.remove(task);
-                                        mainViewModel.deleteTask(task);
+                                    oneExpanded = false;
+                                    for(Task a : myTasks){
+                                        oneExpanded = oneExpanded || a.getExpanded();
+                                        Log.i(TAG, "Expanded:" + oneExpanded);
                                     }
-                                    if(!selectedList.isEmpty()) {
-                                        Alerter.create(activity)
-                                                .setTitle("Selected Tasks Completed")
-                                                .setText("Keep on Chugging Ahead!")
-                                                .setBackgroundColorRes(R.color.colorAccent)
-                                                .setIcon(R.drawable.icon_tasktrain)
-                                                .setIconColorFilter(0) // Optional - Removes white tint
-                                                .enableSwipeToDismiss()
-                                                .enableProgress(true)
-                                                .setDuration(1500)
-                                                .setProgressColorRes(R.color.colorPrimary)
-                                                .show();
+
+
+                                    if(!oneExpanded) {
+                                        for(Task task : selectedList) {
+                                            myTasks.remove(task);
+                                            mainViewModel.deleteTask(task);
+                                        }
+                                        if (!selectedList.isEmpty()) {
+                                            Alerter.create(activity)
+                                                    .setTitle("Selected Tasks Completed")
+                                                    .setText("Keep on Chugging Ahead!")
+                                                    .setBackgroundColorRes(R.color.colorAccent)
+                                                    .setIcon(R.drawable.icon_tasktrain)
+                                                    .setIconColorFilter(0) // Optional - Removes white tint
+                                                    .enableSwipeToDismiss()
+                                                    .enableProgress(true)
+                                                    .setDuration(1500)
+                                                    .setProgressColorRes(R.color.colorPrimary)
+                                                    .show();
+                                        }
+                                    }
+                                    else{
+                                        Toast.makeText(context2, "Completion is disabled while items are expanded", Toast.LENGTH_SHORT).show();
                                     }
                                     mode.finish();
                                     break;

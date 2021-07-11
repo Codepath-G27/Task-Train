@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">TaskTrain</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="button">Button</string>
     <string name="create_an_event">Create an event</string>
     <string name="stay_on_track">Stay On Track</string>

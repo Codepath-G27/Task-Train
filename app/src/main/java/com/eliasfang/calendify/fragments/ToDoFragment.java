@@ -1,11 +1,10 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.fragments;
 
-import android.app.ActionBar;
-import android.app.Activity;
-import android.app.Dialog;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -15,27 +14,24 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.eliasfang.calendify.R;
+import com.eliasfang.calendify.alarmSetup.Alarm;
+import com.eliasfang.calendify.data.Task;
+import com.eliasfang.calendify.data.TaskViewModel;
+import com.eliasfang.calendify.fragments.TaskCreateDialogFragment;
 import com.tapadoo.alerter.Alerter;
-import com.tapadoo.alerter.OnHideAlertListener;
-import com.tapadoo.alerter.OnShowAlertListener;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -43,11 +39,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eliasfang.calendify.Adapter.TaskListAdapter;
-import com.eliasfang.calendify.Database.ReminderEntity;
 import com.github.jinatonic.confetti.CommonConfetti;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -89,10 +88,22 @@ public class ToDoFragment extends Fragment {
         recyclerView = view.findViewById(R.id.rvItems);
         clRoot = view.findViewById(R.id.clroot);
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.my_toolbar);
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+
+
+
+        AppCompatActivity actionBar = (AppCompatActivity) getActivity();
+        actionBar.setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) actionBar.findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
 
 
@@ -120,6 +131,10 @@ public class ToDoFragment extends Fragment {
                     DialogFragment dialog = TaskCreateDialogFragment.newInstance();
                     dialog.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.action_todo), TASK_CREATION_FRAGMENT);
                     dialog.show(getActivity().getSupportFragmentManager(), "tag");
+
+                    for(Task task: adapter.getMyTasks()){
+                        Log.i("Ids", task.getId() + "");
+                    }
             }
         });
 
@@ -136,6 +151,7 @@ public class ToDoFragment extends Fragment {
             public void onSwiped(@NonNull RecyclerView.ViewHolder target, int direction) {
                 final int position = target.getAdapterPosition();
                 final Task item = adapter.getMyTasks().get(position);
+
 
 
                 oneExpanded = false;
@@ -155,6 +171,8 @@ public class ToDoFragment extends Fragment {
                     } else {
                         adapter.getMyTasks().remove(position);
 
+                        //Cancel alarm when deleted
+                        item.cancelAlarm(getContext());
 
                         Log.i(TAG, String.valueOf(item.getExpanded()));
                         myTaskViewModel.deleteTask(item);
@@ -180,10 +198,12 @@ public class ToDoFragment extends Fragment {
                                 adapter.getMyTasks().add(position, item);
                                 adapter.notifyDataSetChanged();
                                 recyclerView.scrollToPosition(position);
+                                //restore alarm if brought back
                             }
                         });
                         snackbar.setActionTextColor(Color.WHITE);
                         snackbar.show();
+
 
                         adapter.notifyDataSetChanged();
 
@@ -275,4 +295,31 @@ public class ToDoFragment extends Fragment {
         }
 
     }
+
+    //Work in progress. When restoring alarm it always immediately goes off
+//    public void setAlarm(Context context, Task task) {
+//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//
+//        Intent intent = new Intent(context, Alarm.class);
+//
+//        intent.putExtra("event", task.getName());
+//        intent.putExtra("date", task.getEventDate());
+//        intent.putExtra("time", task.getEventDate());
+//        intent.putExtra("id", task.getAlarmId());
+//        Log.i("Id", task.getAlarmId() + "");
+//
+//        task.setHasAlarm(true);
+//
+//        Toast.makeText(context, "Retored", Toast.LENGTH_SHORT).show();
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, task.getAlarmId(), intent, 0);
+//        String TimeandDate = task.getEventDate() + " " + task.getEventTime();
+//        DateFormat formatter = new SimpleDateFormat("M-d-yyyy hh:mm");
+//        try {
+//            Date date1 = formatter.parse(TimeandDate);
+//            alarmManager.setExact(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
+//
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//    }
 }

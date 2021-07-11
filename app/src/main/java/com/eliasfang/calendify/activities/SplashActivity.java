@@ -1,4 +1,4 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.os.Handler;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.eliasfang.calendify.MainActivity;
+import com.eliasfang.calendify.R;
 
 public class SplashActivity extends AppCompatActivity {
     private static final int SPLASH_SCREEN_TIMEOUT = 2000;

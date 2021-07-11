@@ -1,4 +1,4 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.data;
 
 import android.app.Application;
 import android.os.AsyncTask;

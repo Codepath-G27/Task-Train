@@ -1,4 +1,4 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,12 +13,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -30,17 +28,19 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.eliasfang.calendify.Database.DatabaseClass;
-import com.eliasfang.calendify.Database.ReminderEntity;
+
+import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.alarmSetup.Alarm;
+import com.eliasfang.calendify.data.Task;
+import com.eliasfang.calendify.data.TaskViewModel;
 import com.muddzdev.styleabletoast.StyleableToast;
 
-import java.text.BreakIterator;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 public class TaskCreateDialogFragment extends DialogFragment implements View.OnClickListener {
     public static final String EXTRA_REPLY = "com.eliasfang.calendify.TASK";
@@ -56,10 +56,11 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     private CheckBox cbAlarm;
     String notificationTime;
 
+    private Integer alarm_month, alarm_year, alarm_day, alarm_hour, alarm_minute;
+
 
     private Boolean checked = false;
 
-    DatabaseClass dataBase;
 
 
     public TaskCreateDialogFragment() {
@@ -76,7 +77,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         super.onCreate(savedInstanceState);
         // Set to style defined in styles.xml
         setStyle(DialogFragment.STYLE_NORMAL, R.style.FullscreenDialogTheme);
-        dataBase = DatabaseClass.getDatabase(getContext());
+
     }
 
     @Nullable
@@ -141,23 +142,36 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                             dismiss();
                             StyleableToast.makeText(getContext(), "Task Saved", R.style.toastSaved).show();
                         } else {
-                            Task task = saveData();
+                            Task reminderEntity = saveData();
                             Intent replyIntent = new Intent();
-                            replyIntent.putExtra(EXTRA_REPLY, task);
+                            replyIntent.putExtra(EXTRA_REPLY, reminderEntity);
                             TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-                            myTaskViewModel.insert(task);
-                            task.setHasAlarm(true);
+                            reminderEntity.setHasAlarm(true);
                             cbAlarm.setChecked(true);
                             //add alarm in a very brute force way
-                            ReminderEntity reminderEntity = new ReminderEntity();
+
                             String value = etTitle.getText().toString();
                             String date = (btnDate.getText().toString().trim());
                             String time = (btnTime.getText().toString().trim());
-                            reminderEntity.setEventdate(date);
-                            reminderEntity.setEventname(value);
-                            reminderEntity.setEventtime(time);
-                            dataBase.EventDao().insertAll(reminderEntity);
-                            setAlarm(value, date, time);
+                            reminderEntity.setEventDate(date);
+                            reminderEntity.setName(value);
+                            reminderEntity.setEventTime(time);
+
+                            int rand_alarmId = new Random().nextInt(Integer.MAX_VALUE);
+
+                            reminderEntity.setHour(alarm_hour);
+                            reminderEntity.setMinute(alarm_minute);
+                            reminderEntity.setDay(alarm_day);
+                            reminderEntity.setYear(alarm_year);
+                            reminderEntity.setMonth(alarm_month);
+                            reminderEntity.setAlarmId(rand_alarmId);
+
+
+                            myTaskViewModel.insert(reminderEntity);
+
+
+
+                            setAlarm(value, date, time, rand_alarmId);
                             dismiss();
                             Log.i(TAG, "The date is " + btnDate.getText().toString().trim() + " The time is " + btnTime.getText().toString().trim());
                             StyleableToast.makeText(getContext(), "Task Saved with Alarm", R.style.toastSaved).show();
@@ -179,7 +193,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                btnDate.setText(day + "-" + (month + 1) + "-" + year);
+                alarm_year = year;alarm_month = month; alarm_day = day;
+                btnDate.setText((month + 1) + "-" + day + "-" + year);
             }
         }, year, month, day);
         datePickerDialog.show();
@@ -192,6 +207,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
+                alarm_hour = i; alarm_minute = i1;
                 notificationTime = i + ":" + i1;
                 btnTime.setText(FormatTime(i, i1));
             }
@@ -243,20 +259,23 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         return toReturn;
     }
 
-    private void setAlarm(String text, String date, String time) {
+    private void setAlarm(String text, String date, String time, Integer id) {
         AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
         Intent intent = new Intent(getContext(), Alarm.class);
         intent.putExtra("event", text);
         intent.putExtra("date", date);
         intent.putExtra("time", time);
+        intent.putExtra("id", id);
+        Log.i("Id", id + "");
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), id, intent, 0);
         String TimeandDate = date + " " + notificationTime;
-        DateFormat formatter = new SimpleDateFormat("d-M-yyyy hh:mm");
+        DateFormat formatter = new SimpleDateFormat("M-d-yyyy hh:mm");
         try {
             Date date1 = formatter.parse(TimeandDate);
-            am.set(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
+            am.setExact(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
 
         } catch (ParseException e) {
             e.printStackTrace();

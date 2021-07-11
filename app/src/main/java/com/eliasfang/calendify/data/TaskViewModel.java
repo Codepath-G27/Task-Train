@@ -1,9 +1,12 @@
-package com.eliasfang.calendify;
+package com.eliasfang.calendify.data;
 
 import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+
+import com.eliasfang.calendify.data.Task;
+import com.eliasfang.calendify.data.TaskRepository;
 
 import java.util.List;
 
