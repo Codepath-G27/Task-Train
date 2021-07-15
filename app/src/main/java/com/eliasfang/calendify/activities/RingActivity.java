@@ -24,8 +24,8 @@ import butterknife.ButterKnife;
 public class RingActivity extends AppCompatActivity {
     @BindView(R.id.activity_ring_dismiss)
     Button dismiss;
-    @BindView(R.id.activity_ring_snooze)
-    Button snooze;
+//    @BindView(R.id.activity_ring_snooze)
+//    Button snooze;
     @BindView(R.id.activity_ring_clock)
     ImageView clock;
 

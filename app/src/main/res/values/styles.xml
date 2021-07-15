@@ -65,4 +65,10 @@
         <item name="stLength">SHORT</item>
     </style>
 
+
+    <style name="CustomCheckbox" parent="@style/Widget.AppCompat.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox_selector</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>

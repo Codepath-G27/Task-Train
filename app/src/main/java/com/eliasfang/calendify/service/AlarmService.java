@@ -39,7 +39,6 @@ public class AlarmService extends Service {
         Intent notificationIntent = new Intent(this, RingActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-        Bundle bundle = intent.getExtras();
 
         String alarmTitle = String.format("%s Alarm", intent.getStringExtra("event"));
 

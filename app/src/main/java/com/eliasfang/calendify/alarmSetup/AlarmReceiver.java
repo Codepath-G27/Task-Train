@@ -1,35 +1,53 @@
 package com.eliasfang.calendify.alarmSetup;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.RemoteViews;
 import android.widget.Toast;
 
-import androidx.core.app.NotificationCompat;
-
-import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.service.AlarmService;
+import com.eliasfang.calendify.service.RestartAlarmService;
 
-public class Alarm extends BroadcastReceiver {
+import java.util.Calendar;
+
+public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        String toastText = String.format("Alarm Received");
-        Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
-        startAlarmService(context, intent);
+
+        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
+            String toastText = String.format("Alarm Reboot");
+            Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
+            startRescheduleAlarmsService(context);
+        }
+        else {
+            String toastText = String.format("Alarm Received");
+            Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
+            if (!intent.getBooleanExtra("RECURRING", false)) {
+                startAlarmService(context, intent);
+            } else {
+                if (alarmIsToday(intent)) {
+                    startAlarmService(context, intent);
+                }
+            }
+        }
+
 
 //        Intent intent1 = new Intent(context, MainActivity.class);
 //        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //        context.startActivity(intent1);
+    }
+
+    private void startRescheduleAlarmsService(Context context) {
+        Intent intentService = new Intent(context, RestartAlarmService.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(intentService);
+        } else {
+            context.startService(intentService);
+        }
     }
 
     private void startAlarmService(Context context, Intent intent) {
@@ -45,6 +63,45 @@ public class Alarm extends BroadcastReceiver {
             context.startService(intentService);
         }
     }
+
+    private boolean alarmIsToday(Intent intent) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        int today = calendar.get(Calendar.DAY_OF_WEEK);
+
+        switch (today) {
+            case Calendar.MONDAY:
+                if (intent.getBooleanExtra("MONDAY", false))
+                    return true;
+                return false;
+            case Calendar.TUESDAY:
+                if (intent.getBooleanExtra("TUESDAY", false))
+                    return true;
+                return false;
+            case Calendar.WEDNESDAY:
+                if (intent.getBooleanExtra("WEDNESDAY", false))
+                    return true;
+                return false;
+            case Calendar.THURSDAY:
+                if (intent.getBooleanExtra("THURSDAY", false))
+                    return true;
+                return false;
+            case Calendar.FRIDAY:
+                if (intent.getBooleanExtra("FRIDAY", false))
+                    return true;
+                return false;
+            case Calendar.SATURDAY:
+                if (intent.getBooleanExtra("SATURDAY", false))
+                    return true;
+                return false;
+            case Calendar.SUNDAY:
+                if (intent.getBooleanExtra("SUNDAY", false))
+                    return true;
+                return false;
+        }
+        return false;
+    }
+
 
 //    @Override
 //    public void onReceive(Context context, Intent intent) {

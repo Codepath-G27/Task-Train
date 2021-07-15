@@ -30,7 +30,7 @@ import android.widget.Toast;
 
 
 import com.eliasfang.calendify.R;
-import com.eliasfang.calendify.alarmSetup.Alarm;
+import com.eliasfang.calendify.alarmSetup.AlarmReceiver;
 import com.eliasfang.calendify.data.Task;
 import com.eliasfang.calendify.data.TaskViewModel;
 import com.muddzdev.styleabletoast.StyleableToast;
@@ -50,16 +50,19 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     private EditText etLocation;
     private Button btnDate;
     private Button btnTime;
-    private CheckBox cbRecur;
+    private CheckBox cbAlarm;
     private EditText etDescription;
     private Spinner spCategory;
-    private CheckBox cbAlarm;
     String notificationTime;
 
     private Integer alarm_month, alarm_year, alarm_day, alarm_hour, alarm_minute;
 
+    private CheckBox cb_mon, cb_tues, cb_wed, cb_thur, cb_fri, cb_sat, cb_sun;
 
-    private Boolean checked = false;
+
+    private Boolean alarm_set = false;
+
+    private Boolean recur = false;
 
 
 
@@ -90,10 +93,18 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         etLocation = view.findViewById(R.id.etLocation);
         btnDate = view.findViewById(R.id.btnDate);
         btnTime = view.findViewById(R.id.btnTime);
-        cbRecur = view.findViewById(R.id.cbAlarm);
+
         etDescription = view.findViewById(R.id.etDescription);
         cbAlarm = view.findViewById(R.id.cbAlarm);
         spCategory = view.findViewById(R.id.etCategory);
+
+        cb_mon = view.findViewById(R.id.cb_mon);
+        cb_tues = view.findViewById(R.id.cb_tues);
+        cb_wed = view.findViewById(R.id.cb_wed);
+        cb_thur = view.findViewById(R.id.cb_thur);
+        cb_fri = view.findViewById(R.id.cb_fri);
+        cb_sat = view.findViewById(R.id.cb_sat);
+        cb_sun = view.findViewById(R.id.cb_sun);
 
         ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.category_items));
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -159,19 +170,16 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
                             int rand_alarmId = new Random().nextInt(Integer.MAX_VALUE);
 
-                            reminderEntity.setHour(alarm_hour);
-                            reminderEntity.setMinute(alarm_minute);
-                            reminderEntity.setDay(alarm_day);
-                            reminderEntity.setYear(alarm_year);
-                            reminderEntity.setMonth(alarm_month);
-                            reminderEntity.setAlarmId(rand_alarmId);
 
+                            reminderEntity.setAlarmId(rand_alarmId);
+                            reminderEntity.setRecurrence(recur);
+                            reminderEntity.setNotificationTime(notificationTime);
+                            reminderEntity.setDays(cb_mon.isChecked(), cb_tues.isChecked(), cb_wed.isChecked(), cb_thur.isChecked(), cb_fri.isChecked(), cb_sat.isChecked(), cb_sun.isChecked());
 
                             myTaskViewModel.insert(reminderEntity);
 
 
-
-                            setAlarm(value, date, time, rand_alarmId);
+                            reminderEntity.setAlarm(getContext(),getActivity());
                             dismiss();
                             Log.i(TAG, "The date is " + btnDate.getText().toString().trim() + " The time is " + btnTime.getText().toString().trim());
                             StyleableToast.makeText(getContext(), "Task Saved with Alarm", R.style.toastSaved).show();
@@ -242,45 +250,70 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
     // Helper functions to save the fields that are filled in
     private Task saveData() {
+        alarm_set = false;
+        recur = false;
         //todo add some error handling to make sure that we have a valid task
         String title = etTitle.getText().toString();
         String location = etLocation.getText().toString();
         String date = btnDate.getText().toString();
         String time = btnTime.getText().toString();
         String category = spCategory.getSelectedItem().toString();
-        Log.i(TAG, category);
 
-        boolean recur = cbRecur.isChecked();
+        alarm_set = cbAlarm.isChecked();
+        recur = cb_mon.isChecked() || cb_tues.isChecked() || cb_wed.isChecked() || cb_thur.isChecked() || cb_fri.isChecked() || cb_sat.isChecked() || cb_sun.isChecked();
         String description = etDescription.getText().toString();
 
         //TODO set the category picker from the spinner
 
-        Task toReturn = new Task(title, description, date, time, (long) 0.0, false, recur, 0, category, location, false);
+        Task toReturn = new Task(title, description, date, time, false, alarm_set, category, location, false);
         return toReturn;
     }
 
     private void setAlarm(String text, String date, String time, Integer id) {
         AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
 
-        Intent intent = new Intent(getContext(), Alarm.class);
+        Intent intent = new Intent(getContext(), AlarmReceiver.class);
         intent.putExtra("event", text);
         intent.putExtra("date", date);
         intent.putExtra("time", time);
         intent.putExtra("id", id);
-        Log.i("Id", id + "");
+        intent.putExtra("RECURRING", recur);
+        intent.putExtra("MONDAY", cb_mon.isChecked());
+        intent.putExtra("TUESDAY", cb_tues.isChecked());
+        intent.putExtra("WEDNESDAY", cb_wed.isChecked());
+        intent.putExtra("THURSDAY", cb_thur.isChecked());
+        intent.putExtra("FRIDAY", cb_fri.isChecked());
+        intent.putExtra("SATURDAY", cb_sat.isChecked());
+        intent.putExtra("SUNDAY", cb_sun.isChecked());
 
+        if(!recur) {
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), id, intent, 0);
+            String TimeandDate = date + " " + notificationTime;
+            DateFormat formatter = new SimpleDateFormat("M-d-yyyy hh:mm");
+            try {
+                Date date1 = formatter.parse(TimeandDate);
+                am.setExact(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), id, intent, 0);
-        String TimeandDate = date + " " + notificationTime;
-        DateFormat formatter = new SimpleDateFormat("M-d-yyyy hh:mm");
-        try {
-            Date date1 = formatter.parse(TimeandDate);
-            am.setExact(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
+        else{
 
+            final long RUN_DAILY = 24 * 60 * 60 * 1000;
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), id, intent, 0);
+            String TimeandDate = date + " " + notificationTime;
+            DateFormat formatter = new SimpleDateFormat("M-d-yyyy hh:mm");
+            try {
+                Date date1 = formatter.parse(TimeandDate);
+                am.setRepeating(
+                        AlarmManager.RTC_WAKEUP, date1.getTime(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

@@ -1,5 +1,6 @@
 package com.eliasfang.calendify.data;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -10,17 +11,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import com.eliasfang.calendify.alarmSetup.Alarm;
+import com.eliasfang.calendify.alarmSetup.AlarmReceiver;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 @Entity(tableName = "task_table")
@@ -36,14 +35,12 @@ public class Task implements Parcelable {
     private String name;
     @ColumnInfo(name = "description")
     private String description;
-    @ColumnInfo(name = "epochTime")
-    private long epochTime; //TODO same with this one
+
     @ColumnInfo(name = "isCompleted")
     private boolean isCompleted;
+
     @ColumnInfo(name = "hasAlarm")
     private boolean hasAlarm;
-    @ColumnInfo(name = "minutesBefore")
-    private int minutesBefore;
 
     @ColumnInfo(name = "eventDate")
     private String eventDate;
@@ -51,7 +48,7 @@ public class Task implements Parcelable {
     @ColumnInfo(name = "location")
     private String location;
     @ColumnInfo(name = "recurrence")
-    private String recurrence; //TODO also change this to some appropriate Java time library
+    private Boolean recurrence;
 
     @ColumnInfo(name = "eventTime")
     private String eventTime;
@@ -63,38 +60,44 @@ public class Task implements Parcelable {
     private boolean isExpanded;
 
 
-    @ColumnInfo(name ="month")
-    private Integer month;
-
-    @ColumnInfo(name ="year")
-    private Integer year;
-
-    @ColumnInfo(name ="day")
-    private Integer day;
-
-    @ColumnInfo(name ="hour")
-    private Integer hour;
-
-    @ColumnInfo(name ="minute")
-    private Integer minute;
-
-
     @ColumnInfo(name = "alarmId")
     private Integer alarmId;
 
 
+    @ColumnInfo(name ="monday")
+    private boolean monday;
+
+    @ColumnInfo(name ="tuesday")
+    private boolean tuesday;
+
+    @ColumnInfo(name ="wed")
+    private boolean wed;
+
+    @ColumnInfo(name ="thur")
+    private boolean thur;
+
+    @ColumnInfo(name ="fri")
+    private boolean fri;
+
+    @ColumnInfo(name ="sat")
+    private boolean sat;
+
+    @ColumnInfo(name ="sun")
+    private boolean sun;
+
+    @ColumnInfo(name ="notificationTime")
+    private String notificationTime;
 
 
-    public Task(String name, String description, String eventDate, String eventTime, long epochTime, boolean isCompleted, boolean hasAlarm, int minutesBefore, String category, String location, boolean isExpanded) {
+
+    public Task(String name, String description, String eventDate, String eventTime, boolean isCompleted, boolean hasAlarm, String category, String location, boolean isExpanded) {
         this.name = name;
         this.description = description;
-        this.epochTime = epochTime;
         this.eventDate = eventDate;
         this.location = location;
         this.eventTime = eventTime;
         this.isCompleted = isCompleted;
         this.hasAlarm = hasAlarm;
-        this.minutesBefore = minutesBefore;
         this.category = category;
     }
 
@@ -132,13 +135,6 @@ public class Task implements Parcelable {
         this.description = description;
     }
 
-    public long getEpochTime() {
-        return epochTime;
-    }
-
-    public void setEpochTime(long epochTime) {
-        this.epochTime = epochTime;
-    }
 
     public boolean isCompleted() {
         return isCompleted;
@@ -156,13 +152,6 @@ public class Task implements Parcelable {
         this.hasAlarm = hasAlarm;
     }
 
-    public int getMinutesBefore() {
-        return minutesBefore;
-    }
-
-    public void setMinutesBefore(int minutesBefore) {
-        this.minutesBefore = minutesBefore;
-    }
 
     public String getLocation() {
         return location;
@@ -172,11 +161,11 @@ public class Task implements Parcelable {
         this.location = location;
     }
 
-    public String getRecurrence() {
+    public Boolean getRecurrence() {
         return recurrence;
     }
 
-    public void setRecurrence(String recurrence) {
+    public void setRecurrence(Boolean recurrence) {
         this.recurrence = recurrence;
     }
 
@@ -206,50 +195,6 @@ public class Task implements Parcelable {
 
 
 
-
-
-
-    public Integer getMonth() {
-        return month;
-    }
-
-    public void setMonth(Integer month) {
-        this.month = month;
-    }
-
-    public Integer getYear() {
-        return year;
-    }
-
-    public void setYear(Integer year) {
-        this.year = year;
-    }
-
-    public Integer getDay() {
-        return day;
-    }
-
-    public void setDay(Integer day) {
-        this.day = day;
-    }
-
-    public Integer getHour() {
-        return hour;
-    }
-
-    public void setHour(Integer hour) {
-        this.hour = hour;
-    }
-
-    public Integer getMinute() {
-        return minute;
-    }
-
-    public void setMinute(Integer minute) {
-        this.minute = minute;
-    }
-
-
     public Integer getAlarmId() {
         return alarmId;
     }
@@ -258,16 +203,88 @@ public class Task implements Parcelable {
         this.alarmId = alarmId;
     }
 
+    public Boolean getMonday() {
+        return monday;
+    }
+
+    public void setMonday(Boolean monday) {
+        this.monday = monday;
+    }
+
+    public Boolean getTuesday() {
+        return tuesday;
+    }
+
+    public void setTuesday(Boolean tuesday) {
+        this.tuesday = tuesday;
+    }
+
+    public Boolean getWed() {
+        return wed;
+    }
+
+    public void setWed(Boolean wed) {
+        this.wed = wed;
+    }
+
+    public Boolean getThur() {
+        return thur;
+    }
+
+    public void setThur(Boolean thur) {
+        this.thur = thur;
+    }
+
+    public Boolean getFri() {
+        return fri;
+    }
+
+    public void setFri(Boolean fri) {
+        this.fri = fri;
+    }
+
+    public Boolean getSat() {
+        return sat;
+    }
+
+    public void setSat(Boolean sat) {
+        this.sat = sat;
+    }
+
+    public Boolean getSun() {
+        return sun;
+    }
+
+    public void setSun(Boolean sun) {
+        this.sun = sun;
+    }
+
+    public String getNotificationTime() {
+        return notificationTime;
+    }
+
+    public void setNotificationTime(String time) {
+        this.notificationTime = time;
+    }
+
+
+    public void setDays(Boolean mon, Boolean tues, Boolean wed, Boolean thur, Boolean fri, Boolean sat, Boolean sun) {
+        this.monday = mon;
+        this.tuesday = tues;
+        this.wed = wed;
+        this.thur = thur;
+        this.fri = fri;
+        this.sat = sat;
+        this.sun = sun;
+    }
+
     protected Task(Parcel in) {
         id = in.readInt();
         name = in.readString();
         description = in.readString();
-        epochTime = in.readLong();
         isCompleted = in.readByte() != 0x00;
         hasAlarm = in.readByte() != 0x00;
-        minutesBefore = in.readInt();
         location = in.readString();
-        recurrence = in.readString();
         eventDate = in.readString();
         eventTime = in.readString();
         category = in.readString();
@@ -283,15 +300,12 @@ public class Task implements Parcelable {
         dest.writeInt(id);
         dest.writeString(name);
         dest.writeString(description);
-        dest.writeLong(epochTime);
         dest.writeByte((byte) (isCompleted ? 0x01 : 0x00));
         dest.writeByte((byte) (hasAlarm ? 0x01 : 0x00));
-        dest.writeInt(minutesBefore);
         dest.writeString(location);
         dest.writeString(category);
         dest.writeString(eventDate);
         dest.writeString(eventTime);
-        dest.writeString(recurrence);
     }
 
     @SuppressWarnings("unused")
@@ -310,15 +324,59 @@ public class Task implements Parcelable {
 
     public void cancelAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(context, Alarm.class);
+        Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
         alarmManager.cancel(alarmPendingIntent);
         this.hasAlarm = false;
+    }
 
-        String toastText = String.format("Alarm cancelled for %02d:%02d with id %d", hour, minute, alarmId);
-        //Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
 
-        Log.i("cancel", toastText);
+    public void setAlarm(Context context, Activity activity) {
+        AlarmManager am = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+
+        String text = this.name;
+        String date = this.eventDate;
+        String time = this.eventTime;
+        int id = this.alarmId;
+        Boolean recur = this.recurrence;
+
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.putExtra("event", text);
+        intent.putExtra("date", date);
+        intent.putExtra("time", time);
+        intent.putExtra("id", id);
+        intent.putExtra("RECURRING", recur);
+        intent.putExtra("MONDAY", this.monday);
+        intent.putExtra("TUESDAY", this.tuesday);
+        intent.putExtra("WEDNESDAY", this.wed);
+        intent.putExtra("THURSDAY", this.tuesday);
+        intent.putExtra("FRIDAY", this.fri);
+        intent.putExtra("SATURDAY", this.sat);
+        intent.putExtra("SUNDAY", this.sun);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+        String TimeandDate = date + " " + this.notificationTime;
+        DateFormat formatter = new SimpleDateFormat("M-d-yyyy hh:mm");
+        
+        if(!recur) {
+            try {
+                Date date1 = formatter.parse(TimeandDate);
+                am.setExact(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
+
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            try {
+                Date date1 = formatter.parse(TimeandDate);
+                am.setRepeating(
+                        AlarmManager.RTC_WAKEUP, date1.getTime(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
 

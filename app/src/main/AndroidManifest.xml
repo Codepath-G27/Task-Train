@@ -28,7 +28,7 @@
 
         <activity android:name=".activities.RingActivity"></activity>
 
-        <receiver android:name=".alarmSetup.Alarm">
+        <receiver android:name=".alarmSetup.AlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

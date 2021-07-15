@@ -1,8 +1,5 @@
 package com.eliasfang.calendify.fragments;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,10 +15,8 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.eliasfang.calendify.R;
-import com.eliasfang.calendify.alarmSetup.Alarm;
 import com.eliasfang.calendify.data.Task;
 import com.eliasfang.calendify.data.TaskViewModel;
-import com.eliasfang.calendify.fragments.TaskCreateDialogFragment;
 import com.tapadoo.alerter.Alerter;
 
 import androidx.annotation.NonNull;
@@ -43,10 +38,6 @@ import com.github.jinatonic.confetti.CommonConfetti;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -75,7 +66,6 @@ public class ToDoFragment extends Fragment {
     private int colors[] = {Color.parseColor("#94C1FF"), Color.parseColor("#8080FF"), Color.parseColor("#785CF7")};
 
 
-
     public ToDoFragment() {
         // Required empty public constructor
     }
@@ -95,7 +85,6 @@ public class ToDoFragment extends Fragment {
         // Make sure the toolbar exists in the activity and is not null
 
 
-
         AppCompatActivity actionBar = (AppCompatActivity) getActivity();
         actionBar.setSupportActionBar(toolbar);
 
@@ -104,8 +93,6 @@ public class ToDoFragment extends Fragment {
                 getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-
 
 
         myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
@@ -128,16 +115,28 @@ public class ToDoFragment extends Fragment {
         fabCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                oneExpanded = false;
+                for (Task a : adapter.getMyTasks()) {
+                    oneExpanded = oneExpanded || a.getExpanded();
+                    Log.i(TAG, "Expanded:" + oneExpanded);
+                }
+
+                if(!oneExpanded){
                     DialogFragment dialog = TaskCreateDialogFragment.newInstance();
                     dialog.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.action_todo), TASK_CREATION_FRAGMENT);
                     dialog.show(getActivity().getSupportFragmentManager(), "tag");
 
-                    for(Task task: adapter.getMyTasks()){
+                    for (Task task : adapter.getMyTasks()) {
                         Log.i("Ids", task.getId() + "");
                     }
+                }
+                else{
+                    Toast.makeText(getContext(), "Creation is disabled while items are expanded", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
-
 
 
         ItemTouchHelper helper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
@@ -153,16 +152,14 @@ public class ToDoFragment extends Fragment {
                 final Task item = adapter.getMyTasks().get(position);
 
 
-
                 oneExpanded = false;
-                for(Task a : adapter.getMyTasks()){
+                for (Task a : adapter.getMyTasks()) {
                     oneExpanded = oneExpanded || a.getExpanded();
                     Log.i(TAG, "Expanded:" + oneExpanded);
                 }
 
 
-
-                if(!oneExpanded) {
+                if (!oneExpanded) {
                     if (direction == ItemTouchHelper.LEFT) {
                         myTaskViewModel.updateCompleted(item);
                         myTaskViewModel.refreshTasks();
@@ -172,7 +169,8 @@ public class ToDoFragment extends Fragment {
                         adapter.getMyTasks().remove(position);
 
                         //Cancel alarm when deleted
-                        item.cancelAlarm(getContext());
+                        if (item.isHasAlarm())
+                            item.cancelAlarm(getContext());
 
                         Log.i(TAG, String.valueOf(item.getExpanded()));
                         myTaskViewModel.deleteTask(item);
@@ -208,8 +206,7 @@ public class ToDoFragment extends Fragment {
                         adapter.notifyDataSetChanged();
 
                     }
-                }
-                else {
+                } else {
                     Toast.makeText(getContext(), "Deletion is disabled while items are expanded", Toast.LENGTH_SHORT).show();
                     Handler handler = new Handler();
                     handler.postDelayed(new Runnable() {
@@ -249,7 +246,7 @@ public class ToDoFragment extends Fragment {
 
     }
 
-    public void showAlerter(View v){
+    public void showAlerter(View v) {
         Alerter.create(getActivity())
                 .setTitle("Task Completed")
                 .setText("Keep on Chugging Ahead!")
@@ -285,7 +282,7 @@ public class ToDoFragment extends Fragment {
                 return false;
             }
         });
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     private void setItemsVisibility(Menu menu, MenuItem exception, boolean visible) {

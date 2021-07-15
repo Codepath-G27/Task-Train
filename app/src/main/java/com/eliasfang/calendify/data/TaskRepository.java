@@ -18,7 +18,7 @@ public class TaskRepository {
         myAllTasks = myTaskDao.getAllTasks();
     }
 
-    LiveData<List<Task>> getAllTasks() {
+    public LiveData<List<Task>> getAllTasks() {
         return myAllTasks;
     }
 
