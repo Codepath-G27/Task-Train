@@ -15,7 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.eliasfang.calendify.R;
-import com.eliasfang.calendify.data.Task;
+import com.eliasfang.calendify.models.Task;
 import com.eliasfang.calendify.data.TaskViewModel;
 import com.tapadoo.alerter.Alerter;
 

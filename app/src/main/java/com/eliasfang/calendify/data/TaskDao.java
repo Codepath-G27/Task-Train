@@ -6,7 +6,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.eliasfang.calendify.data.Task;
+import com.eliasfang.calendify.models.Task;
 
 import java.util.List;
 

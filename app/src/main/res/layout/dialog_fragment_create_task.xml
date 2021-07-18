@@ -74,6 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/cbAlarm">
 
                 <TextView
@@ -239,13 +240,26 @@
                     android:theme="@style/TextLabel" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/etLocation"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/inputText2"
+                app:counterEnabled="true"
+                app:counterMaxLength="30"
+                app:layout_constraintTop_toBottomOf="@id/inputText"
+                app:hintTextAppearance="@style/MyHintStyle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/etLocation"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="5dp"
+                android:maxLength="30"
 
                 android:hint="Add location"
                 android:textSize="16sp"
@@ -254,7 +268,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.94"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputText" />
+                app:layout_constraintTop_toBottomOf="@+id/inputText"
+                />
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -267,7 +283,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/etLocation">
+                app:layout_constraintTop_toBottomOf="@+id/inputText2">
 
                 <Button
                     android:id="@+id/btnDate"

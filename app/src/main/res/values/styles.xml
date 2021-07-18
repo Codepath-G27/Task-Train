@@ -71,4 +71,10 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+
+    <style name="GreenTheme" parent="FirebaseUI">
+        <!-- Required for sign-in flow styling -->
+        <item name="colorPrimary">@drawable/gradient</item>
+    </style>
+
 </resources>

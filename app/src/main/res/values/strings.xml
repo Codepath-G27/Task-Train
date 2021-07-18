@@ -5,6 +5,7 @@
     <string name="button">Button</string>
     <string name="create_an_event">Create an event</string>
     <string name="stay_on_track">Stay On Track</string>
+    <string name="card_friends_format">•••• •••• •••• %s</string>
 
     <string-array name="category_items">
         <item>Other</item>
@@ -13,4 +14,6 @@
         <item>Sports</item>
         <item>Recreation</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

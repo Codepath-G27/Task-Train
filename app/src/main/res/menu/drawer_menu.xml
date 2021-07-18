@@ -14,6 +14,13 @@
                 android:id="@+id/nav_calendar"
                 android:icon="@drawable/ic_baseline_edit_calendar_24"
                 android:title="Calendar"></item>
+
+            <item
+                android:id="@+id/nav_social"
+                android:icon="@drawable/ic_baseline_contact_page_24"
+                android:title="Friends"></item>
         </group>
+
+
 
 </menu>

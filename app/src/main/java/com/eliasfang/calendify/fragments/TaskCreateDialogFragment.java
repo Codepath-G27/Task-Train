@@ -29,10 +29,14 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 
+import com.eliasfang.calendify.API.NotificationApi;
+import com.eliasfang.calendify.models.PushNotification;
 import com.eliasfang.calendify.R;
+import com.eliasfang.calendify.API.RetrofitInit;
 import com.eliasfang.calendify.alarmSetup.AlarmReceiver;
-import com.eliasfang.calendify.data.Task;
+import com.eliasfang.calendify.models.Task;
 import com.eliasfang.calendify.data.TaskViewModel;
+import com.google.gson.Gson;
 import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.text.DateFormat;
@@ -42,9 +46,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+
 public class TaskCreateDialogFragment extends DialogFragment implements View.OnClickListener {
     public static final String EXTRA_REPLY = "com.eliasfang.calendify.TASK";
     public static final String TAG = "TaskCreateDialog";
+    private final String TOPIC = "/topics/myTopic";
 
     private EditText etTitle;
     private EditText etLocation;
@@ -55,6 +66,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     private Spinner spCategory;
     String notificationTime;
 
+    private String token;
+
     private Integer alarm_month, alarm_year, alarm_day, alarm_hour, alarm_minute;
 
     private CheckBox cb_mon, cb_tues, cb_wed, cb_thur, cb_fri, cb_sat, cb_sun;
@@ -64,7 +77,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
     private Boolean recur = false;
 
-
+    private NotificationApi notificationApi;
 
     public TaskCreateDialogFragment() {
         // Required empty constructor
@@ -79,6 +92,11 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // Set to style defined in styles.xml
+
+        //Retrofit
+        Retrofit retro = RetrofitInit.getClient();
+        notificationApi = retro.create(NotificationApi.class);
+
         setStyle(DialogFragment.STYLE_NORMAL, R.style.FullscreenDialogTheme);
 
     }
@@ -178,6 +196,21 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
                             myTaskViewModel.insert(reminderEntity);
 
+//                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+//                                @Override
+//                                public void onComplete(@NonNull com.google.android.gms.tasks.Task<String> task) {
+//                                    if (!task.isSuccessful()) {
+//                                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+//                                        return;
+//                                }
+//                                    token = task.getResult();
+//                                    NotificationData data = new NotificationData("hello", "by");
+//                                    data.setEventTime(time);
+//                                    PushNotification notification = new PushNotification(data,token);
+//                                    createNotification(notification);
+//                                }
+//                            });
+//                            Log.i(TAG, "Token:" + token);
 
                             reminderEntity.setAlarm(getContext(),getActivity());
                             dismiss();
@@ -317,5 +350,30 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
     }
 
+    private void createNotification(PushNotification notification) {
+
+        Call<PushNotification> call = notificationApi.postNotification(notification);
+
+        call.enqueue(new Callback<PushNotification>() {
+            @Override
+            public void onResponse(Call<PushNotification> call, Response<PushNotification> response) {
+                if(!response.isSuccessful()){
+                    Log.e(TAG,"Error: " + response.code());
+                    return;
+                }
+                else{
+                    Log.i(TAG,"Error: " + response.code());
+                    Gson gson= new Gson();
+                    Log.d(TAG, "Response: " + gson.toJson(response));
+                    Log.i(TAG,"Body:" + response.body());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PushNotification> call, Throwable t) {
+
+            }
+        });
+    }
 
 }

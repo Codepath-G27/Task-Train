@@ -3,7 +3,6 @@ package com.eliasfang.calendify.Adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Handler;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -26,7 +25,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eliasfang.calendify.R;
-import com.eliasfang.calendify.data.Task;
+import com.eliasfang.calendify.models.Task;
 import com.eliasfang.calendify.data.TaskViewModel;
 import com.tapadoo.alerter.Alerter;
 

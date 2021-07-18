@@ -12,11 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.eliasfang.calendify.R;
-import com.eliasfang.calendify.data.Task;
 import com.eliasfang.calendify.service.AlarmService;
-
-import java.util.Calendar;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

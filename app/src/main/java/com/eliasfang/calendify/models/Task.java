@@ -1,4 +1,4 @@
-package com.eliasfang.calendify.data;
+package com.eliasfang.calendify.models;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -7,8 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

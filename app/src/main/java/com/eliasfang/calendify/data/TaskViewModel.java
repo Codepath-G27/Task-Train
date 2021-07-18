@@ -5,8 +5,7 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.eliasfang.calendify.data.Task;
-import com.eliasfang.calendify.data.TaskRepository;
+import com.eliasfang.calendify.models.Task;
 
 import java.util.List;
 

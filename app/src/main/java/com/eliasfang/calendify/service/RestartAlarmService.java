@@ -8,7 +8,7 @@ import androidx.lifecycle.LifecycleService;
 import androidx.lifecycle.Observer;
 
 
-import com.eliasfang.calendify.data.Task;
+import com.eliasfang.calendify.models.Task;
 import com.eliasfang.calendify.data.TaskRepository;
 
 import java.util.List;
