@@ -21,11 +21,15 @@ import androidx.fragment.app.FragmentManager;
 import com.eliasfang.calendify.API.NotificationApi;
 import com.eliasfang.calendify.activities.FirebaseActivity;
 import com.eliasfang.calendify.activities.PreferencesActivity;
+import com.eliasfang.calendify.dialogs.TaskCreateBottomSheetDialog;
 import com.eliasfang.calendify.fragments.CalendarFragment;
 import com.eliasfang.calendify.fragments.SocialFragment;
 import com.eliasfang.calendify.fragments.ToDoFragment;
+import com.eliasfang.calendify.models.User;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,12 +75,11 @@ public class MainActivity extends AppCompatActivity {
         btn_login = findViewById(R.id.btn_login);
 
 
-        if (auth.getCurrentUser() != null) {
-            btn_login.setText("Log Out");
-            tvNavName.setText(auth.getCurrentUser().getDisplayName());
-        } else {
+        if (auth.getCurrentUser() != null)
+            logInUser();
+         else
             btn_login.setText("Login");
-        }
+
 
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +102,11 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_social:
                         if(FirebaseAuth.getInstance().getCurrentUser() != null)
                             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new SocialFragment()).commit();
-                        else
+                        else {
                             Toast.makeText(MainActivity.this, "Please login to view friends", Toast.LENGTH_SHORT).show();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ToDoFragment()).commit();
+                            navigationView.setCheckedItem(R.id.nav_todo);
+                        }
                         break;
 
                 }
@@ -122,6 +128,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void logInUser() {
+        btn_login.setText("Log Out");
+        tvNavName.setText(auth.getCurrentUser().getDisplayName());
+    }
+
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen((GravityCompat.START))) {
@@ -141,7 +152,9 @@ public class MainActivity extends AppCompatActivity {
             tvNavName.setText(auth.getCurrentUser().getDisplayName());
         } else {
             btn_login.setText("Login");
+            tvNavName.setText("Anonymous User");
         }
 
     }
+
 }

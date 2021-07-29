@@ -88,6 +88,8 @@ public class ToDoFragment extends Fragment {
         AppCompatActivity actionBar = (AppCompatActivity) getActivity();
         actionBar.setSupportActionBar(toolbar);
 
+        setHasOptionsMenu(true);
+
         DrawerLayout drawer = (DrawerLayout) actionBar.findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 getActivity(), drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -108,7 +110,6 @@ public class ToDoFragment extends Fragment {
             }
         });
 
-        setHasOptionsMenu(true);
 
         allTasks = adapter.getMyTasks();
 

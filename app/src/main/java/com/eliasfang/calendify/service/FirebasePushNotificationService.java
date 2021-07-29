@@ -12,8 +12,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
+import com.eliasfang.calendify.MainActivity;
 import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.activities.AlarmBuddyActivity;
+import com.eliasfang.calendify.fragments.SocialFragment;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -43,7 +45,14 @@ public class FirebasePushNotificationService extends FirebaseMessagingService {
         String message = data.get("message");
         String eventTime = data.get("evenTime");
 
-        Intent intent = new Intent(this, AlarmBuddyActivity.class);
+        //Check if the alarm is for getting a friend request or for getting an alarm
+            //Pass in some type of information in the notification data (i.e. String or Boolean)
+            //Then set the intent depending on the notification data
+        Intent intent;
+        if(title.equals("New Friend Request"))
+            intent = new Intent(this, MainActivity.class);
+        else
+            intent = new Intent(this, AlarmBuddyActivity.class);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         int notificationID = new Random().nextInt(Integer.MAX_VALUE);
 

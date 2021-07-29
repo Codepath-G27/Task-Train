@@ -7,9 +7,7 @@
     android:layout_marginHorizontal="5dp"
     android:layout_marginVertical="1dp"
     android:clickable="false"
-    android:foreground="?android:attr/selectableItemBackground"
-    >
-
+    android:foreground="?android:attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,7 +22,7 @@
             android:background="@color/white">
 
             <TextView
-                android:id="@+id/tvTitle"
+                android:id="@+id/tvFriendName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
@@ -33,10 +31,10 @@
                 tools:text="Name of Task Here" />
 
             <TextView
-                android:id="@+id/tvCategory"
+                android:id="@+id/tvToTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvTitle"
+                android:layout_below="@+id/tvFriendName"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
                 tools:text="Category" />
@@ -74,7 +72,7 @@
                 android:id="@+id/rLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/tvCategory"
+                android:layout_below="@+id/tvToTitle"
                 android:layout_marginStart="1dp"
                 android:layout_marginTop="0dp"
                 android:layout_marginEnd="1dp"

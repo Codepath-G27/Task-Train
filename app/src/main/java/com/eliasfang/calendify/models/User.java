@@ -11,17 +11,19 @@ public class User {
     private String fmcToken = "";
     private List<String> tasks;
     private List<String> friends;
+    private String uid = "";
 
 
     public User() {
     }
 
-    public User(String email, String displayName, String fmcToken) {
+    public User(String email, String displayName, String fmcToken, String uid) {
         this.email = email;
         this.displayName = displayName;
         this.fmcToken = fmcToken;
         this.tasks = new ArrayList<String>();
         this.friends = new ArrayList<String>();
+        this.uid = uid;
     }
 
     public String getEmail() {
@@ -31,7 +33,6 @@ public class User {
     public String getDisplayName() {
         return displayName;
     }
-
 
     public String getFmcToken() {
         return fmcToken;
@@ -45,4 +46,5 @@ public class User {
         return friends;
     }
 
+    public String getUid() { return uid; }
 }

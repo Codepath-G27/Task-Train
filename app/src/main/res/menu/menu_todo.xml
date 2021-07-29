@@ -11,11 +11,9 @@
          />
 
     <item android:id="@+id/action_sort"
-        android:icon="@drawable/ic_baseline_search_24"
         android:title="Sort By"
         app:iconTint="@color/white"
         app:showAsAction="never"
-        app:actionViewClass="androidx.appcompat.widget.SearchView"
         android:closeIcon="@drawable/ic_baseline_close_24">
 
         <menu>

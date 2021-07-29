@@ -72,9 +72,11 @@
     </style>
 
 
-    <style name="GreenTheme" parent="FirebaseUI">
+    <style name="MainTheme" parent="FirebaseUI">
         <!-- Required for sign-in flow styling -->
         <item name="colorPrimary">@drawable/gradient</item>
     </style>
+
+
 
 </resources>

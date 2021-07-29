@@ -50,8 +50,7 @@
         android:layout_marginStart="0dp"
         android:layout_marginTop="10dp"
         android:background="@color/white"
-        android:layout_marginBottom="0dp"
-        tools:listitem="recyclerview_item">
+        android:layout_marginBottom="0dp">
 
     </androidx.recyclerview.widget.RecyclerView>
 

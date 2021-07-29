@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.eliasfang.calendify.MainActivity;
 import com.eliasfang.calendify.R;
+import com.eliasfang.calendify.models.FriendRequest;
 import com.eliasfang.calendify.models.User;
 import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
@@ -25,7 +26,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FirebaseActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
@@ -49,35 +52,13 @@ public class FirebaseActivity extends AppCompatActivity {
         authUI = AuthUI.getInstance();
         dataBase = FirebaseFirestore.getInstance();
 
-        if (auth.getCurrentUser() != null) {
-            AuthUI.getInstance()
-                    .signOut(this)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        public void onComplete(@NonNull Task<Void> task) {
-                            // user is now signed out
-                            startActivity(new Intent(FirebaseActivity.this, MainActivity.class));
-                            finish();
-                        }
-                    });
-            Toast.makeText(getApplicationContext(), "You have been logged out!", Toast.LENGTH_SHORT).show();
-        } else {
-            //User is attempting to log in
-            List<AuthUI.IdpConfig> providers = new ArrayList<>();
-            providers.add(new AuthUI.IdpConfig.EmailBuilder().build());
-            providers.add(new AuthUI.IdpConfig.GoogleBuilder().build());
+        if (auth.getCurrentUser() != null)
+            logOutUser();
+        else
+            logInUser(customLayout);
 
-            startActivityForResult(
-                    // Get an instance of AuthUI based on the default app
-                    AuthUI.getInstance().createSignInIntentBuilder()
-                            .setTheme(R.style.GreenTheme)
-                            .setAuthMethodPickerLayout(customLayout)
-                            .setAvailableProviders(providers)
-                            .setLogo(R.mipmap.ic_launcher)
-                            .build(),
-                    RC_SIGN_IN);
-
-        }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -88,8 +69,7 @@ public class FirebaseActivity extends AppCompatActivity {
             if (response == null) {
                 //The user has pressed the back button
                 finish();
-            }
-            else if (response.isNewUser()) {
+            } else if (response.isNewUser()) {
                 try {
                     addDocumentData();
                     startActivity(new Intent(FirebaseActivity.this, MainActivity.class));
@@ -98,19 +78,15 @@ public class FirebaseActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (resultCode == RESULT_OK){
-                    //The user has logged in
-                    startActivity(new Intent(FirebaseActivity.this, MainActivity.class));
-                    finish();
-                    Toast.makeText(getApplicationContext(), "You have been logged in!", Toast.LENGTH_SHORT).show();
-
-
-//                Log.e(TAG, "Sign-in error: ", response.getError());
-                }
-            else{
+            } else if (resultCode == RESULT_OK) {
+                //The user has logged in
+                startActivity(new Intent(FirebaseActivity.this, MainActivity.class));
+                finish();
+                Toast.makeText(getApplicationContext(), "You have been logged in!", Toast.LENGTH_SHORT).show();
+            } else {
                 //the sign in failed due to other reasons
             }
-            }
+        }
     }
 
     public void addDocumentData() throws Exception {
@@ -128,7 +104,7 @@ public class FirebaseActivity extends AppCompatActivity {
                     return;
                 }
                 String token = task.getResult();
-                User data = new User(email, displayName, token);
+                User data = new User(email, displayName, token, auth.getUid());
                 dataBase.collection("users")
                         .document(uid)
                         .set(data)
@@ -147,6 +123,52 @@ public class FirebaseActivity extends AppCompatActivity {
 
             }
         });
+
+        Map<String, ArrayList<String>> data = new HashMap<String, ArrayList<String>>();
+        FriendRequest request = new FriendRequest(data);
+        dataBase.collection("friend_requests").document(auth.getUid()).set(request)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully written!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error writing document", e);
+                    }
+                });
+    }
+
+
+    private void logOutUser() {
+        AuthUI.getInstance()
+                .signOut(this)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // user is now signed out
+                        startActivity(new Intent(FirebaseActivity.this, MainActivity.class));
+                        finish();
+                    }
+                });
+        Toast.makeText(getApplicationContext(), "You have been logged out!", Toast.LENGTH_SHORT).show();
+    }
+
+    private void logInUser(AuthMethodPickerLayout customLayout) {
+        List<AuthUI.IdpConfig> providers = new ArrayList<>();
+        providers.add(new AuthUI.IdpConfig.EmailBuilder().build());
+        providers.add(new AuthUI.IdpConfig.GoogleBuilder().build());
+
+        startActivityForResult(
+                // Get an instance of AuthUI based on the default app
+                AuthUI.getInstance().createSignInIntentBuilder()
+                        .setTheme(R.style.MainTheme)
+                        .setAuthMethodPickerLayout(customLayout)
+                        .setAvailableProviders(providers)
+                        .setLogo(R.mipmap.ic_launcher)
+                        .build(),
+                RC_SIGN_IN);
     }
 
 }

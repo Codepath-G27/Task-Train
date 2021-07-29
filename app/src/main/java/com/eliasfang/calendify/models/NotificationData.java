@@ -4,6 +4,7 @@ public class NotificationData {
     String title;
     String message;
     String alarm_id;
+    String notificationType;
 
 
     public NotificationData(String title, String message) {
@@ -16,9 +17,6 @@ public class NotificationData {
     }
 
 
-
-
-
     public void setTitle(String title) {
         this.title = title;
     }
@@ -27,4 +25,5 @@ public class NotificationData {
         this.message = message;
     }
 
+    public void setNotificationType(String notificationType) { this.notificationType = notificationType; }
 }

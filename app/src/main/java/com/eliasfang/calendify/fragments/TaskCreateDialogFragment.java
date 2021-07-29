@@ -2,8 +2,10 @@ package com.eliasfang.calendify.fragments;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.AlarmManager;
 import android.app.DatePickerDialog;
@@ -30,12 +32,18 @@ import android.widget.Toast;
 
 
 import com.eliasfang.calendify.API.NotificationApi;
+import com.eliasfang.calendify.Adapter.RequestsAdapter;
+import com.eliasfang.calendify.MainActivity;
+import com.eliasfang.calendify.dialogs.SocialBottomSheetDialog;
+import com.eliasfang.calendify.dialogs.TaskCreateBottomSheetDialog;
 import com.eliasfang.calendify.models.PushNotification;
 import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.API.RetrofitInit;
 import com.eliasfang.calendify.alarmSetup.AlarmReceiver;
 import com.eliasfang.calendify.models.Task;
 import com.eliasfang.calendify.data.TaskViewModel;
+import com.eliasfang.calendify.models.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.muddzdev.styleabletoast.StyleableToast;
 
@@ -44,6 +52,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import retrofit2.Call;
@@ -52,7 +61,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 
-public class TaskCreateDialogFragment extends DialogFragment implements View.OnClickListener {
+public class TaskCreateDialogFragment extends DialogFragment implements View.OnClickListener, TaskCreateBottomSheetDialog.BottomSheetListener {
     public static final String EXTRA_REPLY = "com.eliasfang.calendify.TASK";
     public static final String TAG = "TaskCreateDialog";
     private final String TOPIC = "/topics/myTopic";
@@ -66,6 +75,12 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     private Spinner spCategory;
     String notificationTime;
 
+
+
+    private TextView tv_alarmFriends;
+
+    private ConstraintLayout cl_addFriend;
+
     private String token;
 
     private Integer alarm_month, alarm_year, alarm_day, alarm_hour, alarm_minute;
@@ -74,6 +89,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
 
     private Boolean alarm_set = false;
+
+    private TextView tvSave;
 
     private Boolean recur = false;
 
@@ -106,7 +123,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_fragment_create_task, container, false);
         ImageButton imgBtnClose = view.findViewById(R.id.imgBtnClose);
-        TextView tvSave = view.findViewById(R.id.tvSave);
+        tvSave = view.findViewById(R.id.tvSave);
         etTitle = view.findViewById(R.id.etTitle);
         etLocation = view.findViewById(R.id.etLocation);
         btnDate = view.findViewById(R.id.btnDate);
@@ -115,6 +132,10 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         etDescription = view.findViewById(R.id.etDescription);
         cbAlarm = view.findViewById(R.id.cbAlarm);
         spCategory = view.findViewById(R.id.etCategory);
+
+        tv_alarmFriends = view.findViewById(R.id.tv_alarmFriends);
+
+        cl_addFriend = view.findViewById(R.id.cl_addFriend);
 
         cb_mon = view.findViewById(R.id.cb_mon);
         cb_tues = view.findViewById(R.id.cb_tues);
@@ -139,6 +160,10 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         btnDate.setOnClickListener(this);
         btnTime.setOnClickListener(this);
 
+        cl_addFriend.setOnClickListener(this);
+
+
+
         return view;
     }
 
@@ -154,69 +179,62 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
             case R.id.btnTime:
                 saveTime();
                 break;
+            case R.id.cl_addFriend:
+                if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    TaskCreateBottomSheetDialog sheetDialog = new TaskCreateBottomSheetDialog();
+                    sheetDialog.show(getChildFragmentManager(), "Task Create Bottom Sheet");
+                }
+                else {
+                    Toast.makeText(getContext(), "Please login to add alarm buddies", Toast.LENGTH_SHORT).show();
+                }
+                break;
             case R.id.imgBtnClose:
                 StyleableToast.makeText(getContext(), "Task Creation Cancelled", R.style.toastDeleted).show();
                 dismiss();
                 break;
             case R.id.tvSave:
                 if (!etTitle.getText().toString().isEmpty()) {
-                        if (cbAlarm.isChecked() && (btnDate.getText().toString().equals("Add date") || btnTime.getText().toString().equals("Add time"))) {
-                            Toast.makeText(getContext(), "Please select date and time", Toast.LENGTH_SHORT).show();
-                        } else if (!cbAlarm.isChecked()) {
-                            Task task = saveData();
-                            Intent replyIntent = new Intent();
-                            replyIntent.putExtra(EXTRA_REPLY, task);
-                            TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-                            myTaskViewModel.insert(task);
-                            dismiss();
-                            StyleableToast.makeText(getContext(), "Task Saved", R.style.toastSaved).show();
-                        } else {
-                            Task reminderEntity = saveData();
-                            Intent replyIntent = new Intent();
-                            replyIntent.putExtra(EXTRA_REPLY, reminderEntity);
-                            TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-                            reminderEntity.setHasAlarm(true);
-                            cbAlarm.setChecked(true);
-                            //add alarm in a very brute force way
+                    if (cbAlarm.isChecked() && (btnDate.getText().toString().equals("Add date") || btnTime.getText().toString().equals("Add time"))) {
+                        Toast.makeText(getContext(), "Please select date and time", Toast.LENGTH_SHORT).show();
+                    } else if (!cbAlarm.isChecked()) {
+                        Task task = saveData();
+                        Intent replyIntent = new Intent();
+                        replyIntent.putExtra(EXTRA_REPLY, task);
+                        TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+                        myTaskViewModel.insert(task);
+                        dismiss();
+                        StyleableToast.makeText(getContext(), "Task Saved", R.style.toastSaved).show();
+                    } else {
+                        Task reminderEntity = saveData();
+                        Intent replyIntent = new Intent();
+                        replyIntent.putExtra(EXTRA_REPLY, reminderEntity);
+                        TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+                        reminderEntity.setHasAlarm(true);
+                        cbAlarm.setChecked(true);
+                        //add alarm in a very brute force way
 
-                            String value = etTitle.getText().toString();
-                            String date = (btnDate.getText().toString().trim());
-                            String time = (btnTime.getText().toString().trim());
-                            reminderEntity.setEventDate(date);
-                            reminderEntity.setName(value);
-                            reminderEntity.setEventTime(time);
+                        String value = etTitle.getText().toString();
+                        String date = (btnDate.getText().toString().trim());
+                        String time = (btnTime.getText().toString().trim());
+                        reminderEntity.setEventDate(date);
+                        reminderEntity.setName(value);
+                        reminderEntity.setEventTime(time);
 
-                            int rand_alarmId = new Random().nextInt(Integer.MAX_VALUE);
+                        int rand_alarmId = new Random().nextInt(Integer.MAX_VALUE);
 
 
-                            reminderEntity.setAlarmId(rand_alarmId);
-                            reminderEntity.setRecurrence(recur);
-                            reminderEntity.setNotificationTime(notificationTime);
-                            reminderEntity.setDays(cb_mon.isChecked(), cb_tues.isChecked(), cb_wed.isChecked(), cb_thur.isChecked(), cb_fri.isChecked(), cb_sat.isChecked(), cb_sun.isChecked());
+                        reminderEntity.setAlarmId(rand_alarmId);
+                        reminderEntity.setRecurrence(recur);
+                        reminderEntity.setNotificationTime(notificationTime);
+                        reminderEntity.setDays(cb_mon.isChecked(), cb_tues.isChecked(), cb_wed.isChecked(), cb_thur.isChecked(), cb_fri.isChecked(), cb_sat.isChecked(), cb_sun.isChecked());
 
-                            myTaskViewModel.insert(reminderEntity);
+                        myTaskViewModel.insert(reminderEntity);
 
-//                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-//                                @Override
-//                                public void onComplete(@NonNull com.google.android.gms.tasks.Task<String> task) {
-//                                    if (!task.isSuccessful()) {
-//                                        Log.w(TAG, "Fetching FCM registration token failed", task.getException());
-//                                        return;
-//                                }
-//                                    token = task.getResult();
-//                                    NotificationData data = new NotificationData("hello", "by");
-//                                    data.setEventTime(time);
-//                                    PushNotification notification = new PushNotification(data,token);
-//                                    createNotification(notification);
-//                                }
-//                            });
-//                            Log.i(TAG, "Token:" + token);
-
-                            reminderEntity.setAlarm(getContext(),getActivity());
-                            dismiss();
-                            Log.i(TAG, "The date is " + btnDate.getText().toString().trim() + " The time is " + btnTime.getText().toString().trim());
-                            StyleableToast.makeText(getContext(), "Task Saved with Alarm", R.style.toastSaved).show();
-                        }
+                        reminderEntity.setAlarm(getContext(), getActivity());
+                        dismiss();
+                        Log.i(TAG, "The date is " + btnDate.getText().toString().trim() + " The time is " + btnTime.getText().toString().trim());
+                        StyleableToast.makeText(getContext(), "Task Saved with Alarm", R.style.toastSaved).show();
+                    }
 
 
                 } else {
@@ -234,7 +252,9 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                alarm_year = year;alarm_month = month; alarm_day = day;
+                alarm_year = year;
+                alarm_month = month;
+                alarm_day = day;
                 btnDate.setText((month + 1) + "-" + day + "-" + year);
             }
         }, year, month, day);
@@ -248,14 +268,14 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                alarm_hour = i; alarm_minute = i1;
+                alarm_hour = i;
+                alarm_minute = i1;
                 notificationTime = i + ":" + i1;
                 btnTime.setText(FormatTime(i, i1));
             }
         }, hour, minute, false);
         timePickerDialog.show();
     }
-
 
 
     public String FormatTime(int hour, int minute) {
@@ -319,7 +339,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         intent.putExtra("SATURDAY", cb_sat.isChecked());
         intent.putExtra("SUNDAY", cb_sun.isChecked());
 
-        if(!recur) {
+        if (!recur) {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), id, intent, 0);
             String TimeandDate = date + " " + notificationTime;
             DateFormat formatter = new SimpleDateFormat("M-d-yyyy hh:mm");
@@ -330,8 +350,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
-        else{
+        } else {
 
             final long RUN_DAILY = 24 * 60 * 60 * 1000;
 
@@ -357,15 +376,14 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         call.enqueue(new Callback<PushNotification>() {
             @Override
             public void onResponse(Call<PushNotification> call, Response<PushNotification> response) {
-                if(!response.isSuccessful()){
-                    Log.e(TAG,"Error: " + response.code());
+                if (!response.isSuccessful()) {
+                    Log.e(TAG, "Error: " + response.code());
                     return;
-                }
-                else{
-                    Log.i(TAG,"Error: " + response.code());
-                    Gson gson= new Gson();
+                } else {
+                    Log.i(TAG, "Error: " + response.code());
+                    Gson gson = new Gson();
                     Log.d(TAG, "Response: " + gson.toJson(response));
-                    Log.i(TAG,"Body:" + response.body());
+                    Log.i(TAG, "Body:" + response.body());
                 }
             }
 
@@ -376,4 +394,14 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         });
     }
 
+    @Override
+    public void onButtonClicked(List<User> selectedUsers) {
+        tv_alarmFriends.setText("");
+        for (User user : selectedUsers) {
+            if (tv_alarmFriends.getText().toString().equals(""))
+                tv_alarmFriends.setText(user.getEmail());
+            else
+                tv_alarmFriends.append("\n" + user.getEmail());
+        }
+    }
 }

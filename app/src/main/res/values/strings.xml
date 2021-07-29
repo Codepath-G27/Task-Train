@@ -5,6 +5,7 @@
     <string name="button">Button</string>
     <string name="create_an_event">Create an event</string>
     <string name="stay_on_track">Stay On Track</string>
+    <string name="add_alarm_buddies">Add Alarm Buddies</string>
     <string name="card_friends_format">•••• •••• •••• %s</string>
 
     <string-array name="category_items">

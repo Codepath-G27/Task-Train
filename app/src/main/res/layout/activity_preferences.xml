@@ -71,7 +71,7 @@
 
 
             <TextView
-                android:id="@+id/tv_PrefNameTitle"
+                android:id="@+id/tv_SelectFriendsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -94,7 +94,7 @@
                 android:theme="@style/TextLabel"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_PrefNameTitle"
+                app:layout_constraintTop_toBottomOf="@id/tv_SelectFriendsTitle"
                 tools:text="Enter Name" />
 
             <TextView
@@ -145,6 +145,7 @@
                 android:padding="10dp"
                 android:text="Click to Receive Reset Password Email"
                 android:textSize="16sp"
+                android:textColor="@color/black"
                 android:background="@drawable/border"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

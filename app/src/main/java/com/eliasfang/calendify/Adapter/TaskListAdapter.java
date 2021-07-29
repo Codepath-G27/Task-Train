@@ -310,8 +310,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         private TaskViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            tvTitle = itemView.findViewById(R.id.tvTitle);
-            tvCategory = itemView.findViewById(R.id.tvCategory);
+            tvTitle = itemView.findViewById(R.id.tvFriendName);
+            tvCategory = itemView.findViewById(R.id.tvToTitle);
             toggle = itemView.findViewById(R.id.swAlarm);
             ivCheckBox = itemView.findViewById(R.id.ivCheckBox);
             rLayout = itemView.findViewById(R.id.rLayout);
