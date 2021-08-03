@@ -5,18 +5,34 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.eliasfang.calendify.models.User;
 import com.eliasfang.calendify.service.AlarmService;
 import com.eliasfang.calendify.service.RestartAlarmService;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
+import java.util.Map;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
+    private static final String TAG = "AlarmReceiver";
+
+    private FirebaseAuth auth;
+    private FirebaseFirestore database;
+
+
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.i(TAG, "Alarm Received");
 
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseFirestore.getInstance();
 
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             String toastText = String.format("Alarm Reboot");
@@ -24,21 +40,49 @@ public class AlarmReceiver extends BroadcastReceiver {
             startRescheduleAlarmsService(context);
         }
         else {
-            String toastText = String.format("Alarm Received");
-            Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
             if (!intent.getBooleanExtra("RECURRING", false)) {
+                String toastText = String.format("Alarm Received");
+                Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
+                //removeAlarmFromFirebase(intent);
                 startAlarmService(context, intent);
             } else {
                 if (alarmIsToday(intent)) {
+                    String toastText = String.format("Alarm Received");
+                    Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
                     startAlarmService(context, intent);
                 }
             }
         }
 
 
-//        Intent intent1 = new Intent(context, MainActivity.class);
-//        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        context.startActivity(intent1);
+    }
+
+    private void removeAlarmFromFirebase(Intent intent) {
+
+        Bundle bundle = intent.getExtras();
+        String alarmId = String.valueOf(bundle.getInt("id"));
+
+        if(auth.getCurrentUser() != null && bundle.getBoolean("alarmBuddy")){
+
+            database.collection("users").document(auth.getUid()).get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            User user = documentSnapshot.toObject(User.class);
+                            Map<String, Map<String,String>> tasks = user.getTasks();
+                            if(tasks.containsKey(alarmId)) {
+                                tasks.remove(alarmId);
+                                database.collection("users").document(auth.getUid()).update("tasks", tasks)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.i(TAG, "Tasks updated");
+                                            }
+                                        });
+                            }
+                        }
+                    });
+        }
     }
 
     private void startRescheduleAlarmsService(Context context) {

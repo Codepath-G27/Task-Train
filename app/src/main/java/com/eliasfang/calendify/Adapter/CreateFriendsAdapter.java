@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eliasfang.calendify.R;
-import com.eliasfang.calendify.models.Task;
 import com.eliasfang.calendify.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,7 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendViewHolder> {
+public class CreateFriendsAdapter extends RecyclerView.Adapter<CreateFriendsAdapter.FriendViewHolder> {
 
     private List<User> users;
     private Context context;
@@ -30,7 +29,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private FirebaseFirestore database = FirebaseFirestore.getInstance();
 
-    public FriendsAdapter(Context context, List<User> users) {
+    public CreateFriendsAdapter(Context context, List<User> users) {
         this.users = users;
         this.context = context;
     }
@@ -39,7 +38,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
     @Override
     public FriendViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_friend, parent, false);
-        return new FriendsAdapter.FriendViewHolder(view);
+        return new CreateFriendsAdapter.FriendViewHolder(view);
     }
 
 
@@ -97,7 +96,7 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
     }
 
 
-    private void ClickItem(FriendsAdapter.FriendViewHolder holder) {
+    private void ClickItem(CreateFriendsAdapter.FriendViewHolder holder) {
         //get selected item value
         User selected = users.get(holder.getAdapterPosition());
         //Check condidtion

@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase;
 
 import com.eliasfang.calendify.models.Task;
 
-@Database(entities = {Task.class}, version = 11, exportSchema = false)
+@Database(entities = {Task.class}, version = 13, exportSchema = false)
 public abstract class TaskRoomDatabase extends RoomDatabase {
     public abstract TaskDao taskDao();
 

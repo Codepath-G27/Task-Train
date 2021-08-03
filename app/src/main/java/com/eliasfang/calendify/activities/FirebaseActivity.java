@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -44,7 +45,6 @@ public class FirebaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout
                 .Builder(R.layout.activity_firebase)
-                .setGoogleButtonId(R.id.btn_google)
                 .setEmailButtonId(R.id.btn_email)
                 .build();
 
@@ -74,15 +74,14 @@ public class FirebaseActivity extends AppCompatActivity {
                     addDocumentData();
                     startActivity(new Intent(FirebaseActivity.this, MainActivity.class));
                     finish();
-                    Toast.makeText(getApplicationContext(), "Account Created!", Toast.LENGTH_SHORT).show();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (resultCode == RESULT_OK) {
                 //The user has logged in
+                checkToken();
                 startActivity(new Intent(FirebaseActivity.this, MainActivity.class));
                 finish();
-                Toast.makeText(getApplicationContext(), "You have been logged in!", Toast.LENGTH_SHORT).show();
             } else {
                 //the sign in failed due to other reasons
             }
@@ -141,6 +140,34 @@ public class FirebaseActivity extends AppCompatActivity {
                 });
     }
 
+    public void checkToken(){
+        Log.w(TAG, "Checking if FCM token is still valid");
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+                dataBase.collection("users")
+                        .document(auth.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        User user = documentSnapshot.toObject(User.class);
+                        if(!task.getResult().equals(user.getFmcToken())){
+                            dataBase.collection("users")
+                                    .document(auth.getUid()).update("fmcToken", task.getResult()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.w(TAG, "User FCM token updated", task.getException());
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
 
     private void logOutUser() {
         AuthUI.getInstance()
@@ -152,7 +179,6 @@ public class FirebaseActivity extends AppCompatActivity {
                         finish();
                     }
                 });
-        Toast.makeText(getApplicationContext(), "You have been logged out!", Toast.LENGTH_SHORT).show();
     }
 
     private void logInUser(AuthMethodPickerLayout customLayout) {

@@ -28,15 +28,15 @@ import static android.app.PendingIntent.FLAG_ONE_SHOT;
 
 public class FirebasePushNotificationService extends FirebaseMessagingService {
 
-    private static final String TAG = "Firebase Service";
-    private final String CHANNEL_ID = "MY_CHANNEL";
+    private static final String TAG = "FirebaseService";
+    private final String CHANNEL_ID = "Notification Service";
 
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
 
         super.onMessageReceived(remoteMessage);
         String toastText = String.format("Alarm Received");
-        Log.i(TAG, "Recieved");
+        Log.i(TAG, "Received");
 
 
         Map<String, String> data = remoteMessage.getData();
@@ -51,8 +51,12 @@ public class FirebasePushNotificationService extends FirebaseMessagingService {
         Intent intent;
         if(title.equals("New Friend Request"))
             intent = new Intent(this, MainActivity.class);
-        else
+        else {
             intent = new Intent(this, AlarmBuddyActivity.class);
+            intent.putExtra("alarm_id", data.get("alarm_id"));
+            intent.putExtra("senderUid", data.get("senderUid"));
+        }
+
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         int notificationID = new Random().nextInt(Integer.MAX_VALUE);
 
@@ -66,6 +70,8 @@ public class FirebasePushNotificationService extends FirebaseMessagingService {
                 .setContentText(message)
                 .setSmallIcon(R.drawable.ic_baseline_alarm_on_24_black)
                 .setAutoCancel(true)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(message))
                 .setContentIntent(pendingIntent)
                 .build();
 

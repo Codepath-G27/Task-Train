@@ -23,11 +23,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eliasfang.calendify.Adapter.RequestsAdapter;
+import com.eliasfang.calendify.Adapter.SocialFriendsAdapter;
 import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.dialogs.SocialBottomSheetDialog;
 import com.eliasfang.calendify.dialogs.LoadingDialog;
 import com.eliasfang.calendify.models.FriendRequest;
 import com.eliasfang.calendify.models.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
@@ -51,12 +53,14 @@ public class SocialFragment extends Fragment {
 
     private RequestsAdapter adapter;
 
+    private SocialFriendsAdapter friendsAdapter;
 
     private LoadingDialog loadingDialog;
 
     private NestedScrollView socialRequestsView;
 
     private List<User> users = new ArrayList<User>();
+    private List<User> friends = new ArrayList<User>();
 
     private FriendRequest requestList = new FriendRequest(new HashMap<String, ArrayList<String>>());
 
@@ -73,6 +77,8 @@ public class SocialFragment extends Fragment {
         Toolbar toolbar = (Toolbar) view.findViewById(R.id.my_toolbar);
 
         RecyclerView rvRequests = view.findViewById(R.id.rvRequests);
+
+        RecyclerView rvFriends = view.findViewById(R.id.rv_Friends);
 
         AppCompatActivity actionBar = (AppCompatActivity) getActivity();
         actionBar.setSupportActionBar(toolbar);
@@ -102,9 +108,14 @@ public class SocialFragment extends Fragment {
         rvRequests.setAdapter(adapter);
         rvRequests.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        friendsAdapter = new SocialFriendsAdapter(getContext(),friends);
+        rvFriends.setAdapter(friendsAdapter);
+        rvFriends.setLayoutManager(new LinearLayoutManager(getContext()));
+
 
         getRequests();
         getUsers();
+        getFriends();
 
 
     }
@@ -126,6 +137,46 @@ public class SocialFragment extends Fragment {
                adapter.notifyDataSetChanged();
            }
        });
+    }
+
+    private void getFriends() {
+        DocumentReference docRef = database.collection("users").document(auth.getUid());
+
+        docRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot snapshot,
+                                @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    Log.w(TAG, "Listen failed.", e);
+                    return;
+                }
+                if (snapshot != null && snapshot.exists()) {
+                    Log.d(TAG, "Current data: " + snapshot.getData());
+
+                    friends.clear();
+                    User user = snapshot.toObject(User.class);
+                    for (String id : user.getFriends()) {
+                        Log.i(TAG, user.getFriends().toString());
+                        DocumentReference ref = database.collection("users").document(id);
+                        ref.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                User user = documentSnapshot.toObject(User.class);
+                                friends.add(user);
+                                friendsAdapter.notifyDataSetChanged();
+                                Log.i(TAG, "Logged in user friends data has changed");
+                                Log.i(TAG, "The user data is: " + user.getUid());
+                                Log.i(TAG, "The user data friends list is: " + user.getFriends());
+                            }
+                        });
+                    }
+                    friendsAdapter.notifyDataSetChanged();
+
+                } else {
+                    Log.d(TAG, "Current data: null");
+                }
+            }
+        });
     }
 
     private void getRequests() {

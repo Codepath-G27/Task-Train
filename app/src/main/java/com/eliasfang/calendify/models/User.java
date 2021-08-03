@@ -2,14 +2,16 @@ package com.eliasfang.calendify.models;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class User {
 
     private String email = "";
     private String displayName = "";
     private String fmcToken = "";
-    private List<String> tasks;
+    private Map<String, Map<String, String>> tasks;
     private List<String> friends;
     private String uid = "";
 
@@ -21,7 +23,8 @@ public class User {
         this.email = email;
         this.displayName = displayName;
         this.fmcToken = fmcToken;
-        this.tasks = new ArrayList<String>();
+        this.tasks = new HashMap<String, Map<String, String>>();
+        //tasks.put("-1", new HashMap<String, String>());
         this.friends = new ArrayList<String>();
         this.uid = uid;
     }
@@ -38,7 +41,7 @@ public class User {
         return fmcToken;
     }
 
-    public List<String> getTasks() {
+    public Map<String, Map<String, String>>  getTasks() {
         return tasks;
     }
 

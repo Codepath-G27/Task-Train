@@ -34,8 +34,11 @@ import android.widget.Toast;
 import com.eliasfang.calendify.API.NotificationApi;
 import com.eliasfang.calendify.Adapter.RequestsAdapter;
 import com.eliasfang.calendify.MainActivity;
+import com.eliasfang.calendify.activities.AlarmBuddyActivity;
+import com.eliasfang.calendify.activities.PreferencesActivity;
 import com.eliasfang.calendify.dialogs.SocialBottomSheetDialog;
 import com.eliasfang.calendify.dialogs.TaskCreateBottomSheetDialog;
+import com.eliasfang.calendify.models.NotificationData;
 import com.eliasfang.calendify.models.PushNotification;
 import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.API.RetrofitInit;
@@ -43,17 +46,26 @@ import com.eliasfang.calendify.alarmSetup.AlarmReceiver;
 import com.eliasfang.calendify.models.Task;
 import com.eliasfang.calendify.data.TaskViewModel;
 import com.eliasfang.calendify.models.User;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.muddzdev.styleabletoast.StyleableToast;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.TimeZone;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,14 +88,13 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     String notificationTime;
 
 
+    List<User> usersSelected = new ArrayList<User>();
+
 
     private TextView tv_alarmFriends;
 
     private ConstraintLayout cl_addFriend;
 
-    private String token;
-
-    private Integer alarm_month, alarm_year, alarm_day, alarm_hour, alarm_minute;
 
     private CheckBox cb_mon, cb_tues, cb_wed, cb_thur, cb_fri, cb_sat, cb_sun;
 
@@ -93,6 +104,9 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     private TextView tvSave;
 
     private Boolean recur = false;
+
+    private FirebaseFirestore database;
+    private FirebaseAuth auth;
 
     private NotificationApi notificationApi;
 
@@ -151,8 +165,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
 
         // Show soft keyboard automatically and set focus on event name
-        etTitle.requestFocus();
-        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+//        etTitle.requestFocus();
+//        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
         // Check for clicks on buttons
         imgBtnClose.setOnClickListener(this);
@@ -162,6 +176,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
         cl_addFriend.setOnClickListener(this);
 
+        database = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
 
 
         return view;
@@ -180,11 +196,10 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                 saveTime();
                 break;
             case R.id.cl_addFriend:
-                if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     TaskCreateBottomSheetDialog sheetDialog = new TaskCreateBottomSheetDialog();
                     sheetDialog.show(getChildFragmentManager(), "Task Create Bottom Sheet");
-                }
-                else {
+                } else {
                     Toast.makeText(getContext(), "Please login to add alarm buddies", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -223,6 +238,67 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                         int rand_alarmId = new Random().nextInt(Integer.MAX_VALUE);
 
 
+                        String time_zone_default = TimeZone.getDefault().getID();
+
+                        if (!tv_alarmFriends.getText().equals("Add Alarm Buddies") && !usersSelected.isEmpty()) {
+                            DocumentReference doc = database.collection("users").document(auth.getUid());
+
+                            HashMap<String, String> data = new HashMap<String, String>();
+
+                            data.put("rand_alarmId", String.valueOf(rand_alarmId));
+                            data.put("eventDate", date);
+                            data.put("eventTime", time);
+                            data.put("name", value);
+                            data.put("timezone", time_zone_default);
+                            data.put("recurring", String.valueOf(recur));
+                            data.put("notificationTime", notificationTime);
+                            data.put("monday", String.valueOf(cb_mon.isChecked()));
+                            data.put("tuesday", String.valueOf(cb_tues.isChecked()));
+                            data.put("wednesday", String.valueOf(cb_wed.isChecked()));
+                            data.put("thursday", String.valueOf(cb_thur.isChecked()));
+                            data.put("friday", String.valueOf(cb_fri.isChecked()));
+                            data.put("saturday", String.valueOf(cb_sat.isChecked()));
+                            data.put("sunday", String.valueOf(cb_sun.isChecked()));
+                            data.put("description", etDescription.getText().toString());
+                            data.put("category", spCategory.getSelectedItem().toString());
+                            data.put("location", etLocation.getText().toString());
+
+
+                            reminderEntity.setHasAlarmBuddy(true);
+
+
+                            doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Log.i(TAG, "The size is" + usersSelected.size());
+                                    User user = documentSnapshot.toObject(User.class);
+                                    Map<String, Map<String, String>> userTasks =  user.getTasks();
+                                    userTasks.put(String.valueOf(rand_alarmId), data);
+                                    doc.update("tasks", userTasks)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Log.d(TAG, "DocumentSnapshot successfully updated with new alarm!");
+                                                    for (User user : usersSelected) {
+                                                        Log.i(TAG, "Token " + user.getFmcToken());
+                                                        NotificationData alarmData = new NotificationData("New Alarm Buddy Request", "The user " + FirebaseAuth.getInstance().getCurrentUser().getEmail() + " has sent you a linked alarm!", FirebaseAuth.getInstance().getUid(), String.valueOf(rand_alarmId));
+                                                        PushNotification notification = new PushNotification(alarmData, user.getFmcToken());
+                                                        createNotification(notification);
+                                                    }
+                                                    usersSelected.clear();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.w(TAG, "Error updating document", e);
+                                                }
+                                            });
+                                }
+                            });
+
+                        }
+                        reminderEntity.setTimezone(time_zone_default);
                         reminderEntity.setAlarmId(rand_alarmId);
                         reminderEntity.setRecurrence(recur);
                         reminderEntity.setNotificationTime(notificationTime);
@@ -230,6 +306,9 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
                         myTaskViewModel.insert(reminderEntity);
 
+//                        Intent intent = new Intent(getContext(), AlarmBuddyActivity.class);
+//                        intent.putExtra("alarm_id", String.valueOf(rand_alarmId));
+//                        startActivity(intent);
                         reminderEntity.setAlarm(getContext(), getActivity());
                         dismiss();
                         Log.i(TAG, "The date is " + btnDate.getText().toString().trim() + " The time is " + btnTime.getText().toString().trim());
@@ -252,9 +331,6 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         DatePickerDialog datePickerDialog = new DatePickerDialog(getContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                alarm_year = year;
-                alarm_month = month;
-                alarm_day = day;
                 btnDate.setText((month + 1) + "-" + day + "-" + year);
             }
         }, year, month, day);
@@ -268,8 +344,6 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         TimePickerDialog timePickerDialog = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int i, int i1) {
-                alarm_hour = i;
-                alarm_minute = i1;
                 notificationTime = i + ":" + i1;
                 btnTime.setText(FormatTime(i, i1));
             }
@@ -352,7 +426,6 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
             }
         } else {
 
-            final long RUN_DAILY = 24 * 60 * 60 * 1000;
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), id, intent, 0);
             String TimeandDate = date + " " + notificationTime;
@@ -382,7 +455,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                 } else {
                     Log.i(TAG, "Error: " + response.code());
                     Gson gson = new Gson();
-                    Log.d(TAG, "Response: " + gson.toJson(response));
+                   // Log.d(TAG, "Response: " + gson.toJson(response));
                     Log.i(TAG, "Body:" + response.body());
                 }
             }
@@ -396,6 +469,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
     @Override
     public void onButtonClicked(List<User> selectedUsers) {
+        usersSelected = selectedUsers;
         tv_alarmFriends.setText("");
         for (User user : selectedUsers) {
             if (tv_alarmFriends.getText().toString().equals(""))

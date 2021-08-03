@@ -17,6 +17,11 @@ import android.widget.Toast;
 import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.models.Task;
 import com.eliasfang.calendify.data.TaskViewModel;
+import com.eliasfang.calendify.models.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.tapadoo.alerter.Alerter;
 
 import androidx.annotation.NonNull;
@@ -39,6 +44,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.List;
+import java.util.Map;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -65,6 +71,9 @@ public class ToDoFragment extends Fragment {
     //Colors array for app styling
     private int colors[] = {Color.parseColor("#94C1FF"), Color.parseColor("#8080FF"), Color.parseColor("#785CF7")};
 
+    private FirebaseFirestore database;
+    private FirebaseAuth auth;
+
 
     public ToDoFragment() {
         // Required empty public constructor
@@ -72,6 +81,9 @@ public class ToDoFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
+
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseFirestore.getInstance();
 
         super.onCreate(savedInstanceState);
         fabCreate = view.findViewById(R.id.fabCreate);
@@ -170,24 +182,16 @@ public class ToDoFragment extends Fragment {
                         adapter.getMyTasks().remove(position);
 
                         //Cancel alarm when deleted
-                        if (item.isHasAlarm())
+                        if (item.isHasAlarm()) {
                             item.cancelAlarm(getContext());
+                            removeAlarmFromFirebase(item);
+                        }
 
                         Log.i(TAG, String.valueOf(item.getExpanded()));
                         myTaskViewModel.deleteTask(item);
 
                         adapter.notifyDataSetChanged();
-                        //Code to include alerter instead of snackbar for deletion
-//                    Alerter.create(getActivity())
-//                            .setTitle("Task Deleted")
-//                            .setText("Click to Undo")
-//                            .setBackgroundColorRes(R.color.colorAccent)
-//                            .setIcon(R.drawable.icon_tasktrain)
-//                            .setIconColorFilter(0) // Optional - Removes white tint
-//                            .enableSwipeToDismiss()
-//                            .enableProgress(true)
-//                            .setProgressColorRes(R.color.colorPrimary)
-//                            .show();
+
                         Snackbar snackbar = Snackbar
                                 .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_SHORT);
                         snackbar.setAction("UNDO", new View.OnClickListener() {
@@ -245,6 +249,32 @@ public class ToDoFragment extends Fragment {
         }
         adapter.notifyDataSetChanged();
 
+    }
+
+    private void removeAlarmFromFirebase(Task task) {
+
+        if(auth.getCurrentUser() != null && task.isHasAlarmBuddy()){
+            String alarmId = String.valueOf(task.getAlarmId());
+
+            database.collection("users").document(auth.getUid()).get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            User user = documentSnapshot.toObject(User.class);
+                            Map<String, Map<String,String>> tasks = user.getTasks();
+                            if(tasks.containsKey(alarmId)) {
+                                tasks.remove(alarmId);
+                                database.collection("users").document(auth.getUid()).update("tasks", tasks)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.i(TAG, "Tasks updated");
+                                            }
+                                        });
+                            }
+                        }
+                    });
+        }
     }
 
     public void showAlerter(View v) {

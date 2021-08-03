@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -18,7 +19,12 @@ import com.eliasfang.calendify.alarmSetup.AlarmReceiver;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
+import static com.eliasfang.calendify.fragments.TaskCreateDialogFragment.TAG;
 
 @Entity(tableName = "task_table")
 public class Task implements Parcelable {
@@ -54,7 +60,7 @@ public class Task implements Parcelable {
     @ColumnInfo(name = "category")
     private String category;
 
-    @ColumnInfo(name ="isExpanded")
+    @ColumnInfo(name = "isExpanded")
     private boolean isExpanded;
 
 
@@ -62,30 +68,35 @@ public class Task implements Parcelable {
     private Integer alarmId;
 
 
-    @ColumnInfo(name ="monday")
+    @ColumnInfo(name = "monday")
     private boolean monday;
 
-    @ColumnInfo(name ="tuesday")
+    @ColumnInfo(name = "tuesday")
     private boolean tuesday;
 
-    @ColumnInfo(name ="wed")
+    @ColumnInfo(name = "wed")
     private boolean wed;
 
-    @ColumnInfo(name ="thur")
+    @ColumnInfo(name = "thur")
     private boolean thur;
 
-    @ColumnInfo(name ="fri")
+    @ColumnInfo(name = "fri")
     private boolean fri;
 
-    @ColumnInfo(name ="sat")
+    @ColumnInfo(name = "sat")
     private boolean sat;
 
-    @ColumnInfo(name ="sun")
+    @ColumnInfo(name = "sun")
     private boolean sun;
 
-    @ColumnInfo(name ="notificationTime")
+    @ColumnInfo(name = "notificationTime")
     private String notificationTime;
 
+    @ColumnInfo(name = "hasAlarmBuddy")
+    private boolean hasAlarmBuddy;
+
+    @ColumnInfo(name = "timezone")
+    private String timezone;
 
 
     public Task(String name, String description, String eventDate, String eventTime, boolean isCompleted, boolean hasAlarm, String category, String location, boolean isExpanded) {
@@ -97,8 +108,8 @@ public class Task implements Parcelable {
         this.isCompleted = isCompleted;
         this.hasAlarm = hasAlarm;
         this.category = category;
+        this.hasAlarmBuddy = false;
     }
-
 
 
     public String getName() {
@@ -191,7 +202,13 @@ public class Task implements Parcelable {
         this.isExpanded = expanded;
     }
 
+    public String getTimezone() {
+        return timezone;
+    }
 
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
 
     public Integer getAlarmId() {
         return alarmId;
@@ -265,6 +282,13 @@ public class Task implements Parcelable {
         this.notificationTime = time;
     }
 
+    public boolean isHasAlarmBuddy() {
+        return hasAlarmBuddy;
+    }
+
+    public void setHasAlarmBuddy(boolean hasAlarmBuddy) {
+        this.hasAlarmBuddy = hasAlarmBuddy;
+    }
 
     public void setDays(Boolean mon, Boolean tues, Boolean wed, Boolean thur, Boolean fri, Boolean sat, Boolean sun) {
         this.monday = mon;
@@ -330,6 +354,8 @@ public class Task implements Parcelable {
 
 
     public void setAlarm(Context context, Activity activity) {
+
+        //TODO: HANDLE DIFFERENT TIMEZONES LIKE 12 hour differences for sharing alarms with friends
         AlarmManager am = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
 
         String text = this.name;
@@ -347,29 +373,59 @@ public class Task implements Parcelable {
         intent.putExtra("MONDAY", this.monday);
         intent.putExtra("TUESDAY", this.tuesday);
         intent.putExtra("WEDNESDAY", this.wed);
-        intent.putExtra("THURSDAY", this.tuesday);
+        intent.putExtra("THURSDAY", this.thur);
         intent.putExtra("FRIDAY", this.fri);
         intent.putExtra("SATURDAY", this.sat);
         intent.putExtra("SUNDAY", this.sun);
+        intent.putExtra("alarmBuddy", this.hasAlarmBuddy);
+
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
         String TimeandDate = date + " " + this.notificationTime;
         DateFormat formatter = new SimpleDateFormat("M-d-yyyy hh:mm");
-        
-        if(!recur) {
+        Log.i("AlarmBuddyActivity", "TIme and date: " + TimeandDate);
+        Log.i("AlarmBuddyActivity", "Date: " + this.getEventDate() + " Time: " + this.getNotificationTime());
+
+
+        if (!recur) {
             try {
+
+
                 Date date1 = formatter.parse(TimeandDate);
-                am.setExact(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
+                TimeZone timeZone = TimeZone.getTimeZone(this.timezone);
+                Log.i(TAG, "TZ: " + this.timezone);
+                Calendar ret = new GregorianCalendar(timeZone);
+                ret.setTimeInMillis(date1.getTime());
+                int offset = timeZone.getOffset(date1.getTime()) - TimeZone.getDefault().getOffset(date1.getTime());
+                Log.i(TAG, "Offset: " + offset);
+
+                ret.add(Calendar.MILLISECOND, -offset);
+
+
+                Log.i(TAG, "Old timezone offset: " + timeZone.getOffset(date1.getTime()) + " New timezone offset: " + TimeZone.getDefault().getOffset(date1.getTime()));
+                Log.i(TAG, "REf time " + ret.getTimeInMillis());
+                Log.i(TAG, "REf time " + ret.getTime());
+                am.setExact(AlarmManager.RTC_WAKEUP, ret.getTimeInMillis(), pendingIntent);
+
 
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }
-        else{
+        } else {
+            Log.i(TAG, "It is recurring");
             try {
+
                 Date date1 = formatter.parse(TimeandDate);
-                am.setRepeating(
-                        AlarmManager.RTC_WAKEUP, date1.getTime(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                TimeZone timeZone = TimeZone.getDefault();
+                Calendar ret = new GregorianCalendar(timeZone);
+                ret.setTimeInMillis(date1.getTime() +
+                        timeZone.getOffset(date1.getTime()) -
+                        TimeZone.getDefault().getOffset(date1.getTime()));
+                Log.i(TAG, "Old timezone offset: " + timeZone.getOffset(date1.getTime()) + "New timezone offset: " + TimeZone.getDefault().getOffset(date1.getTime()));
+                Log.i(TAG, "REf time " + ret.getTimeInMillis());
+                Log.i(TAG, "REf time " + ret.getTime());
+                am.setInexactRepeating(AlarmManager.RTC_WAKEUP, ret.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -377,5 +433,29 @@ public class Task implements Parcelable {
 
     }
 
-
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", isCompleted=" + isCompleted +
+                ", hasAlarm=" + hasAlarm +
+                ", eventDate='" + eventDate + '\'' +
+                ", location='" + location + '\'' +
+                ", recurrence=" + recurrence +
+                ", eventTime='" + eventTime + '\'' +
+                ", category='" + category + '\'' +
+                ", isExpanded=" + isExpanded +
+                ", alarmId=" + alarmId +
+                ", monday=" + monday +
+                ", tuesday=" + tuesday +
+                ", wed=" + wed +
+                ", thur=" + thur +
+                ", fri=" + fri +
+                ", sat=" + sat +
+                ", sun=" + sun +
+                ", notificationTime='" + notificationTime + '\'' +
+                '}';
+    }
 }
