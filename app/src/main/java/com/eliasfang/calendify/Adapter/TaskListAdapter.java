@@ -73,13 +73,15 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         holder.tvTitle.setText(current.getName());
         holder.toggle.setChecked(current.isHasAlarm());
         holder.tvCategory.setText(current.getCategory());
+
         if(!current.getEventTime().equals("Add time"))
             holder.tvTime.setText(current.getEventTime());
 
-        if(current.getRecurrence())
-            holder.tvDate.setText("Recurring");
-        else if(!current.getEventDate().equals("Add date"))
+        if(!current.getEventDate().equals("Add date"))
             holder.tvDate.setText(current.getEventDate());
+
+        if(current.getRecurrence())
+            holder.tvDate.setText(R.string.recurring);
 
 
         holder.tvDescription.setText(current.getDescription());
