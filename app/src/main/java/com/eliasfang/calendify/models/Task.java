@@ -110,6 +110,7 @@ public class Task implements Parcelable{
         this.category = category;
         this.hasAlarmBuddy = false;
         this.isExpanded = isExpanded;
+        this.recurrence = false;
     }
 
 
