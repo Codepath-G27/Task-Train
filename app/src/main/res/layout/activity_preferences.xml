@@ -82,32 +82,51 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
-                android:id="@+id/tv_EnterName"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/inputText"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="15dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Enter Name"
-                android:textSize="16sp"
-                android:theme="@style/TextLabel"
+                android:padding="0dp"
+
+                app:counterEnabled="true"
+                app:counterMaxLength="15"
+                app:hintTextAppearance="@style/MyHintStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_SelectFriendsTitle"
-                tools:text="Enter Name" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_SelectFriendsTitle">
+
+                <EditText
+                    android:id="@+id/et_EnterName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:maxLength="15"
+                    android:textSize="16sp"
+                    android:theme="@style/TextLabel"
+
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_SelectFriendsTitle"
+                    tools:text="Enter Name" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <TextView
                 android:id="@+id/tv_PrefEmailTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="20dp"
+
                 android:text="Email"
                 android:textColor="@color/purple"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_EnterName" />
+                app:layout_constraintTop_toBottomOf="@id/inputText" />
 
 
             <TextView
@@ -142,11 +161,11 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="16dp"
+                android:background="@drawable/border"
                 android:padding="10dp"
                 android:text="Click to Receive Reset Password Email"
-                android:textSize="16sp"
                 android:textColor="@color/black"
-                android:background="@drawable/border"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_PrefPasswordTitle" />
@@ -164,36 +183,37 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvEnterPassword" />
 
             <ImageView
-                android:id="@+id/imageView3"
+                android:id="@+id/iv_profileIcon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
+                android:src="@mipmap/ic_default"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageButton"
+                app:layout_constraintTop_toBottomOf="@+id/iv_right"
                 tools:srcCompat="@tools:sample/avatars" />
 
             <ImageView
-                android:id="@+id/imageButton"
+                android:id="@+id/iv_right"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
                 android:src="@drawable/ic_baseline_arrow_forward_24"
-                app:layout_constraintBottom_toTopOf="@+id/imageView3"
-                app:layout_constraintEnd_toEndOf="@+id/imageView3"
+                app:layout_constraintBottom_toTopOf="@+id/iv_profileIcon"
+                app:layout_constraintEnd_toEndOf="@+id/iv_profileIcon"
                 app:layout_constraintTop_toBottomOf="@+id/tv_PrefIcon"
                 app:tint="@color/colorAccent" />
 
             <ImageView
-                android:id="@+id/imageButton2"
+                android:id="@+id/iv_left"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginStart="10dp"
                 android:src="@drawable/ic_baseline_arrow_back_24"
-                app:layout_constraintBottom_toBottomOf="@+id/imageButton"
-                app:layout_constraintStart_toStartOf="@+id/imageView3"
-                app:layout_constraintTop_toTopOf="@+id/imageButton"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_right"
+                app:layout_constraintStart_toStartOf="@+id/iv_profileIcon"
+                app:layout_constraintTop_toTopOf="@+id/iv_right"
                 app:tint="@color/colorAccent" />
 
 

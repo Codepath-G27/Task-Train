@@ -34,6 +34,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -60,8 +61,7 @@ public class ToDoFragment extends Fragment {
     private FloatingActionButton fabCreate;
 
     protected TaskListAdapter adapter;
-    protected List<Task> allTasks;
-    private boolean oneExpanded = false;
+
 
     private TaskViewModel myTaskViewModel;
 
@@ -88,11 +88,17 @@ public class ToDoFragment extends Fragment {
         super.onCreate(savedInstanceState);
         fabCreate = view.findViewById(R.id.fabCreate);
         recyclerView = view.findViewById(R.id.rvItems);
+
+        adapter = new TaskListAdapter(getActivity());
+
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
         clRoot = view.findViewById(R.id.clroot);
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.my_toolbar);
+        Toolbar toolbar = view.findViewById(R.id.my_toolbar);
         // Sets the Toolbar to act as the ActionBar for this Activity window.
         // Make sure the toolbar exists in the activity and is not null
 
@@ -109,44 +115,25 @@ public class ToDoFragment extends Fragment {
         toggle.syncState();
 
 
-        myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
-        adapter = new TaskListAdapter(getContext(), getActivity());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        myTaskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
         myTaskViewModel.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
             @Override
             public void onChanged(List<Task> tasks) {
+                Log.i(TAG, "TASKS: " + tasks);
                 adapter.setTasks(tasks);
-
             }
         });
 
-
-        allTasks = adapter.getMyTasks();
 
         fabCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                oneExpanded = false;
-                for (Task a : adapter.getMyTasks()) {
-                    oneExpanded = oneExpanded || a.getExpanded();
-                    Log.i(TAG, "Expanded:" + oneExpanded);
-                }
 
-                if(!oneExpanded){
-                    DialogFragment dialog = TaskCreateDialogFragment.newInstance();
-                    dialog.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.action_todo), TASK_CREATION_FRAGMENT);
-                    dialog.show(getActivity().getSupportFragmentManager(), "tag");
+                DialogFragment dialog = TaskCreateDialogFragment.newInstance();
+                dialog.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.action_todo), TASK_CREATION_FRAGMENT);
+                dialog.show(getActivity().getSupportFragmentManager(), "tag");
 
-                    for (Task task : adapter.getMyTasks()) {
-                        Log.i("Ids", task.getId() + "");
-                    }
-                }
-                else{
-                    Toast.makeText(getContext(), "Creation is disabled while items are expanded", Toast.LENGTH_SHORT).show();
-                }
 
             }
         });
@@ -162,65 +149,39 @@ public class ToDoFragment extends Fragment {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder target, int direction) {
                 final int position = target.getAdapterPosition();
-                final Task item = adapter.getMyTasks().get(position);
+                final Task item = adapter.getTaskAt(position);
 
 
-                oneExpanded = false;
-                for (Task a : adapter.getMyTasks()) {
-                    oneExpanded = oneExpanded || a.getExpanded();
-                    Log.i(TAG, "Expanded:" + oneExpanded);
-                }
+                if (direction == ItemTouchHelper.LEFT) {
+                    myTaskViewModel.delete(item);
 
-
-                if (!oneExpanded) {
-                    if (direction == ItemTouchHelper.LEFT) {
-                        myTaskViewModel.updateCompleted(item);
-                        myTaskViewModel.refreshTasks();
-                        showAlerter(view);
-                        CommonConfetti.rainingConfetti(clRoot, colors).oneShot();
-                    } else {
-                        adapter.getMyTasks().remove(position);
-
-                        //Cancel alarm when deleted
-                        if (item.isHasAlarm()) {
-                            item.cancelAlarm(getContext());
-                            removeAlarmFromFirebase(item);
-                        }
-
-                        Log.i(TAG, String.valueOf(item.getExpanded()));
-                        myTaskViewModel.deleteTask(item);
-
-                        adapter.notifyDataSetChanged();
-
-                        Snackbar snackbar = Snackbar
-                                .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_SHORT);
-                        snackbar.setAction("UNDO", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                myTaskViewModel.insert(item);
-                                adapter.getMyTasks().add(position, item);
-                                adapter.notifyDataSetChanged();
-                                recyclerView.scrollToPosition(position);
-                                //restore alarm if brought back
-                            }
-                        });
-                        snackbar.setActionTextColor(Color.WHITE);
-                        snackbar.show();
-
-
-                        adapter.notifyDataSetChanged();
-
-                    }
+                    showAlerter(view);
+                    CommonConfetti.rainingConfetti(clRoot, colors).oneShot();
                 } else {
-                    Toast.makeText(getContext(), "Deletion is disabled while items are expanded", Toast.LENGTH_SHORT).show();
-                    Handler handler = new Handler();
-                    handler.postDelayed(new Runnable() {
+                    myTaskViewModel.delete(item);
+
+                    //Cancel alarm when deleted
+                    if (item.isHasAlarm()) {
+                        item.cancelAlarm(getContext());
+                        removeAlarmFromFirebase(item);
+                    }
+
+                    Log.i(TAG, String.valueOf(item.getExpanded()));
+
+
+                    Snackbar snackbar = Snackbar
+                            .make(target.itemView, "Item was removed from the list.", Snackbar.LENGTH_SHORT);
+                    snackbar.setAction("UNDO", new View.OnClickListener() {
                         @Override
-                        public void run() {
-                            adapter.notifyDataSetChanged();
+                        public void onClick(View view) {
+                            myTaskViewModel.insert(item);
+                            recyclerView.scrollToPosition(position);
+                            //restore alarm if brought back
                         }
-                    }, 300);
-                    Log.i(TAG, "item:" + item.getExpanded());
+                    });
+                    snackbar.setActionTextColor(Color.WHITE);
+                    snackbar.show();
+
 
                 }
 
@@ -247,13 +208,12 @@ public class ToDoFragment extends Fragment {
         } else {
             Toast.makeText(getContext(), "Error occurred", Toast.LENGTH_SHORT).show();
         }
-        adapter.notifyDataSetChanged();
 
     }
 
     private void removeAlarmFromFirebase(Task task) {
 
-        if(auth.getCurrentUser() != null && task.isHasAlarmBuddy()){
+        if (auth.getCurrentUser() != null && task.isHasAlarmBuddy()) {
             String alarmId = String.valueOf(task.getAlarmId());
 
             database.collection("users").document(auth.getUid()).get()
@@ -261,8 +221,8 @@ public class ToDoFragment extends Fragment {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             User user = documentSnapshot.toObject(User.class);
-                            Map<String, Map<String,String>> tasks = user.getTasks();
-                            if(tasks.containsKey(alarmId)) {
+                            Map<String, Map<String, String>> tasks = user.getTasks();
+                            if (tasks.containsKey(alarmId)) {
                                 tasks.remove(alarmId);
                                 database.collection("users").document(auth.getUid()).update("tasks", tasks)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -316,13 +276,6 @@ public class ToDoFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
     }
 
-    private void setItemsVisibility(Menu menu, MenuItem exception, boolean visible) {
-        for (int i = 0; i < menu.size(); ++i) {
-            MenuItem item = menu.getItem(i);
-            if (item != exception) item.setVisible(visible);
-        }
-
-    }
 
     //Work in progress. When restoring alarm it always immediately goes off
 //    public void setAlarm(Context context, Task task) {

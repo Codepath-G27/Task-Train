@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -44,7 +45,7 @@ public class AlarmBuddyActivity extends AppCompatActivity {
 
     private Button btn_accept;
 
-    private Button btn_time;
+    TaskViewModel myTaskViewModel;
 
     FirebaseAuth auth;
     FirebaseFirestore database;
@@ -62,7 +63,7 @@ public class AlarmBuddyActivity extends AppCompatActivity {
 
         Activity activity = this;
 
-        TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+        myTaskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
 
         Bundle bundle = getIntent().getExtras();
         String alarm_id = bundle.getString("alarm_id");

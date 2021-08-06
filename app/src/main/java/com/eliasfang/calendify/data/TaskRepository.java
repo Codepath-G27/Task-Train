@@ -20,26 +20,32 @@ public class TaskRepository {
         myAllTasks = myTaskDao.getAllTasks();
     }
 
+
+    public void insert (Task task) {
+        new InsertAsyncTask(myTaskDao).execute(task);
+    }
+
+    public void delete(Task task) {
+        new DeleteAsyncTask(myTaskDao).execute(task);
+    }
+
+    public void update(Task task) {
+        new UpdateAsyncTask(myTaskDao).execute(task);
+    }
+
+    public void deleteAll(){
+        new DeleteAllAsyncTask(myTaskDao).execute();
+    }
+
     public LiveData<List<Task>> getAllTasks() {
         return myAllTasks;
     }
 
-    public void insert (Task task) {
-        new insertAsyncTask(myTaskDao).execute(task);
-    }
 
-    public void deleteTask(Task task) {
-        new deleteAsyncTask(myTaskDao).execute(task);
-    }
-
-    public void updateCompleted(Task task) {
-        new updateAsyncTask(myTaskDao).execute(task);
-    }
-
-
-    private class insertAsyncTask extends AsyncTask<Task, Void, Void> {
+    //Asynchronous call to insert data to be database on a thread other than the main thread
+    private static class InsertAsyncTask extends AsyncTask<Task, Void, Void> {
         private TaskDao myAsyncTaskDao;
-        public insertAsyncTask(TaskDao myTaskDao) {
+        public InsertAsyncTask(TaskDao myTaskDao) {
             myAsyncTaskDao = myTaskDao;
         }
 
@@ -49,27 +55,44 @@ public class TaskRepository {
             return null;
         }
     }
-    private class deleteAsyncTask extends AsyncTask<Task, Void, Void> {
+
+
+    private class DeleteAsyncTask extends AsyncTask<Task, Void, Void> {
         private TaskDao myAsyncTaskDao;
-        public deleteAsyncTask(TaskDao myTaskDao) {
+        public DeleteAsyncTask(TaskDao myTaskDao) {
             myAsyncTaskDao = myTaskDao;
         }
 
         @Override
         protected Void doInBackground(final Task... params) {
-            myAsyncTaskDao.deleteTask(params[0].getId());
+            myAsyncTaskDao.delete(params[0]);
             return null;
         }
     }
-    private class updateAsyncTask extends AsyncTask<Task, Void, Void> {
+
+
+    private class UpdateAsyncTask extends AsyncTask<Task, Void, Void> {
         private TaskDao myAsyncTaskDao;
-        public updateAsyncTask(TaskDao myTaskDao) {
+        public UpdateAsyncTask(TaskDao myTaskDao) {
             myAsyncTaskDao = myTaskDao;
         }
 
         @Override
         protected Void doInBackground(final Task... params) {
-            myAsyncTaskDao.updateIsComplete(params[0].getId());
+            myAsyncTaskDao.update(params[0]);
+            return null;
+        }
+    }
+
+    private class DeleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
+        private TaskDao myAsyncTaskDao;
+        public DeleteAllAsyncTask(TaskDao myTaskDao) {
+            myAsyncTaskDao = myTaskDao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            myAsyncTaskDao.deleteAll();
             return null;
         }
     }

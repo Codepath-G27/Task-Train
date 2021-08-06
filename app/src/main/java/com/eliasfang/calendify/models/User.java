@@ -14,6 +14,7 @@ public class User {
     private Map<String, Map<String, String>> tasks;
     private List<String> friends;
     private String uid = "";
+    private int icon = 0;
 
 
     public User() {
@@ -24,9 +25,9 @@ public class User {
         this.displayName = displayName;
         this.fmcToken = fmcToken;
         this.tasks = new HashMap<String, Map<String, String>>();
-        //tasks.put("-1", new HashMap<String, String>());
         this.friends = new ArrayList<String>();
         this.uid = uid;
+        this.icon = 0;
     }
 
     public String getEmail() {
@@ -50,4 +51,6 @@ public class User {
     }
 
     public String getUid() { return uid; }
+
+    public int getIcon() { return icon; }
 }

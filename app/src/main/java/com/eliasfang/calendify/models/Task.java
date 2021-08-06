@@ -27,7 +27,7 @@ import java.util.TimeZone;
 import static com.eliasfang.calendify.fragments.TaskCreateDialogFragment.TAG;
 
 @Entity(tableName = "task_table")
-public class Task implements Parcelable {
+public class Task implements Parcelable{
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -109,6 +109,7 @@ public class Task implements Parcelable {
         this.hasAlarm = hasAlarm;
         this.category = category;
         this.hasAlarmBuddy = false;
+        this.isExpanded = isExpanded;
     }
 
 
@@ -300,50 +301,6 @@ public class Task implements Parcelable {
         this.sun = sun;
     }
 
-    protected Task(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        description = in.readString();
-        isCompleted = in.readByte() != 0x00;
-        hasAlarm = in.readByte() != 0x00;
-        location = in.readString();
-        eventDate = in.readString();
-        eventTime = in.readString();
-        category = in.readString();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeByte((byte) (isCompleted ? 0x01 : 0x00));
-        dest.writeByte((byte) (hasAlarm ? 0x01 : 0x00));
-        dest.writeString(location);
-        dest.writeString(category);
-        dest.writeString(eventDate);
-        dest.writeString(eventTime);
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
-        @Override
-        public Task createFromParcel(Parcel in) {
-            return new Task(in);
-        }
-
-        @Override
-        public Task[] newArray(int size) {
-            return new Task[size];
-        }
-    };
-
-
     public void cancelAlarm(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
@@ -458,4 +415,47 @@ public class Task implements Parcelable {
                 ", notificationTime='" + notificationTime + '\'' +
                 '}';
     }
+
+    protected Task(Parcel in) {
+        id = in.readInt();
+        name = in.readString();
+        description = in.readString();
+        isCompleted = in.readByte() != 0x00;
+        hasAlarm = in.readByte() != 0x00;
+        location = in.readString();
+        eventDate = in.readString();
+        eventTime = in.readString();
+        category = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeByte((byte) (isCompleted ? 0x01 : 0x00));
+        dest.writeByte((byte) (hasAlarm ? 0x01 : 0x00));
+        dest.writeString(location);
+        dest.writeString(category);
+        dest.writeString(eventDate);
+        dest.writeString(eventTime);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+        @Override
+        public Task createFromParcel(Parcel in) {
+            return new Task(in);
+        }
+
+        @Override
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
 }

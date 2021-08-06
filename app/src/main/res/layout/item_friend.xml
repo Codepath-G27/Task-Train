@@ -48,7 +48,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_toEndOf="@+id/tvFriendName"
                 android:textColor="@color/black"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toEndOf="@+id/iv_socialIcon"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Email" />
 
@@ -66,7 +66,7 @@
                 app:srcCompat="@drawable/ic_baseline_check_circle_24" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/iv_socialIcon"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="10dp"

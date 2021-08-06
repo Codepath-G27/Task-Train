@@ -47,30 +47,30 @@
 
             <TextView
                 android:id="@+id/tvFrom"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@+id/tvFriendName"
                 android:textColor="@color/black"
-                android:text="TextView" />
+                tools:text="123456789aaa" />
 
             <TextView
                 android:id="@+id/tvTo"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvFriendName"
                 android:layout_marginStart="5dp"
                 android:layout_marginTop="2dp"
-                android:textColor="@color/black"
                 android:layout_toEndOf="@+id/tvFriendName"
-                android:text="TextView" />
+                android:textColor="@color/black"
+                tools:text="123456789aaaaaa" />
 
             <TextView
                 android:id="@+id/tvRequestType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:layout_toEndOf="@+id/tvFrom"
                 android:gravity="center_horizontal"

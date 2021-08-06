@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.app.AlarmManager;
@@ -93,6 +94,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
     private TextView tv_alarmFriends;
 
+    private TaskViewModel myTaskViewModel;
+
     private ConstraintLayout cl_addFriend;
 
 
@@ -122,11 +125,12 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Set to style defined in styles.xml
 
         //Retrofit
         Retrofit retro = RetrofitInit.getClient();
         notificationApi = retro.create(NotificationApi.class);
+
+        myTaskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
 
         setStyle(DialogFragment.STYLE_NORMAL, R.style.FullscreenDialogTheme);
 
@@ -215,7 +219,6 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                         Task task = saveData();
                         Intent replyIntent = new Intent();
                         replyIntent.putExtra(EXTRA_REPLY, task);
-                        TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
                         myTaskViewModel.insert(task);
                         dismiss();
                         StyleableToast.makeText(getContext(), "Task Saved", R.style.toastSaved).show();
@@ -223,7 +226,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                         Task reminderEntity = saveData();
                         Intent replyIntent = new Intent();
                         replyIntent.putExtra(EXTRA_REPLY, reminderEntity);
-                        TaskViewModel myTaskViewModel = new ViewModelProvider(this).get(TaskViewModel.class);
+
                         reminderEntity.setHasAlarm(true);
                         cbAlarm.setChecked(true);
                         //add alarm in a very brute force way

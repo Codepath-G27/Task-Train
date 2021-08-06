@@ -95,8 +95,8 @@ public class RequestsAdapter extends RecyclerView.Adapter<RequestsAdapter.Reques
 
             if(fromId.equals(auth.getUid())) {
                 holder.tvRequestType.setText("Outgoing");
-                holder.ivAccept.setVisibility(View.INVISIBLE);
-                holder.ivDecline.setVisibility(View.INVISIBLE);
+                holder.ivAccept.setVisibility(View.GONE);
+                holder.ivDecline.setVisibility(View.GONE);
             }
             else {
                 holder.tvRequestType.setText("Incoming");

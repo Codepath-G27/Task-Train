@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +41,9 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
@@ -54,6 +57,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "Main Activity";
 
     Button btn_login;
+
+    private ImageView iv_profile;
 
     final FragmentManager fragmentManager = getSupportFragmentManager();
     private DrawerLayout drawer;
@@ -77,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
                 .setEmailButtonId(R.id.btn_login)
                 .build();
 
+
+
         Toolbar toolbar = findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
@@ -85,8 +92,9 @@ public class MainActivity extends AppCompatActivity {
 
         //To Set the Header Name Text View
         View headerView = navigationView.getHeaderView(0);
-        tvNavName = (TextView) headerView.findViewById(R.id.tv_Name);
+        tvNavName = headerView.findViewById(R.id.tv_Name);
         layoutPreferences = headerView.findViewById(R.id.layout_Preferences);
+        iv_profile = headerView.findViewById(R.id.iv_profile);
         layoutPreferences.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,10 +111,22 @@ public class MainActivity extends AppCompatActivity {
         if (auth.getCurrentUser() != null) {
             btn_login.setText("Log Out");
             tvNavName.setText(auth.getCurrentUser().getDisplayName());
+            database.collection("users").document(auth.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                    if(value != null) {
+                        User user = value.toObject(User.class);
+                        if(user != null) {
+                            setIcon(user.getIcon());
+                        }
+                    }
+                }
+            });
         }
-        else
+        else {
             btn_login.setText("Login");
-
+            setIcon(0);
+        }
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -160,6 +180,25 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void setIcon(int index) {
+        switch (index) {
+            case 0:
+                iv_profile.setImageResource(R.mipmap.ic_default);
+                break;
+            case 1:
+                iv_profile.setImageResource(R.mipmap.ic_logo_round);
+                break;
+            case 2:
+                iv_profile.setImageResource(R.mipmap.ic_default_foreground);
+                break;
+            case 3:
+                iv_profile.setImageResource(R.mipmap.ic_launcher_foreground);
+                break;
+            case 4:
+                iv_profile.setImageResource(R.mipmap.ic_launcher);
+                break;
+        }
+    }
 
 
     @Override

@@ -15,10 +15,6 @@ public class TaskViewModel extends AndroidViewModel {
 
     private LiveData<List<Task>> myAllTasks;
 
-    private boolean isSelected;
-
-
-
 
     public TaskViewModel (Application application) {
         super(application);
@@ -30,15 +26,13 @@ public class TaskViewModel extends AndroidViewModel {
 
     public void insert(Task task) {myRepository.insert(task); }
 
-    public void deleteTask(Task task) {
-        myRepository.deleteTask(task);
+    public void delete(Task task) {
+        myRepository.delete(task);
     }
 
+    public void update(Task task) { myRepository.update(task); }
 
-    public void updateCompleted(Task task) {
-        myRepository.updateCompleted(task);
-    }
-    public void refreshTasks() {
-        myAllTasks = myRepository.getAllTasks();
-    }
+    public void deleteAllNotes() { myRepository.deleteAll(); }
+
+    //public void refreshTasks() { myAllTasks = myRepository.getAllTasks(); }
 }
