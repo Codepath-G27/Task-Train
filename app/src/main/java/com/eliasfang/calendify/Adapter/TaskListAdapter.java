@@ -69,7 +69,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     public void onBindViewHolder(final TaskViewHolder holder, final int position) {
 
         Task current = myTasks.get(position);
-        Log.i(TAG, "INIT " + current.getExpanded());
+        
         holder.tvTitle.setText(current.getName());
         holder.toggle.setChecked(current.isHasAlarm());
         holder.tvCategory.setText(current.getCategory());

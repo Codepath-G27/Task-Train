@@ -351,7 +351,7 @@ public class Task implements Parcelable{
 
                 Date date1 = formatter.parse(TimeandDate);
                 TimeZone timeZone = TimeZone.getTimeZone(this.timezone);
-                Log.i(TAG, "TZ: " + this.timezone);
+                
                 Calendar ret = new GregorianCalendar(timeZone);
                 ret.setTimeInMillis(date1.getTime());
                 int offset = timeZone.getOffset(date1.getTime()) - TimeZone.getDefault().getOffset(date1.getTime());
@@ -365,6 +365,12 @@ public class Task implements Parcelable{
                 Log.i(TAG, "REf time " + ret.getTime());
                 am.setExact(AlarmManager.RTC_WAKEUP, ret.getTimeInMillis(), pendingIntent);
 
+                Date date2 = new Date(ret.getTimeInMillis());
+                DateFormat formatter2 = new SimpleDateFormat("h:mm a");
+                formatter.setTimeZone(TimeZone.getDefault());
+                String dateFormatted = formatter2.format(date2);
+                this.eventTime = dateFormatted;
+
 
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -374,15 +380,25 @@ public class Task implements Parcelable{
             try {
 
                 Date date1 = formatter.parse(TimeandDate);
-                TimeZone timeZone = TimeZone.getDefault();
+                TimeZone timeZone = TimeZone.getTimeZone(this.timezone);
+
                 Calendar ret = new GregorianCalendar(timeZone);
-                ret.setTimeInMillis(date1.getTime() +
-                        timeZone.getOffset(date1.getTime()) -
-                        TimeZone.getDefault().getOffset(date1.getTime()));
-                Log.i(TAG, "Old timezone offset: " + timeZone.getOffset(date1.getTime()) + "New timezone offset: " + TimeZone.getDefault().getOffset(date1.getTime()));
+                ret.setTimeInMillis(date1.getTime());
+                int offset = timeZone.getOffset(date1.getTime()) - TimeZone.getDefault().getOffset(date1.getTime());
+                Log.i(TAG, "Offset: " + offset);
+
+                ret.add(Calendar.MILLISECOND, -offset);
+
+                Log.i(TAG, "Old timezone offset: " + timeZone.getOffset(date1.getTime()) + " New timezone offset: " + TimeZone.getDefault().getOffset(date1.getTime()));
                 Log.i(TAG, "REf time " + ret.getTimeInMillis());
                 Log.i(TAG, "REf time " + ret.getTime());
                 am.setInexactRepeating(AlarmManager.RTC_WAKEUP, ret.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+
+                Date date2 = new Date(ret.getTimeInMillis());
+                DateFormat formatter2 = new SimpleDateFormat("h:mm a");
+                formatter.setTimeZone(TimeZone.getDefault());
+                String dateFormatted = formatter2.format(date2);
+                this.eventTime = dateFormatted;
 
             } catch (ParseException e) {
                 e.printStackTrace();
