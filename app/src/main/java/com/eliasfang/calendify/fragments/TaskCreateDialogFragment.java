@@ -75,9 +75,7 @@ import retrofit2.Retrofit;
 
 
 public class TaskCreateDialogFragment extends DialogFragment implements View.OnClickListener, TaskCreateBottomSheetDialog.BottomSheetListener {
-    public static final String EXTRA_REPLY = "com.eliasfang.calendify.TASK";
     public static final String TAG = "TaskCreateDialog";
-    private final String TOPIC = "/topics/myTopic";
 
     private EditText etTitle;
     private EditText etLocation;
@@ -104,6 +102,8 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
     private Boolean alarm_set = false;
 
+    private String selectedDate;
+
     private TextView tvSave;
 
     private Boolean recur = false;
@@ -117,9 +117,18 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         // Required empty constructor
     }
 
+    public TaskCreateDialogFragment(String selectedDate) {
+        this.selectedDate = selectedDate;
+    }
+
     // Required newInstance constructor to be called from ToDoFragment
     public static TaskCreateDialogFragment newInstance() {
         return new TaskCreateDialogFragment();
+    }
+
+    // Required newInstance constructor to be called from ToDoFragment
+    public static TaskCreateDialogFragment newInstance(String selectedDate) {
+        return new TaskCreateDialogFragment(selectedDate);
     }
 
     @Override
@@ -147,9 +156,17 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         btnDate = view.findViewById(R.id.btnDate);
         btnTime = view.findViewById(R.id.btnTime);
 
+
+        if(selectedDate!=null){
+            btnDate.setText(selectedDate);
+        }
+
         etDescription = view.findViewById(R.id.etDescription);
         cbAlarm = view.findViewById(R.id.cbAlarm);
         spCategory = view.findViewById(R.id.etCategory);
+
+
+
 
         tv_alarmFriends = view.findViewById(R.id.tv_alarmFriends);
 
@@ -213,19 +230,16 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                 break;
             case R.id.tvSave:
                 if (!etTitle.getText().toString().isEmpty()) {
-                    if (cbAlarm.isChecked() && (btnDate.getText().toString().equals("Add date") || btnTime.getText().toString().equals("Add time"))) {
+                    if (cbAlarm.isChecked() && (btnDate.getText().toString().equals(getResources().getString(R.string.add_date)) || btnTime.getText().toString().equals(getResources().getString(R.string.add_time)))) {
                         Toast.makeText(getContext(), "Please select date and time", Toast.LENGTH_SHORT).show();
                     } else if (!cbAlarm.isChecked()) {
                         Task task = saveData();
-                        Intent replyIntent = new Intent();
-                        replyIntent.putExtra(EXTRA_REPLY, task);
+
                         myTaskViewModel.insert(task);
                         dismiss();
                         StyleableToast.makeText(getContext(), "Task Saved", R.style.toastSaved).show();
                     } else {
                         Task reminderEntity = saveData();
-                        Intent replyIntent = new Intent();
-                        replyIntent.putExtra(EXTRA_REPLY, reminderEntity);
 
                         reminderEntity.setHasAlarm(true);
                         cbAlarm.setChecked(true);
@@ -268,6 +282,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 
 
                             reminderEntity.setHasAlarmBuddy(true);
+                            reminderEntity.setAlarmBuddies(tv_alarmFriends.getText().toString().trim());
 
 
                             doc.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -312,7 +327,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
 //                        Intent intent = new Intent(getContext(), AlarmBuddyActivity.class);
 //                        intent.putExtra("alarm_id", String.valueOf(rand_alarmId));
 //                        startActivity(intent);
-                        reminderEntity.setAlarm(getContext(), getActivity());
+                        reminderEntity.setAlarm(getContext());
                         dismiss();
                         Log.i(TAG, "The date is " + btnDate.getText().toString().trim() + " The time is " + btnTime.getText().toString().trim());
                         StyleableToast.makeText(getContext(), "Task Saved with Alarm", R.style.toastSaved).show();
@@ -399,51 +414,6 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
         return toReturn;
     }
 
-    private void setAlarm(String text, String date, String time, Integer id) {
-        AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-
-        Intent intent = new Intent(getContext(), AlarmReceiver.class);
-        intent.putExtra("event", text);
-        intent.putExtra("date", date);
-        intent.putExtra("time", time);
-        intent.putExtra("id", id);
-        intent.putExtra("RECURRING", recur);
-        intent.putExtra("MONDAY", cb_mon.isChecked());
-        intent.putExtra("TUESDAY", cb_tues.isChecked());
-        intent.putExtra("WEDNESDAY", cb_wed.isChecked());
-        intent.putExtra("THURSDAY", cb_thur.isChecked());
-        intent.putExtra("FRIDAY", cb_fri.isChecked());
-        intent.putExtra("SATURDAY", cb_sat.isChecked());
-        intent.putExtra("SUNDAY", cb_sun.isChecked());
-
-        if (!recur) {
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), id, intent, 0);
-            String TimeandDate = date + " " + notificationTime;
-            DateFormat formatter = new SimpleDateFormat("M-d-yyyy hh:mm");
-            try {
-                Date date1 = formatter.parse(TimeandDate);
-                am.setExact(AlarmManager.RTC_WAKEUP, date1.getTime(), pendingIntent);
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        } else {
-
-
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(), id, intent, 0);
-            String TimeandDate = date + " " + notificationTime;
-            DateFormat formatter = new SimpleDateFormat("M-d-yyyy hh:mm");
-            try {
-                Date date1 = formatter.parse(TimeandDate);
-                am.setRepeating(
-                        AlarmManager.RTC_WAKEUP, date1.getTime(), AlarmManager.INTERVAL_DAY, pendingIntent);
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
 
     private void createNotification(PushNotification notification) {
 
@@ -474,11 +444,16 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     public void onButtonClicked(List<User> selectedUsers) {
         usersSelected = selectedUsers;
         tv_alarmFriends.setText("");
-        for (User user : selectedUsers) {
-            if (tv_alarmFriends.getText().toString().equals(""))
-                tv_alarmFriends.setText(user.getEmail());
-            else
-                tv_alarmFriends.append("\n" + user.getEmail());
+        if(selectedUsers.size() <= 5) {
+            for (User user : selectedUsers) {
+                if (tv_alarmFriends.getText().toString().equals(""))
+                    tv_alarmFriends.setText(user.getEmail());
+                else
+                    tv_alarmFriends.append("\n" + user.getEmail());
+            }
+        }
+        else{
+            Toast.makeText(getContext(), "No more than 5 buddies can be added", Toast.LENGTH_SHORT).show();
         }
     }
 }

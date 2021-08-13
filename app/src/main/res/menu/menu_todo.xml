@@ -18,8 +18,10 @@
 
         <menu>
             <item android:id="@+id/sort_alpha"
+                android:checkable="true"
                 android:title="Alphabetically"/>
             <item android:id="@+id/sort_category"
+                android:checkable="true"
                 android:title="Category"/>
         </menu>
     </item>

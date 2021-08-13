@@ -49,6 +49,7 @@ public class CreateFriendsAdapter extends RecyclerView.Adapter<CreateFriendsAdap
             User current = users.get(position);
             holder.tvName.setText(current.getDisplayName());
             holder.tvEmail.setText(current.getEmail());
+            setIcon(current.getIcon(), holder);
         } else {
             // Covers the case of data not being ready yet.
             holder.tvEmail.setText("Friend not specified yet");
@@ -72,6 +73,7 @@ public class CreateFriendsAdapter extends RecyclerView.Adapter<CreateFriendsAdap
         TextView tvEmail;
         TextView tvName;
         ImageView ivSelect;
+        ImageView ivSocialIcon;
 
         private FriendViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -79,6 +81,7 @@ public class CreateFriendsAdapter extends RecyclerView.Adapter<CreateFriendsAdap
             tvName = itemView.findViewById(R.id.tvEmail);
             ivSelect = itemView.findViewById(R.id.iv_select_friend);
             ivSelect.setVisibility(View.GONE);
+            ivSocialIcon = itemView.findViewById(R.id.iv_socialIcon);
 
 
 
@@ -117,6 +120,26 @@ public class CreateFriendsAdapter extends RecyclerView.Adapter<CreateFriendsAdap
             holder.itemView.setBackgroundColor(Color.BLACK);
             //remove value
             selectedList.remove(selected);
+        }
+    }
+
+    private void setIcon(int icon, CreateFriendsAdapter.FriendViewHolder holder)  {
+        switch (icon) {
+            case 0:
+                holder.ivSocialIcon.setImageResource(R.mipmap.ic_default);
+                break;
+            case 1:
+                holder.ivSocialIcon.setImageResource(R.mipmap.ic_logo_round);
+                break;
+            case 2:
+                holder.ivSocialIcon.setImageResource(R.mipmap.ic_default_foreground);
+                break;
+            case 3:
+                holder.ivSocialIcon.setImageResource(R.mipmap.ic_launcher_foreground);
+                break;
+            case 4:
+                holder.ivSocialIcon.setImageResource(R.mipmap.ic_launcher);
+                break;
         }
     }
 }

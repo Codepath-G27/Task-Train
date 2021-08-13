@@ -27,7 +27,7 @@ import java.util.TimeZone;
 import static com.eliasfang.calendify.fragments.TaskCreateDialogFragment.TAG;
 
 @Entity(tableName = "task_table")
-public class Task implements Parcelable{
+public class Task {
 
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -67,7 +67,6 @@ public class Task implements Parcelable{
     @ColumnInfo(name = "alarmId")
     private Integer alarmId;
 
-
     @ColumnInfo(name = "monday")
     private boolean monday;
 
@@ -97,6 +96,9 @@ public class Task implements Parcelable{
 
     @ColumnInfo(name = "timezone")
     private String timezone;
+
+    @ColumnInfo(name = "alarmBuddies")
+    private String alarmBuddies = "";
 
 
     public Task(String name, String description, String eventDate, String eventTime, boolean isCompleted, boolean hasAlarm, String category, String location, boolean isExpanded) {
@@ -162,7 +164,6 @@ public class Task implements Parcelable{
     public void setHasAlarm(boolean hasAlarm) {
         this.hasAlarm = hasAlarm;
     }
-
 
     public String getLocation() {
         return location;
@@ -292,6 +293,16 @@ public class Task implements Parcelable{
         this.hasAlarmBuddy = hasAlarmBuddy;
     }
 
+    public String getAlarmBuddies() {
+        return alarmBuddies;
+    }
+
+    public void setAlarmBuddies(String alarmBuddies) {
+        this.alarmBuddies = alarmBuddies;
+    }
+
+
+
     public void setDays(Boolean mon, Boolean tues, Boolean wed, Boolean thur, Boolean fri, Boolean sat, Boolean sun) {
         this.monday = mon;
         this.tuesday = tues;
@@ -311,10 +322,10 @@ public class Task implements Parcelable{
     }
 
 
-    public void setAlarm(Context context, Activity activity) {
+    public void setAlarm(Context context) {
 
         //TODO: HANDLE DIFFERENT TIMEZONES LIKE 12 hour differences for sharing alarms with friends
-        AlarmManager am = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         String text = this.name;
         String date = this.eventDate;
@@ -355,14 +366,12 @@ public class Task implements Parcelable{
                 Calendar ret = new GregorianCalendar(timeZone);
                 ret.setTimeInMillis(date1.getTime());
                 int offset = timeZone.getOffset(date1.getTime()) - TimeZone.getDefault().getOffset(date1.getTime());
-                Log.i(TAG, "Offset: " + offset);
+                Log.i(TAG, "EventDate: " + this.eventDate);
 
                 ret.add(Calendar.MILLISECOND, -offset);
 
 
-                Log.i(TAG, "Old timezone offset: " + timeZone.getOffset(date1.getTime()) + " New timezone offset: " + TimeZone.getDefault().getOffset(date1.getTime()));
-                Log.i(TAG, "REf time " + ret.getTimeInMillis());
-                Log.i(TAG, "REf time " + ret.getTime());
+
                 am.setExact(AlarmManager.RTC_WAKEUP, ret.getTimeInMillis(), pendingIntent);
 
                 Date date2 = new Date(ret.getTimeInMillis());
@@ -376,7 +385,7 @@ public class Task implements Parcelable{
                 e.printStackTrace();
             }
         } else {
-            Log.i(TAG, "It is recurring");
+
             try {
 
                 Date date1 = formatter.parse(TimeandDate);
@@ -385,13 +394,9 @@ public class Task implements Parcelable{
                 Calendar ret = new GregorianCalendar(timeZone);
                 ret.setTimeInMillis(date1.getTime());
                 int offset = timeZone.getOffset(date1.getTime()) - TimeZone.getDefault().getOffset(date1.getTime());
-                Log.i(TAG, "Offset: " + offset);
 
                 ret.add(Calendar.MILLISECOND, -offset);
 
-                Log.i(TAG, "Old timezone offset: " + timeZone.getOffset(date1.getTime()) + " New timezone offset: " + TimeZone.getDefault().getOffset(date1.getTime()));
-                Log.i(TAG, "REf time " + ret.getTimeInMillis());
-                Log.i(TAG, "REf time " + ret.getTime());
                 am.setInexactRepeating(AlarmManager.RTC_WAKEUP, ret.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
 
                 Date date2 = new Date(ret.getTimeInMillis());
@@ -433,46 +438,4 @@ public class Task implements Parcelable{
                 '}';
     }
 
-    protected Task(Parcel in) {
-        id = in.readInt();
-        name = in.readString();
-        description = in.readString();
-        isCompleted = in.readByte() != 0x00;
-        hasAlarm = in.readByte() != 0x00;
-        location = in.readString();
-        eventDate = in.readString();
-        eventTime = in.readString();
-        category = in.readString();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
-        dest.writeString(name);
-        dest.writeString(description);
-        dest.writeByte((byte) (isCompleted ? 0x01 : 0x00));
-        dest.writeByte((byte) (hasAlarm ? 0x01 : 0x00));
-        dest.writeString(location);
-        dest.writeString(category);
-        dest.writeString(eventDate);
-        dest.writeString(eventTime);
-    }
-
-    @SuppressWarnings("unused")
-    public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
-        @Override
-        public Task createFromParcel(Parcel in) {
-            return new Task(in);
-        }
-
-        @Override
-        public Task[] newArray(int size) {
-            return new Task[size];
-        }
-    };
 }

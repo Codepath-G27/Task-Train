@@ -34,6 +34,21 @@ public interface TaskDao {
     @Query("SELECT * from task_table")
     LiveData<List<Task>> getAllTasks();
 
+    @Query("SELECT * from task_table where eventDate = :date")
+    LiveData<List<Task>> getTasksByDate(String date);
+
+    @Query("SELECT * from task_table where id = :id")
+    Task getTask(int id);
+
+    @Query("SELECT * from task_table Order By name")
+    LiveData<List<Task>> getAllAlphabetical();
+
+    @Query("SELECT * from task_table Order By category")
+    LiveData<List<Task>> getAllCategory();
+
+    @Query("SELECT * from task_table Order By name, category")
+    LiveData<List<Task>> getAllAlphaCategory();
+
 //    @Query("UPDATE task_table SET isCompleted = 1 WHERE id = :taskId")
 //    void updateIsComplete(int taskId);
 //

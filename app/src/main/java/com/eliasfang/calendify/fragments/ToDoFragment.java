@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.models.Task;
@@ -52,8 +51,6 @@ import static android.app.Activity.RESULT_OK;
 public class ToDoFragment extends Fragment {
 
     public static final int TASK_CREATION_FRAGMENT = 1;
-    public static final String EXTRA_REPLY =
-            "com.eliasfang.calendify.TASK";
 
     public static final String TAG = "ToDoFragment";
     private RecyclerView recyclerView;
@@ -63,10 +60,14 @@ public class ToDoFragment extends Fragment {
     protected TaskListAdapter adapter;
 
 
+
     private TaskViewModel myTaskViewModel;
 
     private SearchView searchView;
     private RelativeLayout clRoot;
+
+    private MenuItem sortAlpha;
+    private MenuItem sortCategory;
 
     //Colors array for app styling
     private int colors[] = {Color.parseColor("#94C1FF"), Color.parseColor("#8080FF"), Color.parseColor("#785CF7")};
@@ -115,6 +116,7 @@ public class ToDoFragment extends Fragment {
         toggle.syncState();
 
 
+
         myTaskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
         myTaskViewModel.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
             @Override
@@ -125,10 +127,10 @@ public class ToDoFragment extends Fragment {
         });
 
 
+
         fabCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 DialogFragment dialog = TaskCreateDialogFragment.newInstance();
                 dialog.setTargetFragment(getActivity().getSupportFragmentManager().findFragmentById(R.id.action_todo), TASK_CREATION_FRAGMENT);
@@ -153,8 +155,12 @@ public class ToDoFragment extends Fragment {
 
 
                 if (direction == ItemTouchHelper.LEFT) {
-                    myTaskViewModel.delete(item);
+                    if (item.isHasAlarm()) {
+                        item.cancelAlarm(getContext());
+                        removeAlarmFromFirebase(item);
+                    }
 
+                    myTaskViewModel.delete(item);
                     showAlerter(view);
                     CommonConfetti.rainingConfetti(clRoot, colors).oneShot();
                 } else {
@@ -200,16 +206,7 @@ public class ToDoFragment extends Fragment {
     }
 
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == TASK_CREATION_FRAGMENT && resultCode == RESULT_OK && data != null) {
-            Bundle info = data.getExtras();
-            Task newTask = info.getParcelable(EXTRA_REPLY);
-            myTaskViewModel.insert(newTask);
-        } else {
-            Toast.makeText(getContext(), "Error occurred", Toast.LENGTH_SHORT).show();
-        }
 
-    }
 
     private void removeAlarmFromFirebase(Task task) {
 
@@ -259,6 +256,9 @@ public class ToDoFragment extends Fragment {
 
         SearchView searchView = (SearchView) searchItem.getActionView();
 
+        sortAlpha = menu.findItem(R.id.sort_alpha);
+        sortCategory = menu.findItem(R.id.sort_category);
+
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -274,6 +274,89 @@ public class ToDoFragment extends Fragment {
             }
         });
         super.onCreateOptionsMenu(menu, inflater);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.sort_alpha:
+                if(item.isChecked() && sortCategory.isChecked()) {
+                    item.setChecked(false);
+                    sortCategory();
+                }
+                else if(item.isChecked()){
+                    item.setChecked(false);
+                    sortNormal();
+                }
+                else if(sortCategory.isChecked()){
+                    item.setChecked(true);
+                    sortAlphaCategory();
+                }
+                else{
+                    item.setChecked(true);
+                    sortAlpha();
+                }
+                return true;
+            case R.id.sort_category:
+                if(item.isChecked() && sortAlpha.isChecked()) {
+                    item.setChecked(false);
+                    sortAlpha();
+                }
+                else if(item.isChecked()){
+                    item.setChecked(false);
+                    sortNormal();
+                }
+                else if(sortAlpha.isChecked()){
+                    item.setChecked(true);
+                    sortAlphaCategory();
+                }
+                else{
+                    item.setChecked(true);
+                    sortCategory();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void sortAlphaCategory() {
+        myTaskViewModel.getAllTasksAlphaCategory().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                adapter.setTasks(tasks);
+            }
+        });
+    }
+
+    private void sortCategory() {
+        myTaskViewModel.getAllTasksCategory().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                adapter.setTasks(tasks);
+            }
+        });
+    }
+
+    private void sortNormal() {
+        myTaskViewModel.getAllTasks().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                adapter.setTasks(tasks);
+            }
+        });
+    }
+
+    private void sortAlpha() {
+        myTaskViewModel.getAllTasksAlpha().observe(getViewLifecycleOwner(), new Observer<List<Task>>() {
+            @Override
+            public void onChanged(List<Task> tasks) {
+                adapter.setTasks(tasks);
+            }
+        });
+
     }
 
 

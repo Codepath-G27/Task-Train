@@ -30,7 +30,7 @@ public class RestartAlarmService extends LifecycleService {
             public void onChanged(List<Task> alarms) {
                 for (Task a : alarms) {
                     if (a.isHasAlarm()) {
-                        //a.schedule(getApplicationContext());
+                        a.setAlarm(getApplicationContext());
                     }
                 }
             }

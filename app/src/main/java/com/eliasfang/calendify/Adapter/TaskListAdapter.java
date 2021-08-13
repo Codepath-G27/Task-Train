@@ -3,6 +3,7 @@ package com.eliasfang.calendify.Adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -17,22 +18,33 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.eliasfang.calendify.R;
+import com.eliasfang.calendify.fragments.EditTaskFragment;
+import com.eliasfang.calendify.fragments.ToDoFragment;
 import com.eliasfang.calendify.models.Task;
 import com.eliasfang.calendify.data.TaskViewModel;
+import com.eliasfang.calendify.models.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.tapadoo.alerter.Alerter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import static java.security.AccessController.getContext;
 
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskViewHolder> implements Filterable {
     private static final String TAG = "TaskListAdapter";
@@ -47,6 +59,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
 
     private Activity activity;
     private Context context;
+
+    FirebaseAuth auth = FirebaseAuth.getInstance();
+    FirebaseFirestore database = FirebaseFirestore.getInstance();
 
     ArrayList<Task> selectedList = new ArrayList<Task>();
     private TaskViewModel mainViewModel;
@@ -69,18 +84,18 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
     public void onBindViewHolder(final TaskViewHolder holder, final int position) {
 
         Task current = myTasks.get(position);
-        
+
         holder.tvTitle.setText(current.getName());
         holder.toggle.setChecked(current.isHasAlarm());
         holder.tvCategory.setText(current.getCategory());
 
-        if(!current.getEventTime().equals("Add time"))
+        if (!current.getEventTime().equals(activity.getResources().getString(R.string.add_time)))
             holder.tvTime.setText(current.getEventTime());
 
-        if(!current.getEventDate().equals("Add date"))
+        if (!current.getEventDate().equals(activity.getResources().getString(R.string.add_date)))
             holder.tvDate.setText(current.getEventDate());
 
-        if(current.getRecurrence())
+        if (current.getRecurrence())
             holder.tvDate.setText(R.string.recurring);
 
 
@@ -126,7 +141,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
                                     //When cliked delte items
 
 
+                                    removeAlarmFromFirebase(selectedList);
                                     for (Task task : selectedList) {
+                                        if (task.isHasAlarm()) {
+                                            task.cancelAlarm(context);
+                                        }
                                         mainViewModel.delete(task);
                                     }
                                     if (myTasks.size() == 0) {
@@ -150,7 +169,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
                                     break;
                                 case R.id.complete:
 
+                                    removeAlarmFromFirebase(selectedList);
                                     for (Task task : selectedList) {
+                                        if (task.isHasAlarm()) {
+                                            task.cancelAlarm(context);
+                                        }
                                         mainViewModel.delete(task);
                                     }
                                     if (!selectedList.isEmpty()) {
@@ -193,8 +216,26 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             }
         });
 
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (isEnabled) {
+                    ClickItem(holder);
+                } else {
+                    AppCompatActivity activity = (AppCompatActivity) v.getContext();
+
+                    Fragment myFragment = new EditTaskFragment();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id", current.getId());
+
+                    myFragment.setArguments(bundle);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, myFragment).addToBackStack(null).commit();
+                }
+            }
+        });
+        holder.ivDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Task current = myTasks.get(position);
@@ -204,9 +245,10 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
                 } else {
 
                     if (!current.getExpanded()) {
-
+                        holder.ivDown.setImageResource(R.drawable.ic_baseline_keyboard_arrow_up_24);
                         current.setExpanded(true);
                     } else {
+                        holder.ivDown.setImageResource(R.drawable.ic_baseline_keyboard_arrow_down_24);
                         current.setExpanded(false);
                     }
 
@@ -282,6 +324,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
         private final TextView tvDescription;
         private ImageView ivCheckBox;
         private RelativeLayout rLayout;
+        private ImageView ivDown;
 
 
         private TaskViewHolder(@NonNull View itemView) {
@@ -296,6 +339,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             tvTime = itemView.findViewById(R.id.tvTime);
             tvDescription = itemView.findViewById(R.id.tvDescription);
             tvLocation = itemView.findViewById(R.id.tvLocation);
+            ivDown = itemView.findViewById(R.id.ivDown);
 
 
         }
@@ -336,6 +380,36 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskVi
             notifyDataSetChanged();
         }
     };
+
+    private void removeAlarmFromFirebase(List<Task> list) {
+
+        List<Task> tasksList = new ArrayList<>(list);
+
+        if (auth.getCurrentUser() != null && !tasksList.isEmpty()) {
+
+            database.collection("users").document(auth.getUid()).get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            User user = documentSnapshot.toObject(User.class);
+
+
+                            Map<String, Map<String, String>> tasks = user.getTasks();
+                            for (Task task : tasksList) {
+                                String alarmId = String.valueOf(task.getAlarmId());
+                                tasks.remove(alarmId);
+                            }
+                            database.collection("users").document(auth.getUid()).update("tasks", tasks)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Log.i(TAG, "Tasks updated");
+                                        }
+                                    });
+                        }
+                    });
+        }
+    }
 
 
 }

@@ -16,6 +16,15 @@
         <item>Sports</item>
         <item>Recreation</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- String Preset values for Toasts -->
+    <string name="no_data_available">No Tasks For Today</string>
+    <string name="add_date">Add Date</string>
+    <string name="add_time">Add Time</string>
+    <string name="alarm_deleted">Alarm was deleted!</string>
+    <string name="login_friends">Please login to view friends</string>
+    <string name="email_sent">Email Sent</string>
+    <string name="login_preferences">Please login to edit preferences</string>
+    <string name="enter_valid_email">Please Enter a Valid User Email</string>
+    <string name="error_updating_name">Error Updating Name</string>
 </resources>

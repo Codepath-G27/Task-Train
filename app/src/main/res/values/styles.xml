@@ -45,6 +45,9 @@
         <item name="android:textColorHint">@color/dark_gray</item>
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
         <item name="colorControlActivated">@color/purple</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="MyHintStyle" parent="@android:style/TextAppearance">

@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 if(FirebaseAuth.getInstance().getCurrentUser() != null )
                     startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
                 else
-                    Toast.makeText(MainActivity.this, "Please login to edit preferences", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.login_preferences), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
                         if(FirebaseAuth.getInstance().getCurrentUser() != null)
                             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new SocialFragment()).commit();
                         else {
-                            Toast.makeText(MainActivity.this, "Please login to view friends", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MainActivity.this, getResources().getString(R.string.login_friends), Toast.LENGTH_SHORT).show();
                             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ToDoFragment()).commit();
                             navigationView.setCheckedItem(R.id.nav_todo);
                         }

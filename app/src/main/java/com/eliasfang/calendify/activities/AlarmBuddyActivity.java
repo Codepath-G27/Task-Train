@@ -61,8 +61,6 @@ public class AlarmBuddyActivity extends AppCompatActivity {
         database = FirebaseFirestore.getInstance();
 
 
-        Activity activity = this;
-
         myTaskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
 
         Bundle bundle = getIntent().getExtras();
@@ -113,12 +111,12 @@ public class AlarmBuddyActivity extends AppCompatActivity {
                                     reminderEntity.setNotificationTime(data.get("notificationTime"));
                                     reminderEntity.setDays(Boolean.parseBoolean(data.get("monday")), Boolean.parseBoolean(data.get("tuesday")), Boolean.parseBoolean(data.get("wednesday")), Boolean.parseBoolean(data.get("thursday")), Boolean.parseBoolean(data.get("friday")), Boolean.parseBoolean(data.get("saturday")), Boolean.parseBoolean(data.get("sunday")));
 
-                                    reminderEntity.setAlarm(AlarmBuddyActivity.this, activity);
+                                    reminderEntity.setAlarm(AlarmBuddyActivity.this);
 
                                     myTaskViewModel.insert(reminderEntity);
                                     finish();
                                 } else {
-                                    Toast.makeText(AlarmBuddyActivity.this, "Alarm was deleted!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AlarmBuddyActivity.this, getResources().getString(R.string.alarm_deleted), Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 Log.d(TAG, "No such document");

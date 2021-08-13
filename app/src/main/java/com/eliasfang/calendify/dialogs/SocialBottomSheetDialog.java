@@ -83,7 +83,7 @@ public class SocialBottomSheetDialog extends BottomSheetDialogFragment {
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
                                     if (task.getResult().isEmpty()) {
-                                        Toast.makeText(getContext(), "Please Enter a Valid User Email", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), R.string.enter_valid_email, Toast.LENGTH_SHORT).show();
                                         dismiss();
                                     } else {
 
@@ -91,7 +91,7 @@ public class SocialBottomSheetDialog extends BottomSheetDialogFragment {
 
                                             User user = document.toObject(User.class);
                                             if (user.getEmail().equals(auth.getCurrentUser().getEmail()) || user.getFriends().contains(auth.getCurrentUser().getUid()))
-                                                Toast.makeText(getContext(), "Please Enter a Valid User Email", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), getResources().getString(R.string.enter_valid_email), Toast.LENGTH_SHORT).show();
                                             else {
                                                 //CHECK IF THE REQUEST WAS ALREADY SENT
                                                 //CHECK THAT IT IS NOT THE SAME USERNAME AS YOURS

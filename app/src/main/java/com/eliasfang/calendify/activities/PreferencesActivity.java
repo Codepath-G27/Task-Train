@@ -54,8 +54,7 @@ public class PreferencesActivity extends AppCompatActivity {
     private FirebaseAuth auth;
     private FirebaseFirestore dataBase;
 
-    private int index;
-    private int userIndex;
+    private int index = 0;
 
 
     @Override
@@ -83,10 +82,9 @@ public class PreferencesActivity extends AppCompatActivity {
         dataBase.collection("users").document(auth.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if(documentSnapshot != null) {
+                if (documentSnapshot != null) {
                     User user = documentSnapshot.toObject(User.class);
                     index = user.getIcon();
-                    userIndex = user.getIcon();
                     setIcon();
                     loadingDialog.dismiss();
                 }
@@ -94,11 +92,10 @@ public class PreferencesActivity extends AppCompatActivity {
         });
 
 
-
         ib_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(index != 4)
+                if (index != 4)
                     index++;
                 else
                     index = 0;
@@ -119,7 +116,6 @@ public class PreferencesActivity extends AppCompatActivity {
         });
 
 
-
         btnClose = findViewById(R.id.imgBtnClose);
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +133,7 @@ public class PreferencesActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if (task.isSuccessful()) {
                                     Log.d(TAG, "Email sent.");
-                                    Toast.makeText(PreferencesActivity.this, "Email Sent", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PreferencesActivity.this, getResources().getString(R.string.email_sent), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -179,7 +175,8 @@ public class PreferencesActivity extends AppCompatActivity {
     }
 
     private void updateUserProfile(FirebaseUser user) {
-        if (enterName.getText().toString().length() <= 15 && enterName.getText().toString().length() > 4) {
+
+
             Log.i(TAG, "User profile updating");
             UserProfileChangeRequest profileUpdates;
             if (enterName.getText().toString().isEmpty()) {
@@ -203,7 +200,7 @@ public class PreferencesActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Log.i(TAG, "DocumentSnapshot successfully updated!");
-                                                if (!enterName.getText().toString().isEmpty()) {
+                                                if (!enterName.getText().toString().isEmpty() && enterName.getText().toString().length() <= 15 && enterName.getText().toString().length() > 4) {
                                                     document.update("displayName", enterName.getText().toString())
                                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                 @Override
@@ -216,10 +213,13 @@ public class PreferencesActivity extends AppCompatActivity {
                                                                 @Override
                                                                 public void onFailure(@NonNull Exception e) {
                                                                     Log.i(TAG, "Error updating document", e);
-                                                                    Toast.makeText(PreferencesActivity.this, "Error Updating Name", Toast.LENGTH_SHORT).show();
+                                                                    Toast.makeText(PreferencesActivity.this, getResources().getString(R.string.error_updating_name), Toast.LENGTH_SHORT).show();
                                                                 }
                                                             });
-                                                } else
+                                                }
+                                                else if(!enterName.getText().toString().isEmpty())
+                                                    Toast.makeText(PreferencesActivity.this, "Name must be between 5 and 20 characters long", Toast.LENGTH_SHORT).show();
+                                                else
                                                     finish();
 
                                             }
@@ -228,7 +228,7 @@ public class PreferencesActivity extends AppCompatActivity {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
                                                 Log.i(TAG, "Error updating document", e);
-                                                Toast.makeText(PreferencesActivity.this, "Error Updating Name", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(PreferencesActivity.this, getResources().getString(R.string.error_updating_name), Toast.LENGTH_SHORT).show();
                                             }
                                         });
 
@@ -236,10 +236,7 @@ public class PreferencesActivity extends AppCompatActivity {
                             }
                         }
                     });
-        }
-        else{
-            Toast.makeText(PreferencesActivity.this, "Name must be between 5 and 20 characters long", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
 

@@ -65,8 +65,6 @@ public class TaskCreateBottomSheetDialog extends BottomSheetDialogFragment {
         Retrofit retro = RetrofitInit.getClient();
         notificationApi = retro.create(NotificationApi.class);
 
-//        loadingDialog = new LoadingDialog(getActivity());
-//        loadingDialog.start();
 
 
         auth = FirebaseAuth.getInstance();

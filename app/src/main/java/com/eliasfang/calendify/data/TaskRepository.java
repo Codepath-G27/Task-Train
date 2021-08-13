@@ -8,6 +8,8 @@ import androidx.lifecycle.LiveData;
 import com.eliasfang.calendify.models.Task;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class TaskRepository {
 
@@ -20,80 +22,86 @@ public class TaskRepository {
         myAllTasks = myTaskDao.getAllTasks();
     }
 
-
+    //Use the executor to write the data Async
     public void insert (Task task) {
-        new InsertAsyncTask(myTaskDao).execute(task);
+        TaskRoomDatabase.databaseWriteExecutor.execute(() -> {
+            myTaskDao.insert(task);
+        });
     }
 
     public void delete(Task task) {
-        new DeleteAsyncTask(myTaskDao).execute(task);
+        TaskRoomDatabase.databaseWriteExecutor.execute(() -> {
+            myTaskDao.delete(task);
+        });
     }
 
     public void update(Task task) {
-        new UpdateAsyncTask(myTaskDao).execute(task);
+        TaskRoomDatabase.databaseWriteExecutor.execute(() -> {
+            myTaskDao.update(task);
+        });
     }
 
     public void deleteAll(){
-        new DeleteAllAsyncTask(myTaskDao).execute();
+        TaskRoomDatabase.databaseWriteExecutor.execute(() -> {
+            myTaskDao.deleteAll();
+        });
+    }
+
+
+    public Task getTask(int alarmId) {
+        Future<Task> callback =  TaskRoomDatabase.databaseWriteExecutor.submit(() -> myTaskDao.getTask(alarmId));
+        try{
+            return callback.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+    return null;
     }
 
     public LiveData<List<Task>> getAllTasks() {
         return myAllTasks;
     }
 
-
-    //Asynchronous call to insert data to be database on a thread other than the main thread
-    private static class InsertAsyncTask extends AsyncTask<Task, Void, Void> {
-        private TaskDao myAsyncTaskDao;
-        public InsertAsyncTask(TaskDao myTaskDao) {
-            myAsyncTaskDao = myTaskDao;
+    public LiveData<List<Task>> getTasksByDate(String date) {
+        Future<LiveData<List<Task>>> callback =  TaskRoomDatabase.databaseWriteExecutor.submit(() -> myTaskDao.getTasksByDate(date));
+        try{
+            return callback.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
+        return null;
 
-        @Override
-        protected Void doInBackground(final Task... params) {
-            myAsyncTaskDao.insert(params[0]);
-            return null;
+    }
+
+    public LiveData<List<Task>> getAllTasksAlpha() {
+        Future<LiveData<List<Task>>> callback =  TaskRoomDatabase.databaseWriteExecutor.submit(() -> myTaskDao.getAllAlphabetical());
+        try{
+            return callback.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
+
+    public LiveData<List<Task>> getAllCategory() {
+        Future<LiveData<List<Task>>> callback =  TaskRoomDatabase.databaseWriteExecutor.submit(() -> myTaskDao.getAllCategory());
+        try{
+            return callback.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public LiveData<List<Task>> getAllAlphaCategory() {
+        Future<LiveData<List<Task>>> callback =  TaskRoomDatabase.databaseWriteExecutor.submit(() -> myTaskDao.getAllAlphaCategory());
+        try{
+            return callback.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
-    private class DeleteAsyncTask extends AsyncTask<Task, Void, Void> {
-        private TaskDao myAsyncTaskDao;
-        public DeleteAsyncTask(TaskDao myTaskDao) {
-            myAsyncTaskDao = myTaskDao;
-        }
-
-        @Override
-        protected Void doInBackground(final Task... params) {
-            myAsyncTaskDao.delete(params[0]);
-            return null;
-        }
-    }
-
-
-    private class UpdateAsyncTask extends AsyncTask<Task, Void, Void> {
-        private TaskDao myAsyncTaskDao;
-        public UpdateAsyncTask(TaskDao myTaskDao) {
-            myAsyncTaskDao = myTaskDao;
-        }
-
-        @Override
-        protected Void doInBackground(final Task... params) {
-            myAsyncTaskDao.update(params[0]);
-            return null;
-        }
-    }
-
-    private class DeleteAllAsyncTask extends AsyncTask<Void, Void, Void> {
-        private TaskDao myAsyncTaskDao;
-        public DeleteAllAsyncTask(TaskDao myTaskDao) {
-            myAsyncTaskDao = myTaskDao;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            myAsyncTaskDao.deleteAll();
-            return null;
-        }
-    }
 }

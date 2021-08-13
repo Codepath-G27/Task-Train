@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.TaskCreateDialogFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.EditTaskFragment">
+
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -40,7 +41,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginStart="8dp"
                 android:layout_toEndOf="@id/imgBtnClose"
-                android:text="Create task"
+                android:text="Update task"
                 android:textColor="@android:color/white"
                 android:textSize="20sp" />
 
@@ -236,6 +237,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
+                    android:inputType="textNoSuggestions"
 
                     android:hint="Add title"
                     android:maxLength="30"
@@ -255,24 +257,25 @@
                 app:layout_constraintStart_toStartOf="parent">
 
 
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/etLocation"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="5dp"
-                android:maxLength="30"
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/etLocation"
+                    android:inputType="textNoSuggestions"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="5dp"
+                    android:maxLength="30"
 
-                android:hint="Add location"
-                android:textSize="16sp"
-                android:theme="@style/TextLabel"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.94"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/inputText"
-                />
+                    android:hint="Add location"
+                    android:textSize="16sp"
+                    android:theme="@style/TextLabel"
+                    app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.94"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/inputText"
+                    />
             </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
@@ -326,8 +329,9 @@
                 android:id="@+id/cbAlarm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="15dp"
                 android:buttonTint="@color/colorPrimary"
+                android:gravity="center"
                 android:text="Alarm"
                 app:layout_constraintStart_toStartOf="@+id/constraintLayout"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -340,7 +344,7 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Add description"
-
+                android:inputType="textNoSuggestions"
                 android:textSize="16sp"
                 android:theme="@style/TextLabel"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -396,6 +400,7 @@
                 android:layout_marginStart="100dp"
                 android:backgroundTint="@color/colorPrimary"
                 android:paddingTop="5dp"
+                android:gravity="center"
                 app:layout_constraintBottom_toBottomOf="@+id/cbAlarm"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cbAlarm"
@@ -405,5 +410,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.core.widget.NestedScrollView>
+
 
 </LinearLayout>
