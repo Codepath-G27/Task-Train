@@ -2,9 +2,10 @@
 
 ## Table of Contents
 1. [Overview](#Overview)
-2. [App Evaluation](#App-Evaluation)
-3. [Schema](#Schema)
-4. [Technology Used](#Technology-Used)
+2. [Description](#Description)
+3. [App Evaluation](#App-Evaluation)
+4. [Schema](#Schema)
+5. [Technology Used](#Technology-Used)
 
 
 
@@ -13,7 +14,7 @@ TaskTrain is a productivity app meant to help organize your daily schedule and r
 •	The major features included are creating alarms, calendar integration, grouping alarms with other users, and social friend integration. To accomplish group alarms users can add/remove friends and then request users to set the same alarm.
 •	Technologies: Firebase, Android Studio, GitHub, RoomDB, SQL, and Java.
 
-
+### Description
 When the user first opens the application they are greeted with the Splashscreen showing out icon and splash art. Then they are naviagted to the main ToDo fragment which shows users their upcoming ToDo items. When first opening the app the user is logged into an anomyous user account which is able to use majority of the ToDo item featues, such as setting alarms. However, an anomyous user cannot add friends, and interact with the social features of the application. Below are two gifs showing the SplashScreen activity and the anomyous user functionality.
 <br />
 <img src='https://i.imgur.com/fJW2WfX.gif' width='200' alt='Video Walkthrough' /> <img src='https://i.imgur.com/09fAJ1P.gif' width='200' alt='Video Walkthrough' />
