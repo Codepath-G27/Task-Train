@@ -31,6 +31,10 @@ After creating alarms the user can choose to sort and update alarms after creati
 <img src='https://i.imgur.com/UsGMpxH.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/0vuq0Qj.gif' width='200' alt='Video Walkthrough' />
 
 <br />
+
+Another section of the application is the Calendar screen for the user to see all the upcoming alarms set for the entire month. The user can choose to flip between any past or future months. Once a day is selected the user will be displayed all the ToDo items for that specific day. From the calendar screen the user can also choose to create an alarm for a specific day. The database is linked with the ToDo Fragment screen.
+<br />
+
 <img src='https://i.imgur.com/caZYnzB.gif' width='200' alt='Video Walkthrough' /> 
 
 
