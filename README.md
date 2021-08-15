@@ -9,7 +9,9 @@
 
 
 ### Overview
-TaskTrain is a productivity app meant to help organize your daily schedule and routines. In this app, the user can create Todo items, as well as set an alarm either associated with a task or not. 
+TaskTrain is a productivity app meant to help organize your daily schedule and routines. 
+•	The major features included are creating alarms, calendar integration, grouping alarms with other users, and social friend integration. To accomplish group alarms users can add/remove friends and then request users to set the same alarm. 
+•	Technologies: Firebase, Android Studio, GitHub, RoomDB, SQL, and Java.
 
 
 
