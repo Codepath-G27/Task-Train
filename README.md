@@ -20,6 +20,25 @@ TaskTrain is a productivity app meant to help organize your daily schedule and r
 <img src='https://i.imgur.com/UsGMpxH.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/0vuq0Qj.gif' width='200' alt='Video Walkthrough' />
 <img src='https://i.imgur.com/caZYnzB.gif' width='200' alt='Video Walkthrough' />
 
+Creation:
+<img src='https://i.imgur.com/u8uWelk.gif' width='200' alt='Video Walkthrough' />
+
+Adding Friends:
+<img src='https://i.imgur.com/okaACZj.gif' width='200' alt='Video Walkthrough' />
+
+Task Deletion: 
+<img src='https://i.imgur.com/RZkntMS.gif' width='200' alt='Video Walkthrough' />
+
+Task Completion: 
+<img src='https://i.imgur.com/0pEbBEN.gif' width='200' alt='Video Walkthrough' />
+
+Alarm: 
+<img src='https://i.imgur.com/EiRMkzF.gif' width='200' alt='Video Walkthrough' />
+
+Alarm Recurring: 
+<img src='https://i.imgur.com/vYaif91.mp4' width='200' alt='Video Walkthrough' />
+
+
 
 
 <img src='https://i.imgur.com/KLoVv5z.png' width='200' height='400' alt='Video Walkthrough' /> <img src='https://i.imgur.com/0MBmjvQ.png' width='200' height='300' alt='Video Walkthrough' />
