@@ -10,19 +10,29 @@
 
 ### Overview
 TaskTrain is a productivity app meant to help organize your daily schedule and routines. 
-•	The major features included are creating alarms, calendar integration, grouping alarms with other users, and social friend integration. To accomplish group alarms users can add/remove friends and then request users to set the same alarm. 
+•	The major features included are creating alarms, calendar integration, grouping alarms with other users, and social friend integration. To accomplish group alarms users can add/remove friends and then request users to set the same alarm.
 •	Technologies: Firebase, Android Studio, GitHub, RoomDB, SQL, and Java.
 
 
-When the user first opens the application they are greeted with the Splashscreen showing out icon and splash art. Then they are naviagted to the main ToDo fragment which shows users their upcoming ToDo items.
+When the user first opens the application they are greeted with the Splashscreen showing out icon and splash art. Then they are naviagted to the main ToDo fragment which shows users their upcoming ToDo items. When first opening the app the user is logged into an anomyous user account which is able to use majority of the ToDo item featues, such as setting alarms. However, an anomyous user cannot add friends, and interact with the social features of the application. Below are two gifs showing the SplashScreen activity and the anomyous user functionality.
 <br />
-<img src='https://i.imgur.com/fJW2WfX.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/09fAJ1P.gif' width='200' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/z7Y3T87.gif' width='200' alt='Video Walkthrough' /> <img src='https://i.imgur.com/caXeU3y.gif' width='200' alt='Video Walkthrough' />
+
+<br />
+
+As a user (anonymous or logged in) you can create ToDo items specifically designated with a Name, Location, Description, Category, Time, Date, Alarm, and Recurring Times. If an Alarm is to be set the user is required to enter a Time and a Date in the creation screen. Alarm Buddies allow the user to add friends to alarms they create for group activities, however, this feature is only possible for logged in users. Below are two gifs showing ToDo creation with and without an Alarm.
+<br />
 
 <img src='https://i.imgur.com/z7Y3T87.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/caXeU3y.gif' width='200' alt='Video Walkthrough' />
-<img src='https://i.imgur.com/UsGMpxH.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/0vuq0Qj.gif' width='200' alt='Video Walkthrough' />
-<img src='https://i.imgur.com/caZYnzB.gif' width='200' alt='Video Walkthrough' />
 
-Creation:
+
+
+<img src='https://i.imgur.com/UsGMpxH.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/0vuq0Qj.gif' width='200' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/caZYnzB.gif' width='200' alt='Video Walkthrough' /> 
+
+
+
+Account Creation:
 <img src='https://i.imgur.com/u8uWelk.gif' width='200' alt='Video Walkthrough' />
 
 User Login: 
