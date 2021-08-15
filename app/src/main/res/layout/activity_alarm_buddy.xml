@@ -145,6 +145,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="25dp"
                     android:text="Sun"
+                    android:clickable="false"
                     android:textColor="@color/black"
                     app:layout_constraintStart_toEndOf="@+id/textView10"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -155,6 +156,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:clickable="false"
                     app:layout_constraintEnd_toEndOf="@+id/textView3"
                     app:layout_constraintStart_toStartOf="@+id/textView3"
                     app:layout_constraintTop_toBottomOf="@+id/textView3" />
@@ -164,6 +166,7 @@
                     style="@style/CustomCheckbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     app:layout_constraintEnd_toEndOf="@+id/textView4"
                     app:layout_constraintStart_toStartOf="@+id/textView4"
                     app:layout_constraintTop_toTopOf="@+id/cb_mon" />
@@ -173,6 +176,7 @@
                     style="@style/CustomCheckbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     app:layout_constraintEnd_toEndOf="@+id/textView5"
                     app:layout_constraintStart_toStartOf="@+id/textView5"
                     app:layout_constraintTop_toTopOf="@+id/cb_tues" />
@@ -182,6 +186,7 @@
                     style="@style/CustomCheckbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     app:layout_constraintEnd_toEndOf="@+id/textView7"
                     app:layout_constraintStart_toStartOf="@+id/textView7"
                     app:layout_constraintTop_toTopOf="@+id/cb_wed" />
@@ -191,6 +196,7 @@
                     style="@style/CustomCheckbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     app:layout_constraintEnd_toEndOf="@+id/textView8"
                     app:layout_constraintStart_toStartOf="@+id/textView8"
                     app:layout_constraintTop_toTopOf="@+id/cb_thur" />
@@ -200,6 +206,7 @@
                     style="@style/CustomCheckbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     app:layout_constraintEnd_toEndOf="@+id/textView10"
                     app:layout_constraintStart_toStartOf="@+id/textView10"
                     app:layout_constraintTop_toTopOf="@+id/cb_fri" />
@@ -209,6 +216,7 @@
                     style="@style/CustomCheckbox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:clickable="false"
                     app:layout_constraintEnd_toEndOf="@+id/textView9"
                     app:layout_constraintStart_toStartOf="@+id/textView9"
                     app:layout_constraintTop_toTopOf="@+id/cb_sat" />
@@ -236,8 +244,10 @@
                     android:layout_marginTop="24dp"
                     android:layout_marginEnd="16dp"
                     android:hint="Add title"
+                    android:clickable="false"
 
-                    android:inputType="textNoSuggestions"
+                    android:inputType="none"
+                    android:enabled="false"
                     android:maxLength="30"
                     android:textSize="30sp"
                     android:theme="@style/TextLabel" />
@@ -263,7 +273,8 @@
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="5dp"
                     android:hint="Add location"
-                    android:inputType="textNoSuggestions"
+                    android:inputType="none"
+                    android:enabled="false"
 
                     android:maxLength="30"
                     android:textSize="16sp"
@@ -295,7 +306,7 @@
                     android:layout_marginEnd="16dp"
                     android:layout_weight="2"
                     android:background="@drawable/round_button"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
@@ -311,7 +322,7 @@
                     android:layout_marginEnd="8dp"
                     android:layout_weight="2"
                     android:background="@drawable/round_button"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:paddingTop="8dp"
                     android:paddingBottom="8dp"
@@ -329,6 +340,7 @@
                 android:layout_marginTop="15dp"
                 android:buttonTint="@color/colorPrimary"
                 android:gravity="center"
+                android:clickable="false"
                 android:text="Alarm"
                 app:layout_constraintStart_toStartOf="@+id/constraintLayout"
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
@@ -341,7 +353,8 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="16dp"
                 android:hint="Add description"
-                android:inputType="textNoSuggestions"
+                android:inputType="none"
+                android:enabled="false"
                 android:textSize="16sp"
                 android:theme="@style/TextLabel"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -356,6 +369,7 @@
                 android:backgroundTint="@color/colorPrimary"
                 android:gravity="center"
                 android:paddingTop="5dp"
+                android:clickable="false"
                 app:layout_constraintBottom_toBottomOf="@+id/cbAlarm"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/cbAlarm"

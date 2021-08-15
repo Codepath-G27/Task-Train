@@ -2,6 +2,7 @@ package com.eliasfang.calendify.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -14,7 +15,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +38,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -51,6 +58,23 @@ public class AlarmBuddyActivity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseFirestore database;
 
+    private EditText etTitle;
+    private EditText etLocation;
+    private Button btnDate;
+    private Button btnTime;
+    private CheckBox cbAlarm;
+    private EditText etDescription;
+    private Spinner spCategory;
+    private String notificationTime;
+
+    private TextView tv_alarmFriends;
+
+
+    private ConstraintLayout cl_addFriend;
+
+
+    private CheckBox cb_mon, cb_tues, cb_wed, cb_thur, cb_fri, cb_sat, cb_sun;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +85,38 @@ public class AlarmBuddyActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         database = FirebaseFirestore.getInstance();
 
+        etTitle = findViewById(R.id.etTitle);
+        etLocation = findViewById(R.id.etLocation);
+        btnDate = findViewById(R.id.btnDate);
+        btnTime = findViewById(R.id.btnTime);
+
+        etDescription = findViewById(R.id.etDescription);
+        cbAlarm = findViewById(R.id.cbAlarm);
+        spCategory = findViewById(R.id.etCategory);
+
+
+        tv_alarmFriends = findViewById(R.id.tv_alarmFriends);
+
+        cl_addFriend = findViewById(R.id.cl_addFriend);
+
+        cb_mon =findViewById(R.id.cb_mon);
+
+
+        cb_tues = findViewById(R.id.cb_tues);
+
+
+        cb_wed = findViewById(R.id.cb_wed);
+
+        cb_thur = findViewById(R.id.cb_thur);
+
+        cb_fri = findViewById(R.id.cb_fri);
+
+        cb_sat = findViewById(R.id.cb_sat);
+
+        cb_sun = findViewById(R.id.cb_sun);
+
+
+
 
         myTaskViewModel = ViewModelProviders.of(this).get(TaskViewModel.class);
 
@@ -69,6 +125,56 @@ public class AlarmBuddyActivity extends AppCompatActivity {
         String senderUid = bundle.getString("senderUid");
 
         Log.i(TAG, "The UID: " + senderUid + " and the alarmID: " + alarm_id);
+
+
+        DocumentReference docRef = database.collection("users").document(senderUid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful() && task.getResult() != null) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        User user = document.toObject(User.class);
+                        Log.i(TAG, user.toString());
+                        Map<String, Map<String, String>> tasks = user.getTasks();
+                        Map<String, String> data = tasks.get(alarm_id);
+
+                        //Handle if the alarm is deleted before the user accepts or declines
+                        if (data != null) {
+                            cb_mon.setChecked(Boolean.parseBoolean(data.get("monday")));
+                            cb_tues.setChecked(Boolean.parseBoolean(data.get("tuesday")));
+                            cb_wed.setChecked(Boolean.parseBoolean(data.get("wednesday")));
+                            cb_thur.setChecked( Boolean.parseBoolean(data.get("thursday")));
+                            cb_fri.setChecked(Boolean.parseBoolean(data.get("friday")));
+                            cb_sat.setChecked(Boolean.parseBoolean(data.get("saturday")));
+                            cb_sun.setChecked(Boolean.parseBoolean(data.get("sunday")));
+                            btnDate.setText(data.get("eventDate"));
+                            btnTime.setText(data.get("eventTime"));
+                            cbAlarm.setChecked(true);
+
+                            etTitle.setText(data.get("name"));
+                            etLocation.setText( data.get("location"));
+                            etDescription.setText(data.get("description"));
+
+                            ArrayAdapter<String> myAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, getResources().getStringArray(R.array.category_items));
+                            ArrayList<String> stringList = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.category_items)));
+
+                            myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            spCategory.setAdapter(myAdapter);
+                            spCategory.setSelection(stringList.indexOf(data.get("category")));
+
+                        } else {
+                            Toast.makeText(AlarmBuddyActivity.this, getResources().getString(R.string.alarm_deleted), Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
 
         btn_accept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,12 +196,7 @@ public class AlarmBuddyActivity extends AppCompatActivity {
 
                                 //Handle if the alarm is deleted before the user accepts or declines
                                 if (data != null) {
-                                    data.get("name");
-                                    data.get("description");
-                                    String eventDate = data.get("eventDate");
-                                    data.get("eventTime");
                                     data.get("category");
-                                    data.get("location");
 
 
 

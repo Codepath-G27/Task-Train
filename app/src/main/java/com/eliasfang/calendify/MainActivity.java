@@ -156,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
                             getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new SocialFragment()).commit();
                         else {
                             Toast.makeText(MainActivity.this, getResources().getString(R.string.login_friends), Toast.LENGTH_SHORT).show();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, new ToDoFragment()).commit();
                             navigationView.setCheckedItem(R.id.nav_todo);
                         }
                         break;

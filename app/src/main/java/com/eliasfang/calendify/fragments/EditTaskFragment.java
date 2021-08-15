@@ -137,8 +137,6 @@ public class EditTaskFragment extends Fragment {
 
         cbAlarm.setChecked(currUpdate.isHasAlarm());
 
-        if(!currUpdate.getAlarmBuddies().isEmpty())
-            tv_alarmFriends.setText(currUpdate.getAlarmBuddies());
 
         btnTime.setOnClickListener(new View.OnClickListener() {
             @Override
