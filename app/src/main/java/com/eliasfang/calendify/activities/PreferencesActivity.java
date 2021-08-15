@@ -1,22 +1,17 @@
 package com.eliasfang.calendify.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.eliasfang.calendify.MainActivity;
 import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.dialogs.LoadingDialog;
 import com.eliasfang.calendify.models.User;
@@ -29,13 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 
 public class PreferencesActivity extends AppCompatActivity {
 
@@ -48,6 +37,7 @@ public class PreferencesActivity extends AppCompatActivity {
     private TextView btnSave;
 
     private ImageView iv_profile;
+    private TextView tv_imageName;
     private ImageView ib_left;
     private ImageView ib_right;
 
@@ -73,6 +63,9 @@ public class PreferencesActivity extends AppCompatActivity {
         enterEmail.setText(auth.getCurrentUser().getEmail());
 
         iv_profile = findViewById(R.id.iv_profileIcon);
+
+        tv_imageName = findViewById(R.id.tv_imageName);
+
         ib_right = findViewById(R.id.iv_right);
         ib_left = findViewById(R.id.iv_left);
 
@@ -140,7 +133,7 @@ public class PreferencesActivity extends AppCompatActivity {
             }
         });
 
-        btnSave = findViewById(R.id.tvSave);
+        btnSave = findViewById(R.id.btn_accept);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,19 +150,24 @@ public class PreferencesActivity extends AppCompatActivity {
     private void setIcon() {
         switch (index) {
             case 0:
-                iv_profile.setImageResource(R.mipmap.ic_default);
+                iv_profile.setImageResource(R.mipmap.ic_ghosty_guy_round);
+                tv_imageName.setText("Ghosty Guy");
                 break;
             case 1:
-                iv_profile.setImageResource(R.mipmap.ic_logo_round);
+                iv_profile.setImageResource(R.mipmap.ic_ticked_master_teddy_round);
+                tv_imageName.setText("Ticket Master Teddy");
                 break;
             case 2:
-                iv_profile.setImageResource(R.mipmap.ic_default_foreground);
+                iv_profile.setImageResource(R.mipmap.ic_passenger_piggy_round);
+                tv_imageName.setText("Passenger Piggy");
                 break;
             case 3:
-                iv_profile.setImageResource(R.mipmap.ic_launcher_foreground);
+                iv_profile.setImageResource(R.mipmap.ic_conductor_cat_round);
+                tv_imageName.setText("Conductor Cat");
                 break;
             case 4:
-                iv_profile.setImageResource(R.mipmap.ic_launcher);
+                iv_profile.setImageResource(R.mipmap.ic_railroad_rabbit_round);
+                tv_imageName.setText("Railroad Rabbit");
                 break;
         }
     }

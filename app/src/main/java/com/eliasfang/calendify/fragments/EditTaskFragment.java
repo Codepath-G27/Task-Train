@@ -2,27 +2,20 @@ package com.eliasfang.calendify.fragments;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,28 +28,14 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import com.eliasfang.calendify.MainActivity;
 import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.data.TaskViewModel;
-import com.eliasfang.calendify.models.NotificationData;
-import com.eliasfang.calendify.models.PushNotification;
 import com.eliasfang.calendify.models.Task;
-import com.eliasfang.calendify.models.User;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.muddzdev.styleabletoast.StyleableToast;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.TimeZone;
 
@@ -105,7 +84,7 @@ public class EditTaskFragment extends Fragment {
         notificationTime = currUpdate.getNotificationTime();
 
         ImageButton imgBtnClose = view.findViewById(R.id.imgBtnClose);
-        tvSave = view.findViewById(R.id.tvSave);
+        tvSave = view.findViewById(R.id.btn_accept);
         etTitle = view.findViewById(R.id.etTitle);
         etLocation = view.findViewById(R.id.etLocation);
         btnDate = view.findViewById(R.id.btnDate);

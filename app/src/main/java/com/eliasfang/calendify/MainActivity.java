@@ -183,19 +183,19 @@ public class MainActivity extends AppCompatActivity {
     private void setIcon(int index) {
         switch (index) {
             case 0:
-                iv_profile.setImageResource(R.mipmap.ic_default);
+                iv_profile.setImageResource(R.mipmap.ic_ghosty_guy_round);
                 break;
             case 1:
-                iv_profile.setImageResource(R.mipmap.ic_logo_round);
+                iv_profile.setImageResource(R.mipmap.ic_ticked_master_teddy_round);
                 break;
             case 2:
-                iv_profile.setImageResource(R.mipmap.ic_default_foreground);
+                iv_profile.setImageResource(R.mipmap.ic_passenger_piggy_round);
                 break;
             case 3:
-                iv_profile.setImageResource(R.mipmap.ic_launcher_foreground);
+                iv_profile.setImageResource(R.mipmap.ic_conductor_cat_round);
                 break;
             case 4:
-                iv_profile.setImageResource(R.mipmap.ic_launcher);
+                iv_profile.setImageResource(R.mipmap.ic_railroad_rabbit_round);
                 break;
         }
     }

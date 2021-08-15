@@ -74,8 +74,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:src="@mipmap/ic_default"
-                tools:srcCompat="@mipmap/ic_default" />
+                android:src="@mipmap/ic_ghosty_guy"
+                tools:srcCompat="@mipmap/ic_ghosty_guy" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

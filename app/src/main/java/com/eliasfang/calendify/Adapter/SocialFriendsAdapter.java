@@ -200,19 +200,19 @@ public class SocialFriendsAdapter extends RecyclerView.Adapter<SocialFriendsAdap
     private void setIcon(int icon, SocialFriendsAdapter.FriendViewHolder holder)  {
         switch (icon) {
             case 0:
-                holder.ivSocialIcon.setImageResource(R.mipmap.ic_default);
+                holder.ivSocialIcon.setImageResource(R.mipmap.ic_ghosty_guy_round);
                 break;
             case 1:
-                holder.ivSocialIcon.setImageResource(R.mipmap.ic_logo_round);
+                holder.ivSocialIcon.setImageResource(R.mipmap.ic_ticked_master_teddy_round);
                 break;
             case 2:
-                holder.ivSocialIcon.setImageResource(R.mipmap.ic_default_foreground);
+                holder.ivSocialIcon.setImageResource(R.mipmap.ic_passenger_piggy_round);
                 break;
             case 3:
-                holder.ivSocialIcon.setImageResource(R.mipmap.ic_launcher_foreground);
+                holder.ivSocialIcon.setImageResource(R.mipmap.ic_conductor_cat_round);
                 break;
             case 4:
-                holder.ivSocialIcon.setImageResource(R.mipmap.ic_launcher);
+                holder.ivSocialIcon.setImageResource(R.mipmap.ic_railroad_rabbit_round);
                 break;
         }
     }

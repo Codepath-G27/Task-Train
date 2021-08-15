@@ -4,22 +4,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.DialogFragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -33,17 +26,11 @@ import android.widget.Toast;
 
 
 import com.eliasfang.calendify.API.NotificationApi;
-import com.eliasfang.calendify.Adapter.RequestsAdapter;
-import com.eliasfang.calendify.MainActivity;
-import com.eliasfang.calendify.activities.AlarmBuddyActivity;
-import com.eliasfang.calendify.activities.PreferencesActivity;
-import com.eliasfang.calendify.dialogs.SocialBottomSheetDialog;
 import com.eliasfang.calendify.dialogs.TaskCreateBottomSheetDialog;
 import com.eliasfang.calendify.models.NotificationData;
 import com.eliasfang.calendify.models.PushNotification;
 import com.eliasfang.calendify.R;
 import com.eliasfang.calendify.API.RetrofitInit;
-import com.eliasfang.calendify.alarmSetup.AlarmReceiver;
 import com.eliasfang.calendify.models.Task;
 import com.eliasfang.calendify.data.TaskViewModel;
 import com.eliasfang.calendify.models.User;
@@ -56,12 +43,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.Gson;
 import com.muddzdev.styleabletoast.StyleableToast;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -150,7 +133,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_fragment_create_task, container, false);
         ImageButton imgBtnClose = view.findViewById(R.id.imgBtnClose);
-        tvSave = view.findViewById(R.id.tvSave);
+        tvSave = view.findViewById(R.id.btn_accept);
         etTitle = view.findViewById(R.id.etTitle);
         etLocation = view.findViewById(R.id.etLocation);
         btnDate = view.findViewById(R.id.btnDate);
@@ -228,7 +211,7 @@ public class TaskCreateDialogFragment extends DialogFragment implements View.OnC
                 StyleableToast.makeText(getContext(), "Task Creation Cancelled", R.style.toastDeleted).show();
                 dismiss();
                 break;
-            case R.id.tvSave:
+            case R.id.btn_accept:
                 if (!etTitle.getText().toString().isEmpty()) {
                     if (cbAlarm.isChecked() && (btnDate.getText().toString().equals(getResources().getString(R.string.add_date)) || btnTime.getText().toString().equals(getResources().getString(R.string.add_time)))) {
                         Toast.makeText(getContext(), "Please select date and time", Toast.LENGTH_SHORT).show();
