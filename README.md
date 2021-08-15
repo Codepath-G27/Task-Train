@@ -25,9 +25,12 @@ As a user (anonymous or logged in) you can create ToDo items specifically design
 
 <img src='https://i.imgur.com/z7Y3T87.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/caXeU3y.gif' width='200' alt='Video Walkthrough' />
 
-
+After creating alarms the user can choose to sort and update alarms after creation. The user can use a Search View to enter characters and find a ToDo item by the Name field of an item. This can also be paired with Sort By: Alphabet + Category. A user can also choose to Update an existing task just by clicking on the item. The preset data will be already sent to the EditTask screen for the user to see. Below are two gifs showing the Sorting features and Update functionality. 
+<br />
 
 <img src='https://i.imgur.com/UsGMpxH.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/0vuq0Qj.gif' width='200' alt='Video Walkthrough' />
+
+<br />
 <img src='https://i.imgur.com/caZYnzB.gif' width='200' alt='Video Walkthrough' /> 
 
 
