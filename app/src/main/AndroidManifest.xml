@@ -4,37 +4,51 @@
     package="com.eliasfang.calendify">
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.goggle.android.c2dm.permission.RECIEVE" />
 
     <application
+        android:name=".application.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.PreferencesActivity"
+            android:theme="@style/SplashTheme"/>
+        <activity android:name=".activities.FirebaseActivity" />
+        <activity android:name=".activities.AlarmBuddyActivity"
+            android:theme="@style/SplashTheme"/>
         <activity android:name=".MainActivity" />
-        <activity android:name=".ReminderCreateDialogFragment"
-                  android:theme="@style/SplashTheme"/>
-
-
-        <activity android:name=".SplashActivity" android:theme="@style/SplashTheme">
+        <activity
+            android:name=".activities.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.RingActivity" />
 
-        <receiver
-            android:name=".alarmSetup.Reciever"
-            android:enabled="true">
+        <receiver android:name=".alarmSetup.AlarmReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-
-                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".alarmSetup.Alarm" />
+
+        <service android:name=".service.AlarmService" />
+        <service
+            android:name=".service.FirebasePushNotificationService"
+            android:permission="com.goggle.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.goggle.android.c2dm.permission.RECIEVE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

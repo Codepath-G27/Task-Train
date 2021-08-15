@@ -11,11 +11,11 @@
         app:showAsAction="always" />
 
 
-    <item
-        android:id="@+id/action_reminder"
-        android:icon="@drawable/ic_baseline_alarm_on_24"
-        android:title="Reminders"
-        app:showAsAction="always" />
+<!--    <item-->
+<!--        android:id="@+id/action_reminder"-->
+<!--        android:icon="@drawable/ic_baseline_alarm_on_24"-->
+<!--        android:title="Reminders"-->
+<!--        app:showAsAction="always" />-->
 
 
 </menu>
