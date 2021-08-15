@@ -13,8 +13,8 @@ TaskTrain is a productivity app meant to help organize your daily schedule and r
 
 
 
-<img src='https://i.imgur.com/fJW2WfX.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/09fAJ1P.gif' width='200' alt='Video Walkthrough' />
-<img src='https://i.imgur.com/z7Y3T87.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/caXeU3y.gif' width='200' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/fJW2WfX.gif' width='400' alt='Video Walkthrough' />  <img src='https://i.imgur.com/09fAJ1P.gif' width='400' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/z7Y3T87.gif' width='400' alt='Video Walkthrough' />  <img src='https://i.imgur.com/caXeU3y.gif' width='400' alt='Video Walkthrough' />
 
 
 <img src='https://i.imgur.com/KLoVv5z.png' width='200' height='400' alt='Video Walkthrough' /> <img src='https://i.imgur.com/0MBmjvQ.png' width='200' height='300' alt='Video Walkthrough' />
