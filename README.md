@@ -15,6 +15,7 @@ TaskTrain is a productivity app meant to help organize your daily schedule and r
 
 
 When the user first opens the application they are greeted with the Splashscreen showing out icon and splash art. Then they are naviagted to the main ToDo fragment which shows users their upcoming ToDo items.
+<br />
 <img src='https://i.imgur.com/fJW2WfX.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/09fAJ1P.gif' width='200' alt='Video Walkthrough' />
 
 <img src='https://i.imgur.com/z7Y3T87.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/caXeU3y.gif' width='200' alt='Video Walkthrough' />
