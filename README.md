@@ -26,6 +26,15 @@ As a user (anonymous or logged in) you can create ToDo items specifically design
 
 <img src='https://i.imgur.com/z7Y3T87.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/caXeU3y.gif' width='200' alt='Video Walkthrough' />
 
+<br />
+
+If a ToDo item is linked with a specific alarm then once the time and date match the specified values the user will recieive a notification that the alarm arrived. A sound will play and once the notification is clicked on the user can choose to dismiss the alarm. If the alarm is set as recurring then the alarm will continue to occur at the designated time and days until the alarm is delted. Below is a gif showing a normal alarm being displyed to the user. 
+<br />
+ 
+<img src='https://i.imgur.com/EiRMkzF.gif' width='200' alt='Video Walkthrough' />
+
+<br />
+
 After creating alarms the user can choose to sort and update alarms after creation. The user can use a Search View to enter characters and find a ToDo item by the Name field of an item. This can also be paired with Sort By: Alphabet + Category. A user can also choose to Update an existing task just by clicking on the item. The preset data will be already sent to the EditTask screen for the user to see. Below are two gifs showing the Sorting features and Update functionality. 
 <br />
 
@@ -64,11 +73,6 @@ Task Deletion:
 Task Completion: 
 <img src='https://i.imgur.com/0pEbBEN.gif' width='200' alt='Video Walkthrough' />
 
-Alarm: 
-<img src='https://i.imgur.com/EiRMkzF.gif' width='200' alt='Video Walkthrough' />
-
-Alarm Recurring: 
-<img src='https://i.imgur.com/vYaif91.mp4' width='200' alt='Video Walkthrough' />
 
 
 
