@@ -56,14 +56,19 @@ An anonymous user can choose to create an account to unlock the custom feature o
 
 </br>
 
-User Editing Preferences: 
+Once logged into an account the user can choose to edit their account preferences. The user is able to change their username and profile picture. Profile pictures are picked from a given set of images. A users email is unable to be altered and is the unique identifiers for accounts. Users can requrest password changes via Password Reset emails.
+
+</br>
+
 <img src='https://i.imgur.com/NGcoBDg.gif' width='200' alt='Video Walkthrough' />
+]
+</br>
 
-Adding Friends:
-<img src='https://i.imgur.com/okaACZj.gif' width='200' alt='Video Walkthrough' />
+One important and custom feature in the app for logged in users is the ability to add other users as friends. Once a user is added as a friend they can be selected as alarm buddies when creating alarms. Users can also delete friends and have the changes reflected on the friend account as well. Deleting friends is simple and only requires a user to select them from the presented list. 
+</br>
 
-Deleting Friends: 
-<img src='https://i.imgur.com/r8sn8gT.gif' width='200' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/okaACZj.gif' width='200' alt='Video Walkthrough' /> <img src='https://i.imgur.com/r8sn8gT.gif' width='200' alt='Video Walkthrough' />
+</br>
 
 Task Deletion: 
 <img src='https://i.imgur.com/RZkntMS.gif' width='200' alt='Video Walkthrough' />
