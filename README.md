@@ -35,6 +35,15 @@ If a ToDo item is linked with a specific alarm then once the time and date match
 
 <br />
 
+<br />
+
+A user can also delete or complete an alarm before or after the specfic ToDo item activates the alarm. Deletion can be done via swiping right, which deletes the alarm from the database, or by long pressing on an Todo item. In the action bar menu a user can choose to select all items or select specific items. Once all the items are selected the user can delete all selected items by picking the trash icon. Compleition is similar to deletion execpt it displays a specific Toast message which is meant to be more rewarding for the user. 
+<br />
+ 
+<img src='https://i.imgur.com/RZkntMS.gif' width='200' alt='Video Walkthrough' /> img src='https://i.imgur.com/0pEbBEN.gif' width='200' alt='Video Walkthrough' />
+
+<br />
+
 After creating alarms the user can choose to sort and update alarms after creation. The user can use a Search View to enter characters and find a ToDo item by the Name field of an item. This can also be paired with Sort By: Alphabet + Category. A user can also choose to Update an existing task just by clicking on the item. The preset data will be already sent to the EditTask screen for the user to see. Below are two gifs showing the Sorting features and Update functionality. 
 <br />
 
@@ -72,11 +81,6 @@ One important and custom feature in the app for logged in users is the ability t
 <img src='https://i.imgur.com/r8sn8gT.gif' width='400' alt='Video Walkthrough' />
 </br>
 
-Task Deletion: 
-<img src='https://i.imgur.com/RZkntMS.gif' width='200' alt='Video Walkthrough' />
-
-Task Completion: 
-<img src='https://i.imgur.com/0pEbBEN.gif' width='200' alt='Video Walkthrough' />
 
 
 
