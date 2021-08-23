@@ -40,7 +40,7 @@ If a ToDo item is linked with a specific alarm then once the time and date match
 A user can also delete or complete an alarm before or after the specfic ToDo item activates the alarm. Deletion can be done via swiping right, which deletes the alarm from the database, or by long pressing on an Todo item. In the action bar menu a user can choose to select all items or select specific items. Once all the items are selected the user can delete all selected items by picking the trash icon. Compleition is similar to deletion execpt it displays a specific Toast message which is meant to be more rewarding for the user. 
 <br />
  
-<img src='https://i.imgur.com/RZkntMS.gif' width='200' alt='Video Walkthrough' /> img src='https://i.imgur.com/0pEbBEN.gif' width='200' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/RZkntMS.gif' width='200' alt='Video Walkthrough' /> <img src='https://i.imgur.com/0pEbBEN.gif' width='200' alt='Video Walkthrough' />
 
 <br />
 
