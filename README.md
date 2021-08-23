@@ -15,20 +15,20 @@ TaskTrain is a productivity app meant to help organize your daily schedule and r
 •	Technologies: Firebase, Android Studio, GitHub, RoomDB, SQL, and Java.
 
 ### Description
-When the user first opens the application they are greeted with the Splashscreen showing out icon and splash art. Then they are naviagted to the main ToDo fragment which shows users their upcoming ToDo items. When first opening the app the user is logged into an anomyous user account which is able to use majority of the ToDo item featues, such as setting alarms. However, an anomyous user cannot add friends, and interact with the social features of the application. Below are two gifs showing the SplashScreen activity and the anomyous user functionality.
+When the user first opens the application they are greeted with the Splashscreen showing out the icon and splash art. Then they are navigated to the main ToDo fragment which shows users their upcoming ToDo items. When first opening the app the user is logged into an anonymous user account which can use the majority of the ToDo item features, such as setting alarms. However, an anonymous user cannot add friends, and interact with the social features of the application. Below are two gifs showing the SplashScreen activity and the anonymous user functionality.
 <br />
 <img src='https://i.imgur.com/fJW2WfX.gif' width='200' alt='Video Walkthrough' /> <img src='https://i.imgur.com/09fAJ1P.gif' width='200' alt='Video Walkthrough' />
 
 <br />
 
-As a user (anonymous or logged in) you can create ToDo items specifically designated with a Name, Location, Description, Category, Time, Date, Alarm, and Recurring Times. If an Alarm is to be set the user is required to enter a Time and a Date in the creation screen. Alarm Buddies allow the user to add friends to alarms they create for group activities, however, this feature is only possible for logged in users. Below are two gifs showing ToDo creation with and without an Alarm.
+As a user (anonymous or logged in) you can create ToDo items specifically designated with a Name, Location, Description, Category, Time, Date, Alarm, and Recurring Times. If an Alarm is to be set the user is required to enter a Time and a Date in the creation screen. Alarm Buddies allow the user to add friends to alarms they create for group activities, however, this feature is only possible for logged-in users. Below are two gifs showing ToDo creation with and without an Alarm.
 <br />
 
 <img src='https://i.imgur.com/z7Y3T87.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/caXeU3y.gif' width='200' alt='Video Walkthrough' />
 
 <br />
 
-If a ToDo item is linked with a specific alarm then once the time and date match the specified values the user will recieive a notification that the alarm arrived. A sound will play and once the notification is clicked on the user can choose to dismiss the alarm. If the alarm is set as recurring then the alarm will continue to occur at the designated time and days until the alarm is delted. Below is a gif showing a normal alarm being displyed to the user. 
+If a ToDo item is linked with a specific alarm then once the time and date match the specified values the user will receive a notification that the alarm arrived. A sound will play and once the notification is clicked on the user can choose to dismiss the alarm. If the alarm is set as recurring then the alarm will continue to occur at the designated time and days until the alarm is deleted. Below is a gif showing a normal alarm being displayed to the user. 
 <br />
  
 <img src='https://i.imgur.com/EiRMkzF.gif' width='200' alt='Video Walkthrough' />
@@ -37,35 +37,35 @@ If a ToDo item is linked with a specific alarm then once the time and date match
 
 <br />
 
-A user can also delete or complete an alarm before or after the specfic ToDo item activates the alarm. Deletion can be done via swiping right, which deletes the alarm from the database, or by long pressing on an Todo item. In the action bar menu a user can choose to select all items or select specific items. Once all the items are selected the user can delete all selected items by picking the trash icon. Compleition is similar to deletion execpt it displays a specific Toast message which is meant to be more rewarding for the user. 
+A user can also delete or complete an alarm before or after the specific ToDo item activates the alarm. Deletion can be done via swiping right, which deletes the alarm from the database, or by long-pressing on a Todo item. In the action bar menu, a user can choose to select all items or select specific items. Once all the items are selected the user can delete all selected items by picking the trash icon. Completion is similar to deletion except it displays a specific Toast message which is meant to be more rewarding for the user. 
 <br />
  
 <img src='https://i.imgur.com/RZkntMS.gif' width='200' alt='Video Walkthrough' /> <img src='https://i.imgur.com/0pEbBEN.gif' width='200' alt='Video Walkthrough' />
 
 <br />
 
-After creating alarms the user can choose to sort and update alarms after creation. The user can use a Search View to enter characters and find a ToDo item by the Name field of an item. This can also be paired with Sort By: Alphabet + Category. A user can also choose to Update an existing task just by clicking on the item. The preset data will be already sent to the EditTask screen for the user to see. Below are two gifs showing the Sorting features and Update functionality. 
+After creating alarms the user can choose to sort and update alarms after creation. The user can use a Search View to enter characters and find a ToDo item by the Name field of an item. This can also be paired with Sort By Alphabet + Category. A user can also choose to Update an existing task just by clicking on the item. The preset data will be already sent to the EditTask screen for the user to see. Below are two gifs showing the Sorting features and Update functionality. 
 <br />
 
 <img src='https://i.imgur.com/UsGMpxH.gif' width='200' alt='Video Walkthrough' />  <img src='https://i.imgur.com/0vuq0Qj.gif' width='200' alt='Video Walkthrough' />
 
 <br />
 
-Another section of the application is the Calendar screen for the user to see all the upcoming alarms set for the entire month. The user can choose to flip between any past or future months. Once a day is selected the user will be displayed all the ToDo items for that specific day. From the calendar screen the user can also choose to create an alarm for a specific day. The database is linked with the ToDo Fragment screen.
+Another section of the application is the Calendar screen for the user to see all the upcoming alarms set for the entire month. The user can choose to flip between any past or future months. Once a day is selected the user will be displayed all the ToDo items for that specific day. From the calendar screen, the user can also choose to create an alarm for a specific day. The database is linked with the ToDo Fragment screen.
 <br />
 
 <img src='https://i.imgur.com/caZYnzB.gif' width='200' alt='Video Walkthrough' /> 
 
 <br />
 
-An anonymous user can choose to create an account to unlock the custom feature only accessible by users that are logged into the application with an account. Account creation is easy and simple, only requiring an Email, Name and Password. The display is a non-unique way of identification between users. Once an account is created the user can also choose to log in or log out from the app. Logging in is simple and only requires an email and password. First you enter an email, and if an account is associated with the email it will ask for a password. Else the user will be prompted to create an account with the email entered. Below are gifs displaying account creation, loging in and logging out.
+An anonymous user can choose to create an account to unlock the custom feature only accessible by users that are logged into the application with an account. Account creation is easy and simple, only requiring an Email, Name, and Password. The display is a non-unique way of identification between users. Once an account is created the user can also choose to log in or log out from the app. Logging in is simple and only requires an email and password. First, you enter an email, and if an account is associated with the email it will ask for a password. Else the user will be prompted to create an account with the email entered. Below are gifs displaying account creation, logging in, and logging out.
 </br>
 
 <img src='https://i.imgur.com/u8uWelk.gif' width='200' alt='Video Walkthrough' /> <img src='https://i.imgur.com/sgZGRTf.gif' width='200' alt='Video Walkthrough' /> <img src='https://i.imgur.com/881VXmx.gif' width='200' alt='Video Walkthrough' />
 
 </br>
 
-Once logged into an account the user can choose to edit their account preferences. The user is able to change their username and profile picture. Profile pictures are picked from a given set of images. A users email is unable to be altered and is the unique identifiers for accounts. Users can requrest password changes via Password Reset emails.
+Once logged into an account the user can choose to edit their account preferences. The user can change their username and profile picture. Profile pictures are picked from a given set of images. A user's email is unable to be altered and is the unique identifier for accounts. Users can request password changes via Password Reset emails.
 
 </br>
 
@@ -73,7 +73,7 @@ Once logged into an account the user can choose to edit their account preference
 ]
 </br>
 
-One important and custom feature in the app for logged in users is the ability to add other users as friends. Once a user is added as a friend they can be selected as alarm buddies when creating alarms. When a users sends a friend request the requested user recieves a notification, and can choose to accept or decline the request. Users can also delete friends and have the changes reflected on the friend account as well. Deleting friends is simple and only requires a user to select them from the presented list. 
+One important and custom feature in the app for logged-in users is the ability to add other users as friends. Once a user is added as a friend they can be selected as alarm buddies when creating alarms. When a user sends a friend request the requested user receives a notification and can choose to accept or decline the request. Users can also delete friends and have the changes reflected on the friend account as well. Deleting friends is simple and only requires a user to select them from the presented list. 
 </br>
 
 <img src='https://i.imgur.com/okaACZj.gif' width='400' alt='Video Walkthrough' /> 
