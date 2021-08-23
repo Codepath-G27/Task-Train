@@ -52,9 +52,7 @@ Another section of the application is the Calendar screen for the user to see al
 An anonymous user can choose to create an account to unlock the custom feature only accessible by users that are logged into the application with an account. Account creation is easy and simple, only requiring an Email, Name and Password. The display is a non-unique way of identification between users. Once an account is created the user can also choose to log in or log out from the app. Logging in is simple and only requires an email and password. First you enter an email, and if an account is associated with the email it will ask for a password. Else the user will be prompted to create an account with the email entered. Below are gifs displaying account creation, loging in and logging out.
 </br>
 
-<img src='https://i.imgur.com/u8uWelk.gif' width='200' alt='Video Walkthrough' /> <img src='https://i.imgur.com/sgZGRTf.gif' width='200' alt='Video Walkthrough' />
-
-<img src='https://i.imgur.com/881VXmx.gif' width='200' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/u8uWelk.gif' width='200' alt='Video Walkthrough' /> <img src='https://i.imgur.com/sgZGRTf.gif' width='200' alt='Video Walkthrough' /> <img src='https://i.imgur.com/881VXmx.gif' width='200' alt='Video Walkthrough' />
 
 </br>
 
