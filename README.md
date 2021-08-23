@@ -67,7 +67,9 @@ Once logged into an account the user can choose to edit their account preference
 One important and custom feature in the app for logged in users is the ability to add other users as friends. Once a user is added as a friend they can be selected as alarm buddies when creating alarms. Users can also delete friends and have the changes reflected on the friend account as well. Deleting friends is simple and only requires a user to select them from the presented list. 
 </br>
 
-<img src='https://i.imgur.com/okaACZj.gif' width='400' alt='Video Walkthrough' /> <img src='https://i.imgur.com/r8sn8gT.gif' width='400' alt='Video Walkthrough' />
+<img src='https://i.imgur.com/okaACZj.gif' width='400' alt='Video Walkthrough' /> 
+
+<img src='https://i.imgur.com/r8sn8gT.gif' width='400' alt='Video Walkthrough' />
 </br>
 
 Task Deletion: 
